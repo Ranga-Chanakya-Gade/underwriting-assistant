@@ -14,11 +14,20 @@ import {
   DxcCheckbox,
 } from '@dxc-technology/halstack-react';
 import { getStatusColor, getPriorityColor } from '../../data/mockSubmissions';
+import { getDocumentsBySubmission } from '../../data/mockDocuments';
+import DocumentCard from '../shared/DocumentCard';
+import DocumentUpload from '../shared/DocumentUpload';
+import IDPResults from '../shared/IDPResults';
 import './UnderwritingWorkbench.css';
 
 const UnderwritingWorkbench = ({ submission }) => {
   const [activeTabIndex, setActiveTabIndex] = useState(0);
   const [notes, setNotes] = useState('');
+  const [showUpload, setShowUpload] = useState(false);
+  const [selectedDocument, setSelectedDocument] = useState(null);
+  const [documents, setDocuments] = useState(
+    submission ? getDocumentsBySubmission(submission.id) : []
+  );
 
   if (!submission) {
     return (
@@ -400,6 +409,104 @@ const UnderwritingWorkbench = ({ submission }) => {
                       </div>
                     </DxcFlex>
                   </div>
+                </DxcFlex>
+              </DxcInset>
+            </DxcTabs.Tab>
+
+            <DxcTabs.Tab
+              label="Documents"
+              icon="folder"
+              active={activeTabIndex === 4}
+              onClick={() => setActiveTabIndex(4)}
+            >
+              <DxcInset space="var(--spacing-padding-m)">
+                <DxcFlex direction="column" gap="var(--spacing-gap-l)">
+                  {/* Header with Upload Button */}
+                  <DxcFlex justifyContent="space-between" alignItems="center">
+                    <DxcHeading level={4} text="Documents & IDP Extraction" />
+                    <DxcButton
+                      label="Upload Documents"
+                      icon="cloud_upload"
+                      onClick={() => setShowUpload(!showUpload)}
+                    />
+                  </DxcFlex>
+
+                  {/* Upload Section */}
+                  {showUpload && (
+                    <DocumentUpload
+                      submissionId={submission.id}
+                      onUploadComplete={(data) => {
+                        console.log('Upload complete:', data);
+                        setShowUpload(false);
+                      }}
+                      onCancel={() => setShowUpload(false)}
+                    />
+                  )}
+
+                  {/* Document List */}
+                  {!showUpload && (
+                    <>
+                      <DxcFlex direction="column" gap="var(--spacing-gap-s)">
+                        <DxcFlex justifyContent="space-between" alignItems="center">
+                          <DxcTypography fontSize="font-scale-03" fontWeight="font-weight-semibold">
+                            Uploaded Documents ({documents.length})
+                          </DxcTypography>
+                          {selectedDocument && (
+                            <DxcButton
+                              label="Back to List"
+                              icon="arrow_back"
+                              mode="tertiary"
+                              onClick={() => setSelectedDocument(null)}
+                            />
+                          )}
+                        </DxcFlex>
+
+                        {!selectedDocument ? (
+                          <DxcFlex direction="column" gap="var(--spacing-gap-m)">
+                            {documents.map((doc) => (
+                              <DocumentCard
+                                key={doc.id}
+                                document={doc}
+                                onView={(doc) => setSelectedDocument(doc)}
+                                onDownload={(doc) => console.log('Download:', doc)}
+                              />
+                            ))}
+                            {documents.length === 0 && (
+                              <div
+                                style={{
+                                  padding: 'var(--spacing-padding-xl)',
+                                  textAlign: 'center',
+                                  backgroundColor: 'var(--color-bg-neutral-lighter)',
+                                  borderRadius: 'var(--border-radius-m)',
+                                  border: '2px dashed var(--color-border-neutral-medium)'
+                                }}
+                              >
+                                <DxcFlex direction="column" gap="var(--spacing-gap-m)" alignItems="center">
+                                  <span className="material-icons" style={{ fontSize: '48px', color: 'var(--color-fg-neutral-dark)' }}>
+                                    folder_open
+                                  </span>
+                                  <DxcTypography fontSize="font-scale-03" color="var(--color-fg-neutral-dark)">
+                                    No documents uploaded yet
+                                  </DxcTypography>
+                                  <DxcButton
+                                    label="Upload First Document"
+                                    icon="cloud_upload"
+                                    onClick={() => setShowUpload(true)}
+                                  />
+                                </DxcFlex>
+                              </div>
+                            )}
+                          </DxcFlex>
+                        ) : (
+                          <IDPResults
+                            document={selectedDocument}
+                            onEdit={(field) => console.log('Edit field:', field)}
+                            onValidate={() => console.log('Validate all')}
+                          />
+                        )}
+                      </DxcFlex>
+                    </>
+                  )}
                 </DxcFlex>
               </DxcInset>
             </DxcTabs.Tab>
