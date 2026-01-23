@@ -71,7 +71,7 @@ function App() {
     <DxcApplicationLayout
       header={
         <DxcApplicationLayout.Header
-          appTitle="Underwriting Assistant"
+          appTitle="Underwriter Assistant"
           sideContent={(isResponsive) =>
             isResponsive ? null : (
               <DxcFlex gap="var(--spacing-gap-l)" alignItems="center">
@@ -120,12 +120,6 @@ function App() {
           navItems={sidenavItems}
           expanded={sidenavExpanded}
           onExpandedChange={setSidenavExpanded}
-        />
-      }
-      footer={
-        <DxcApplicationLayout.Footer
-          mode="reduced"
-          copyright="© 2026 Insurance Company. All rights reserved."
         />
       }
     >
