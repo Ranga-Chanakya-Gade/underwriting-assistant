@@ -9,6 +9,7 @@ import {
   DxcInset,
   DxcBadge,
   DxcAccordion,
+  DxcDialog,
 } from '@dxc-technology/halstack-react';
 import './SubmissionIntake.css';
 
@@ -49,6 +50,9 @@ const SubmissionIntake = () => {
     zipCode: 'Invalid Zip Code',
   });
   const [lowConfidenceFields, setLowConfidenceFields] = useState(['priorCarrier']);
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [showProcessingBanner, setShowProcessingBanner] = useState(true);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
 
   const submissionId = '00123224';
 
@@ -86,6 +90,16 @@ const SubmissionIntake = () => {
   const handleNextStep = () => {
     if (currentStep < 4) {
       setCurrentStep(currentStep + 1);
+
+      // Simulate processing when moving to step 3
+      if (currentStep === 2) {
+        setIsProcessing(true);
+        setShowProcessingBanner(true);
+        // Simulate processing completion after 5 seconds
+        setTimeout(() => {
+          setIsProcessing(false);
+        }, 5000);
+      }
     }
   };
 
@@ -96,7 +110,7 @@ const SubmissionIntake = () => {
   };
 
   const handleSubmit = () => {
-    alert('Submission completed! In a real app, this would submit to ServiceNow.');
+    setShowSuccessModal(true);
   };
 
   const handleFieldChange = (field, value) => {
@@ -310,7 +324,37 @@ const SubmissionIntake = () => {
   const renderStep3 = () => (
     <DxcInset>
       <DxcFlex direction="column" gap="var(--spacing-gap-l)">
-        <DxcHeading level={4} text="Review and Edit AI-Extracted Data" />
+        <DxcHeading level={4} text="Review / Edit Extraction" />
+
+        <DxcTypography fontSize="font-scale-02" color="var(--color-fg-neutral-stronger)">
+          Review and modify the AI-extracted data. Override AI suggestions and address validation issues before submission
+        </DxcTypography>
+
+        {/* Processing Banner */}
+        {isProcessing && showProcessingBanner && (
+          <div className="processing-banner">
+            <DxcFlex alignItems="flex-start" justifyContent="space-between" gap="var(--spacing-gap-m)">
+              <DxcFlex alignItems="center" gap="var(--spacing-gap-m)">
+                <span className="material-icons" style={{ color: '#0095FF', fontSize: '24px' }}>info</span>
+                <DxcFlex direction="column" gap="var(--spacing-gap-xs)">
+                  <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold">
+                    Documents are still being processed
+                  </DxcTypography>
+                  <DxcTypography fontSize="font-scale-02">
+                    The system is currently processing the documents for data extraction. Please wait for a few minutes then refresh the page to see the results.
+                  </DxcTypography>
+                </DxcFlex>
+              </DxcFlex>
+              <button
+                className="close-banner-btn"
+                onClick={() => setShowProcessingBanner(false)}
+                aria-label="Close banner"
+              >
+                <span className="material-icons">close</span>
+              </button>
+            </DxcFlex>
+          </div>
+        )}
 
         {(validationSummary.errorCount > 0 || validationSummary.lowConfCount > 0) && (
           <div className="validation-warning">
@@ -677,6 +721,25 @@ const SubmissionIntake = () => {
           </div>
         </DxcFlex>
       </DxcFlex>
+
+      {/* Success Modal */}
+      {showSuccessModal && (
+        <DxcDialog onCloseClick={() => setShowSuccessModal(false)}>
+          <div style={{ padding: 'var(--spacing-padding-l)', minWidth: '400px' }}>
+            <DxcFlex direction="column" gap="var(--spacing-gap-m)" alignItems="center">
+              <DxcHeading level={3} text="Success!" style={{ color: '#24A148' }} />
+              <DxcTypography fontSize="font-scale-02" style={{ textAlign: 'center' }}>
+                Your submission has been successfully processed. Please reach out to the support team for any questions or concerns.
+              </DxcTypography>
+              <DxcButton
+                label="Okay"
+                mode="primary"
+                onClick={() => setShowSuccessModal(false)}
+              />
+            </DxcFlex>
+          </div>
+        </DxcDialog>
+      )}
     </div>
   );
 };

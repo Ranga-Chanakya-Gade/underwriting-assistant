@@ -35,6 +35,10 @@ const UnderwritingWorkbench = ({ submission }) => {
   ]);
   const [activeMessageTab, setActiveMessageTab] = useState(0);
   const [showValidationModal, setShowValidationModal] = useState(false);
+  const [submissionAccepted, setSubmissionAccepted] = useState(false);
+  const [showAddNoteModal, setShowAddNoteModal] = useState(false);
+  const [newNoteType, setNewNoteType] = useState('Reminder');
+  const [newNoteText, setNewNoteText] = useState('');
   const [validationErrors] = useState([
     'Vehicles: VIN ID is invalid',
     'Coverage type is missing for Rental Reimbursement for vehicle 1',
@@ -272,7 +276,154 @@ const UnderwritingWorkbench = ({ submission }) => {
       case 1: // Policy Data
         return (
           <DxcInset>
-            <DxcTypography>Policy Data content would go here</DxcTypography>
+            <DxcFlex direction="column" gap="var(--spacing-gap-xl)">
+              {/* General Policy / Quote Information */}
+              <div>
+                <DxcFlex alignItems="center" gap="var(--spacing-gap-s)" style={{ marginBottom: 'var(--spacing-gap-m)' }}>
+                  <span className="material-icons" style={{ color: '#0095FF' }}>description</span>
+                  <DxcHeading level={4} text="General Policy / Quote Information" />
+                </DxcFlex>
+                <div className="info-section">
+                  <div className="policy-info-grid">
+                    <div className="policy-info-item">
+                      <DxcTypography fontSize="font-scale-01" color="var(--color-fg-neutral-stronger)">
+                        Company Name:
+                      </DxcTypography>
+                      <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold">
+                        ABC Incorporated
+                      </DxcTypography>
+                    </div>
+                    <div className="policy-info-item">
+                      <DxcTypography fontSize="font-scale-01" color="var(--color-fg-neutral-stronger)">
+                        DBA:
+                      </DxcTypography>
+                      <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold">
+                        ABC Construction
+                      </DxcTypography>
+                    </div>
+                    <div className="policy-info-item">
+                      <DxcTypography fontSize="font-scale-01" color="var(--color-fg-neutral-stronger)">
+                        Business Type:
+                      </DxcTypography>
+                      <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold">
+                        Construction
+                      </DxcTypography>
+                    </div>
+                    <div className="policy-info-item">
+                      <DxcTypography fontSize="font-scale-01" color="var(--color-fg-neutral-stronger)">
+                        Years in Business:
+                      </DxcTypography>
+                      <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold">
+                        7 Years
+                      </DxcTypography>
+                    </div>
+                    <div className="policy-info-item">
+                      <DxcTypography fontSize="font-scale-01" color="var(--color-fg-neutral-stronger)">
+                        Number of Employees:
+                      </DxcTypography>
+                      <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold">
+                        50
+                      </DxcTypography>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Vehicle Details */}
+              <div>
+                <DxcFlex alignItems="center" gap="var(--spacing-gap-s)" style={{ marginBottom: 'var(--spacing-gap-m)' }}>
+                  <span className="material-icons" style={{ color: '#0095FF' }}>directions_car</span>
+                  <DxcHeading level={4} text="Vehicle Details" />
+                </DxcFlex>
+                <DxcSelect
+                  label="Select Vehicle"
+                  options={[{ label: '1998 Ford Focus - 123xxx', value: '1' }]}
+                  value="1"
+                  style={{ marginBottom: 'var(--spacing-gap-m)' }}
+                />
+
+                <DxcFlex justifyContent="space-between" alignItems="center" style={{ marginBottom: 'var(--spacing-gap-m)' }}>
+                  <DxcHeading level={5} text="Vehicle 1 - 1998 Ford Focus - 123xxx" />
+                  <DxcButton
+                    label="View Quote"
+                    icon="launch"
+                    mode="text"
+                    onClick={() => {}}
+                  />
+                </DxcFlex>
+
+                <div className="policy-info-grid">
+                  <div className="policy-info-item">
+                    <DxcTypography fontSize="font-scale-01" color="var(--color-fg-neutral-stronger)">Year:</DxcTypography>
+                    <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold">1998</DxcTypography>
+                  </div>
+                  <div className="policy-info-item">
+                    <DxcTypography fontSize="font-scale-01" color="var(--color-fg-neutral-stronger)">Cost New:</DxcTypography>
+                    <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold">$12,299.00</DxcTypography>
+                  </div>
+                  <div className="policy-info-item">
+                    <DxcTypography fontSize="font-scale-01" color="var(--color-fg-neutral-stronger)">Make:</DxcTypography>
+                    <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold">Ford</DxcTypography>
+                  </div>
+                  <div className="policy-info-item">
+                    <DxcTypography fontSize="font-scale-01" color="var(--color-fg-neutral-stronger)">State:</DxcTypography>
+                    <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold">WA</DxcTypography>
+                  </div>
+                  <div className="policy-info-item">
+                    <DxcTypography fontSize="font-scale-01" color="var(--color-fg-neutral-stronger)">Model:</DxcTypography>
+                    <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold">Contour</DxcTypography>
+                  </div>
+                  <div className="policy-info-item">
+                    <DxcTypography fontSize="font-scale-01" color="var(--color-fg-neutral-stronger)">Territory:</DxcTypography>
+                    <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold">001</DxcTypography>
+                  </div>
+                  <div className="policy-info-item">
+                    <DxcTypography fontSize="font-scale-01" color="var(--color-fg-neutral-stronger)">Body Type:</DxcTypography>
+                    <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold">4 Door Hardtop</DxcTypography>
+                  </div>
+                  <div className="policy-info-item">
+                    <DxcTypography fontSize="font-scale-01" color="var(--color-fg-neutral-stronger)">Class:</DxcTypography>
+                    <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold">9876</DxcTypography>
+                  </div>
+                  <div className="policy-info-item">
+                    <DxcTypography fontSize="font-scale-01" color="var(--color-fg-neutral-stronger)">VIN:</DxcTypography>
+                    <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold">1001-1223453</DxcTypography>
+                  </div>
+                  <div className="policy-info-item">
+                    <DxcTypography fontSize="font-scale-01" color="var(--color-fg-neutral-stronger)">Use:</DxcTypography>
+                    <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold">Commercial</DxcTypography>
+                  </div>
+                  <div className="policy-info-item">
+                    <DxcTypography fontSize="font-scale-01" color="var(--color-fg-neutral-stronger)">Vehicle Type:</DxcTypography>
+                    <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold">Sedan</DxcTypography>
+                  </div>
+                  <div className="policy-info-item">
+                    <DxcTypography fontSize="font-scale-01" color="var(--color-fg-neutral-stronger)">Coverage:</DxcTypography>
+                    <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold">
+                      Liab<br/>Comm'l<br/>No Fault<br/>Addt'l No Fault<br/>Med Pay<br/>Towing and Liable
+                    </DxcTypography>
+                  </div>
+                  <div className="policy-info-item">
+                    <DxcTypography fontSize="font-scale-01" color="var(--color-fg-neutral-stronger)">Symbol:</DxcTypography>
+                    <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold">10</DxcTypography>
+                  </div>
+                </div>
+              </div>
+
+              {/* Driver Details */}
+              <div>
+                <DxcFlex alignItems="center" gap="var(--spacing-gap-s)" style={{ marginBottom: 'var(--spacing-gap-m)' }}>
+                  <span className="material-icons" style={{ color: '#0095FF' }}>person</span>
+                  <DxcHeading level={4} text="Driver Details" />
+                </DxcFlex>
+                <DxcSelect
+                  label="Select Driver"
+                  options={[{ label: 'Scott Carpenter', value: '1' }]}
+                  value="1"
+                  style={{ marginBottom: 'var(--spacing-gap-m)' }}
+                />
+              </div>
+            </DxcFlex>
           </DxcInset>
         );
 
@@ -314,7 +465,12 @@ const UnderwritingWorkbench = ({ submission }) => {
                     <tr>
                       <td>Business License</td>
                       <td>State Database</td>
-                      <td><button className="order-btn">🛒 Order</button></td>
+                      <td>
+                        <DxcFlex alignItems="center" gap="var(--spacing-gap-xs)">
+                          <span className="material-icons" style={{ fontSize: '16px', color: '#FF6B00' }}>hourglass_empty</span>
+                          <span style={{ color: '#FF6B00', fontSize: 'var(--font-scale-01)' }}>Processing</span>
+                        </DxcFlex>
+                      </td>
                       <td></td>
                       <td></td>
                     </tr>
@@ -497,7 +653,131 @@ const UnderwritingWorkbench = ({ submission }) => {
       case 4: // Quotation
         return (
           <DxcInset>
-            <DxcTypography>Quotation content would go here</DxcTypography>
+            <DxcFlex direction="column" gap="var(--spacing-gap-xl)">
+              {/* Total Annual Premium */}
+              <div>
+                <DxcFlex alignItems="center" gap="var(--spacing-gap-s)" style={{ marginBottom: 'var(--spacing-gap-m)' }}>
+                  <span className="material-icons" style={{ color: '#0095FF' }}>calculate</span>
+                  <DxcHeading level={4} text="Quotation of Premium" />
+                </DxcFlex>
+                <div className="total-premium-box">
+                  <DxcFlex justifyContent="space-between" alignItems="center">
+                    <DxcTypography fontSize="font-scale-03" fontWeight="font-weight-semibold">
+                      Total Annual Premium
+                    </DxcTypography>
+                    <DxcTypography fontSize="font-scale-04" fontWeight="font-weight-bold" color="#0095FF">
+                      $11,145.00
+                    </DxcTypography>
+                  </DxcFlex>
+                </div>
+              </div>
+
+              {/* Insurance Line Coverages */}
+              <div>
+                <DxcFlex justifyContent="space-between" alignItems="center" style={{ marginBottom: 'var(--spacing-gap-m)' }}>
+                  <DxcFlex alignItems="center" gap="var(--spacing-gap-s)">
+                    <span className="material-icons" style={{ color: '#0095FF' }}>list_alt</span>
+                    <DxcHeading level={4} text="Insurance Line Coverages" />
+                  </DxcFlex>
+                  <DxcButton
+                    label="View Quote"
+                    icon="launch"
+                    mode="text"
+                    onClick={() => {}}
+                  />
+                </DxcFlex>
+                <table className="data-table">
+                  <thead>
+                    <tr>
+                      <th>Category</th>
+                      <th>Limits/Deductible</th>
+                      <th>Premium</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>Liability</td>
+                      <td>$1,000,000 CSL</td>
+                      <td>$ 5,100</td>
+                    </tr>
+                    <tr>
+                      <td>Uninsured / Underinsured Motorist</td>
+                      <td>$1,000,000</td>
+                      <td>$480</td>
+                    </tr>
+                    <tr>
+                      <td>Comprehensive Deductible</td>
+                      <td>$1,000</td>
+                      <td>$985</td>
+                    </tr>
+                    <tr>
+                      <td>Collision Deductible</td>
+                      <td>$1,000</td>
+                      <td>$880</td>
+                    </tr>
+                    <tr>
+                      <td>Hired and Non-Owned Auto</td>
+                      <td>Included</td>
+                      <td>$1,985</td>
+                    </tr>
+                    <tr>
+                      <td>Towing and Labor</td>
+                      <td>Included</td>
+                      <td>$420</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              {/* Fleet Vehicles */}
+              <div>
+                <DxcFlex justifyContent="space-between" alignItems="center" style={{ marginBottom: 'var(--spacing-gap-m)' }}>
+                  <DxcFlex alignItems="center" gap="var(--spacing-gap-s)">
+                    <span className="material-icons" style={{ color: '#0095FF' }}>local_shipping</span>
+                    <DxcHeading level={4} text="Fleet Vehicles" />
+                  </DxcFlex>
+                  <DxcButton
+                    label="View Quote"
+                    icon="launch"
+                    mode="text"
+                    onClick={() => {}}
+                  />
+                </DxcFlex>
+                <table className="data-table">
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>Vehicle</th>
+                      <th>Use</th>
+                      <th>Stated Value</th>
+                      <th>Comp</th>
+                      <th>Collision</th>
+                      <th>Total</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>1</td>
+                      <td>F-150 (2023)</td>
+                      <td>Service</td>
+                      <td>$ 45,100</td>
+                      <td>$ 280</td>
+                      <td>$ 450</td>
+                      <td>$ 46,500</td>
+                    </tr>
+                    <tr>
+                      <td>2</td>
+                      <td>F-150 (2022)</td>
+                      <td>Service</td>
+                      <td>$ 40,100</td>
+                      <td>$ 280</td>
+                      <td>$ 400</td>
+                      <td>$ 46,100</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </DxcFlex>
           </DxcInset>
         );
 
@@ -515,7 +795,7 @@ const UnderwritingWorkbench = ({ submission }) => {
                   <DxcButton
                     label="+ Add Note"
                     mode="primary"
-                    onClick={() => {}}
+                    onClick={() => setShowAddNoteModal(true)}
                   />
                 </DxcFlex>
                 <table className="notes-table">
@@ -613,7 +893,92 @@ const UnderwritingWorkbench = ({ submission }) => {
       case 6: // Actions
         return (
           <DxcInset>
-            <DxcTypography>Actions content would go here</DxcTypography>
+            {submissionAccepted ? (
+              // Success Screen
+              <DxcFlex direction="column" gap="var(--spacing-gap-l)">
+                <DxcHeading level={3} text="Success!" style={{ color: '#0095FF' }} />
+
+                <div className="success-message-box">
+                  <DxcTypography fontSize="font-scale-02">
+                    Submission {submission.id} has been accepted, the agent has been notified, and the quote is ready to convert to a policy.
+                  </DxcTypography>
+                </div>
+
+                <DxcFlex justifyContent="flex-end" gap="var(--spacing-gap-m)">
+                  <DxcButton
+                    label="Email Agent"
+                    icon="email"
+                    mode="secondary"
+                    onClick={() => {}}
+                  />
+                  <DxcButton
+                    label="View Quote Letter"
+                    icon="description"
+                    mode="secondary"
+                    onClick={() => {}}
+                  />
+                  <DxcButton
+                    label="Convert Quote to Policy"
+                    icon="policy"
+                    onClick={() => {}}
+                  />
+                </DxcFlex>
+              </DxcFlex>
+            ) : (
+              // Underwriting Actions Form
+              <DxcFlex direction="column" gap="var(--spacing-gap-l)">
+                <DxcHeading level={4} text="Underwriting Actions" />
+
+                <DxcTextInput
+                  label="Subject"
+                  placeholder="Subject matter"
+                />
+
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-gap-xs)' }}>
+                  <label style={{
+                    fontSize: 'var(--font-scale-02)',
+                    fontWeight: 'var(--font-weight-semibold)',
+                    color: 'var(--color-fg-neutral-stronger)'
+                  }}>
+                    Message (Max limit 3000 characters)
+                  </label>
+                  <textarea
+                    placeholder="Enter your text here..."
+                    maxLength={3000}
+                    rows={12}
+                    style={{
+                      width: '100%',
+                      padding: 'var(--spacing-padding-m)',
+                      fontSize: 'var(--font-scale-02)',
+                      fontFamily: 'var(--font-family-sans)',
+                      border: '1px solid var(--color-border-neutral-medium)',
+                      borderRadius: 'var(--border-radius-s)',
+                      resize: 'vertical',
+                    }}
+                  />
+                </div>
+
+                <DxcFlex justifyContent="flex-end" gap="var(--spacing-gap-m)">
+                  <DxcButton
+                    label="Reassign"
+                    icon="swap_horiz"
+                    mode="secondary"
+                    onClick={() => {}}
+                  />
+                  <DxcButton
+                    label="Decline"
+                    icon="cancel"
+                    mode="secondary"
+                    onClick={() => {}}
+                  />
+                  <DxcButton
+                    label="Accept"
+                    icon="check"
+                    onClick={() => setShowValidationModal(true)}
+                  />
+                </DxcFlex>
+              </DxcFlex>
+            )}
           </DxcInset>
         );
 
@@ -757,11 +1122,94 @@ const UnderwritingWorkbench = ({ submission }) => {
                   </DxcFlex>
                 ))}
               </DxcFlex>
-              <DxcFlex justifyContent="flex-end">
+              <DxcFlex justifyContent="space-between">
                 <DxcButton
                   label="Back to Review"
-                  mode="primary"
+                  mode="secondary"
                   onClick={() => setShowValidationModal(false)}
+                />
+                <DxcButton
+                  label="Accept Anyway"
+                  mode="primary"
+                  onClick={() => {
+                    setShowValidationModal(false);
+                    setSubmissionAccepted(true);
+                    setActiveTabIndex(6); // Switch to Actions tab to show success
+                  }}
+                />
+              </DxcFlex>
+            </DxcFlex>
+          </div>
+        </DxcDialog>
+      )}
+
+      {/* Add Note Modal */}
+      {showAddNoteModal && (
+        <DxcDialog onCloseClick={() => setShowAddNoteModal(false)}>
+          <div style={{ padding: 'var(--spacing-padding-l)', minWidth: '500px' }}>
+            <DxcFlex direction="column" gap="var(--spacing-gap-m)">
+              <DxcHeading level={3} text="Add Note" />
+
+              <DxcSelect
+                label="Type"
+                options={[
+                  { label: 'Reminder', value: 'Reminder' },
+                  { label: 'Task', value: 'Task' },
+                  { label: 'General', value: 'General' },
+                ]}
+                value={newNoteType}
+                onChange={(value) => setNewNoteType(value)}
+              />
+
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-gap-xs)' }}>
+                <label style={{
+                  fontSize: 'var(--font-scale-02)',
+                  fontWeight: 'var(--font-weight-semibold)',
+                  color: 'var(--color-fg-neutral-stronger)'
+                }}>
+                  Note
+                </label>
+                <textarea
+                  placeholder="Enter your text here..."
+                  value={newNoteText}
+                  onChange={(e) => setNewNoteText(e.target.value)}
+                  rows={6}
+                  style={{
+                    width: '100%',
+                    padding: 'var(--spacing-padding-m)',
+                    fontSize: 'var(--font-scale-02)',
+                    fontFamily: 'var(--font-family-sans)',
+                    border: '1px solid var(--color-border-neutral-medium)',
+                    borderRadius: 'var(--border-radius-s)',
+                    resize: 'vertical',
+                  }}
+                />
+              </div>
+
+              <DxcFlex justifyContent="flex-end" gap="var(--spacing-gap-m)">
+                <DxcButton
+                  label="Cancel"
+                  mode="secondary"
+                  onClick={() => {
+                    setShowAddNoteModal(false);
+                    setNewNoteText('');
+                    setNewNoteType('Reminder');
+                  }}
+                />
+                <DxcButton
+                  label="Add"
+                  mode="primary"
+                  onClick={() => {
+                    const newNote = {
+                      date: new Date().toLocaleDateString(),
+                      type: newNoteType,
+                      note: newNoteText
+                    };
+                    setNotes([newNote, ...notes]);
+                    setShowAddNoteModal(false);
+                    setNewNoteText('');
+                    setNewNoteType('Reminder');
+                  }}
                 />
               </DxcFlex>
             </DxcFlex>

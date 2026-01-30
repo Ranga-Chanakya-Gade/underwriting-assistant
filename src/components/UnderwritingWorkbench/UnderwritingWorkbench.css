@@ -9,18 +9,18 @@
 }
 
 .risk-indicator-card.risk-warning {
-  border-left-color: #FF6B00;
-  background-color: #FFF4E5;
+  border-left-color: var(--color-orange-600, #FF6B00);
+  background-color: var(--color-orange-50, #FFF4E5);
 }
 
 .risk-indicator-card.risk-error {
-  border-left-color: #D0021B;
-  background-color: #FFF0F0;
+  border-left-color: var(--color-red-600, #D0021B);
+  background-color: var(--color-red-50, #FFF0F0);
 }
 
 .risk-indicator-card.risk-info {
-  border-left-color: #0095FF;
-  background-color: #F0F8FF;
+  border-left-color: var(--color-blue-600, #0095FF);
+  background-color: var(--color-blue-50, #F0F8FF);
 }
 
 /* Info Section */
@@ -32,8 +32,8 @@
 }
 
 .info-icon {
-  color: #0095FF;
-  font-size: 20px;
+  color: var(--color-blue-600, #0095FF);
+  font-size: var(--font-scale-03);
 }
 
 /* Data Tables */
@@ -46,21 +46,21 @@
 }
 
 .data-table thead {
-  background-color: #0095FF;
-  color: white;
+  background-color: var(--color-blue-600, #0095FF);
+  color: var(--color-white, white);
 }
 
 .data-table th {
   padding: var(--spacing-padding-m);
   text-align: left;
-  font-weight: 600;
-  font-size: 14px;
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-scale-02);
 }
 
 .data-table td {
   padding: var(--spacing-padding-m);
   border-bottom: 1px solid var(--color-border-neutral-lighter);
-  font-size: 14px;
+  font-size: var(--font-scale-02);
 }
 
 .data-table tbody tr:hover {
@@ -72,9 +72,9 @@
 }
 
 .table-link {
-  color: #0095FF;
+  color: var(--color-blue-600, #0095FF);
   text-decoration: none;
-  font-weight: 500;
+  font-weight: var(--font-weight-medium);
 }
 
 .table-link:hover {
@@ -83,32 +83,32 @@
 
 .status-badge {
   display: inline-block;
-  padding: 4px 12px;
+  padding: var(--spacing-padding-xxs) var(--spacing-padding-s);
   border-radius: var(--border-radius-s);
-  font-size: 12px;
-  font-weight: 600;
+  font-size: var(--font-scale-01);
+  font-weight: var(--font-weight-semibold);
 }
 
 .status-badge.status-available {
-  background-color: #E8F5E9;
-  color: #24A148;
+  background-color: var(--color-green-50, #E8F5E9);
+  color: var(--color-green-600, #24A148);
 }
 
 .order-btn {
-  background-color: #F0F8FF;
-  border: 1px solid #0095FF;
-  color: #0095FF;
-  padding: 4px 12px;
+  background-color: var(--color-blue-50, #F0F8FF);
+  border: 1px solid var(--color-blue-600, #0095FF);
+  color: var(--color-blue-600, #0095FF);
+  padding: var(--spacing-padding-xxs) var(--spacing-padding-s);
   border-radius: var(--border-radius-s);
   cursor: pointer;
-  font-size: 12px;
-  font-weight: 600;
+  font-size: var(--font-scale-01);
+  font-weight: var(--font-weight-semibold);
   transition: all 0.2s ease;
 }
 
 .order-btn:hover {
-  background-color: #0095FF;
-  color: white;
+  background-color: var(--color-blue-600, #0095FF);
+  color: var(--color-white, white);
 }
 
 /* Document Upload Table */
@@ -121,21 +121,21 @@
 }
 
 .document-upload-table thead {
-  background-color: #0095FF;
-  color: white;
+  background-color: var(--color-blue-600, #0095FF);
+  color: var(--color-white, white);
 }
 
 .document-upload-table th {
   padding: var(--spacing-padding-m);
   text-align: left;
-  font-weight: 600;
-  font-size: 14px;
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-scale-02);
 }
 
 .document-upload-table td {
   padding: var(--spacing-padding-m);
   border-bottom: 1px solid var(--color-border-neutral-lighter);
-  font-size: 14px;
+  font-size: var(--font-scale-02);
 }
 
 .document-upload-table tbody tr:hover {
@@ -151,18 +151,18 @@
 
 .select-file-btn {
   padding: var(--spacing-padding-s) var(--spacing-padding-m);
-  background-color: white;
+  background-color: var(--color-white, white);
   border: 1px solid var(--color-border-neutral-medium);
   border-radius: var(--border-radius-s);
   cursor: pointer;
-  font-size: 14px;
-  font-weight: 500;
+  font-size: var(--font-scale-02);
+  font-weight: var(--font-weight-medium);
   transition: all 0.2s ease;
 }
 
 .select-file-btn:hover {
   background-color: var(--color-bg-neutral-lighter);
-  border-color: #0095FF;
+  border-color: var(--color-blue-600, #0095FF);
 }
 
 /* Notes Table */
@@ -175,21 +175,21 @@
 }
 
 .notes-table thead {
-  background-color: #0095FF;
-  color: white;
+  background-color: var(--color-blue-600, #0095FF);
+  color: var(--color-white, white);
 }
 
 .notes-table th {
   padding: var(--spacing-padding-m);
   text-align: left;
-  font-weight: 600;
-  font-size: 14px;
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-scale-02);
 }
 
 .notes-table td {
   padding: var(--spacing-padding-m);
   border-bottom: 1px solid var(--color-border-neutral-lighter);
-  font-size: 14px;
+  font-size: var(--font-scale-02);
 }
 
 .notes-table tbody tr:hover {
@@ -206,21 +206,21 @@
 }
 
 .messages-table thead {
-  background-color: #0095FF;
-  color: white;
+  background-color: var(--color-blue-600, #0095FF);
+  color: var(--color-white, white);
 }
 
 .messages-table th {
   padding: var(--spacing-padding-m);
   text-align: left;
-  font-weight: 600;
-  font-size: 14px;
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-scale-02);
 }
 
 .messages-table td {
   padding: var(--spacing-padding-m);
   border-bottom: 1px solid var(--color-border-neutral-lighter);
-  font-size: 14px;
+  font-size: var(--font-scale-02);
 }
 
 .messages-table tbody tr:hover {
@@ -241,21 +241,84 @@
   border-bottom: 3px solid transparent;
   padding: var(--spacing-padding-s) var(--spacing-padding-m);
   cursor: pointer;
-  font-family: 'Open Sans', sans-serif;
-  font-size: 14px;
-  font-weight: 500;
+  font-family: var(--font-family-sans);
+  font-size: var(--font-scale-02);
+  font-weight: var(--font-weight-medium);
   color: var(--color-fg-neutral-stronger);
   transition: all 0.2s ease;
   margin-bottom: -2px;
 }
 
 .message-tab:hover {
-  color: #0095FF;
+  color: var(--color-blue-600, #0095FF);
   background-color: var(--color-bg-neutral-lighter);
 }
 
 .message-tab.active {
-  color: #0095FF;
-  border-bottom-color: #0095FF;
-  font-weight: 600;
+  color: var(--color-blue-600, #0095FF);
+  border-bottom-color: var(--color-blue-600, #0095FF);
+  font-weight: var(--font-weight-semibold);
+}
+
+/* Icon Buttons */
+.icon-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--color-blue-600, #0095FF);
+  padding: var(--spacing-padding-xs);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--border-radius-s);
+  transition: background-color 0.2s ease;
+}
+
+.icon-btn:hover {
+  background-color: var(--color-bg-neutral-lighter);
+}
+
+.icon-btn-small {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--color-blue-600, #0095FF);
+  padding: var(--spacing-padding-xxs);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--border-radius-s);
+  transition: background-color 0.2s ease;
+}
+
+.icon-btn-small:hover {
+  background-color: var(--color-bg-neutral-lighter);
+}
+
+/* Success Message Box */
+.success-message-box {
+  background-color: var(--color-grey-100, #F5F5F5);
+  border-radius: var(--border-radius-m);
+  padding: var(--spacing-padding-l);
+}
+
+/* Policy Info Grid */
+.policy-info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: var(--spacing-gap-m);
+}
+
+.policy-info-item {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-gap-xs);
+}
+
+/* Total Premium Box */
+.total-premium-box {
+  background-color: var(--color-bg-neutral-lightest);
+  border: 2px solid var(--color-blue-600, #0095FF);
+  border-radius: var(--border-radius-m);
+  padding: var(--spacing-padding-l);
 }

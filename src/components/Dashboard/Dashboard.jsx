@@ -15,6 +15,18 @@ const Dashboard = ({ onSubmissionSelect }) => {
   const [activeTabIndex, setActiveTabIndex] = useState(0);
   const [isGridView, setIsGridView] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
+  const [showColumnSelector, setShowColumnSelector] = useState(false);
+  const [visibleColumns, setVisibleColumns] = useState({
+    quotePolicy: true,
+    dateSubmitted: true,
+    dateReceived: true,
+    effectiveDate: true,
+    lob: true,
+    symbol: true,
+    primaryState: true,
+    applicant: true,
+    transactionStatus: true,
+  });
   const itemsPerPage = 9;
 
   // Use P&C Commercial Auto submissions only
@@ -213,8 +225,53 @@ const Dashboard = ({ onSubmissionSelect }) => {
               </DxcTabs.Tab>
             </DxcTabs>
 
-            {/* View Toggle */}
+            {/* View Toggle and Column Selector */}
             <DxcFlex justifyContent="flex-end" alignItems="center" gap="var(--spacing-gap-m)">
+              {/* Column Selector Button (only show in Grid View) */}
+              {isGridView && (
+                <div style={{ position: 'relative' }}>
+                  <button
+                    onClick={() => setShowColumnSelector(!showColumnSelector)}
+                    className="column-selector-btn"
+                  >
+                    <DxcFlex alignItems="center" gap="var(--spacing-gap-xs)">
+                      <span className="material-icons" style={{ fontSize: '18px' }}>view_column</span>
+                      <span>Columns</span>
+                    </DxcFlex>
+                  </button>
+
+                  {showColumnSelector && (
+                    <div className="column-selector-popover">
+                      <DxcFlex direction="column" gap="var(--spacing-gap-s)">
+                        {Object.entries({
+                          quotePolicy: 'Quote / Policy #',
+                          dateSubmitted: 'Date Submitted',
+                          dateReceived: 'Date Received',
+                          effectiveDate: 'Effective Date',
+                          lob: 'LOB',
+                          symbol: 'Symbol',
+                          primaryState: 'Primary State',
+                          applicant: 'Applicant',
+                          transactionStatus: 'Transaction Status',
+                        }).map(([key, label]) => (
+                          <label key={key} className="column-toggle-item">
+                            <input
+                              type="checkbox"
+                              checked={visibleColumns[key]}
+                              onChange={(e) => setVisibleColumns({
+                                ...visibleColumns,
+                                [key]: e.target.checked
+                              })}
+                            />
+                            <span>{label}</span>
+                          </label>
+                        ))}
+                      </DxcFlex>
+                    </div>
+                  )}
+                </div>
+              )}
+
               <button
                 onClick={() => setIsGridView(false)}
                 className={`view-toggle-btn ${!isGridView ? 'active' : ''}`}
@@ -229,67 +286,129 @@ const Dashboard = ({ onSubmissionSelect }) => {
               </button>
             </DxcFlex>
 
-            {/* Submission Cards */}
-            <DxcFlex
-              direction="column"
-              gap="var(--spacing-gap-m)">
-              {paginatedSubmissions.map((submission) => (
-                <div
-                  key={submission.id}
-                  className="submission-card"
-                  onClick={() => onSubmissionSelect(submission)}
-                >
-                  <DxcFlex justifyContent="space-between" alignItems="center">
-                    <DxcFlex direction="column" gap="var(--spacing-gap-xs)" grow={1}>
-                      {/* Company Name and Status */}
-                      <DxcFlex alignItems="center" gap="var(--spacing-gap-m)">
-                        <DxcTypography fontSize="font-scale-03" fontWeight="font-weight-semibold">
-                          {submission.applicantName}
-                        </DxcTypography>
-                        <DxcBadge
-                          label={submission.status}
-                          mode="contextual"
-                          color={getStatusColor(submission.status)}
-                          size="small"
-                        />
+            {/* Submission Cards or Grid Table */}
+            {!isGridView ? (
+              // Card View
+              <DxcFlex direction="column" gap="var(--spacing-gap-m)">
+                {paginatedSubmissions.map((submission) => (
+                  <div
+                    key={submission.id}
+                    className="submission-card"
+                    onClick={() => onSubmissionSelect(submission)}
+                  >
+                    <DxcFlex justifyContent="space-between" alignItems="center">
+                      <DxcFlex direction="column" gap="var(--spacing-gap-xs)" grow={1}>
+                        {/* Company Name and Status */}
+                        <DxcFlex alignItems="center" gap="var(--spacing-gap-m)">
+                          <DxcTypography fontSize="font-scale-03" fontWeight="font-weight-semibold">
+                            {submission.applicantName}
+                          </DxcTypography>
+                          <DxcBadge
+                            label={submission.status}
+                            mode="contextual"
+                            color={getStatusColor(submission.status)}
+                            size="small"
+                          />
+                        </DxcFlex>
+
+                        {/* Submission Details */}
+                        <DxcFlex gap="var(--spacing-gap-l)" wrap="wrap">
+                          <DxcTypography fontSize="12px" color="var(--color-fg-neutral-dark)">
+                            {submission.id}
+                          </DxcTypography>
+                          <DxcTypography fontSize="12px" color="var(--color-fg-neutral-dark)">
+                            LOB: {submission.lineOfBusiness}
+                          </DxcTypography>
+                          <DxcTypography fontSize="12px" color="var(--color-fg-neutral-dark)">
+                            Uploaded: {submission.submittedDate}
+                          </DxcTypography>
+                          <DxcTypography fontSize="12px" color="var(--color-fg-neutral-dark)">
+                            Saved: {submission.receivedDate}
+                          </DxcTypography>
+                          <DxcTypography fontSize="12px" color="var(--color-fg-neutral-dark)">
+                            Effective Date: {submission.effectiveDate}
+                          </DxcTypography>
+                        </DxcFlex>
                       </DxcFlex>
 
-                      {/* Submission Details */}
-                      <DxcFlex gap="var(--spacing-gap-l)" wrap="wrap">
-                        <DxcTypography fontSize="12px" color="var(--color-fg-neutral-dark)">
-                          {submission.id}
-                        </DxcTypography>
-                        <DxcTypography fontSize="12px" color="var(--color-fg-neutral-dark)">
-                          LOB: {submission.lineOfBusiness}
-                        </DxcTypography>
-                        <DxcTypography fontSize="12px" color="var(--color-fg-neutral-dark)">
-                          Uploaded: {submission.submittedDate}
-                        </DxcTypography>
-                        <DxcTypography fontSize="12px" color="var(--color-fg-neutral-dark)">
-                          Saved: {submission.receivedDate}
-                        </DxcTypography>
-                        <DxcTypography fontSize="12px" color="var(--color-fg-neutral-dark)">
-                          Effective Date: {submission.effectiveDate}
-                        </DxcTypography>
+                      {/* Action Icons */}
+                      <DxcFlex gap="var(--spacing-gap-s)" alignItems="center">
+                        <button className="icon-btn" title="Share" onClick={(e) => e.stopPropagation()}>
+                          <span className="material-icons">share</span>
+                        </button>
+                        <button className="icon-btn" title="Preview" onClick={(e) => e.stopPropagation()}>
+                          <span className="material-icons">visibility</span>
+                        </button>
+                        <button className="icon-btn" title="Approve" onClick={(e) => e.stopPropagation()}>
+                          <span className="material-icons">check</span>
+                        </button>
                       </DxcFlex>
                     </DxcFlex>
-
-                    {/* Action Icons */}
-                    <DxcFlex gap="var(--spacing-gap-s)" alignItems="center">
-                      <button className="icon-btn" title="Share" onClick={(e) => e.stopPropagation()}>
-                        <span className="material-icons">share</span>
-                      </button>
-                      <button className="icon-btn" title="Preview" onClick={(e) => e.stopPropagation()}>
-                        <span className="material-icons">visibility</span>
-                      </button>
-                      <button className="icon-btn" title="Approve" onClick={(e) => e.stopPropagation()}>
-                        <span className="material-icons">check</span>
-                      </button>
-                    </DxcFlex>
-                  </DxcFlex>
-                </div>
-              ))}
-            </DxcFlex>
+                  </div>
+                ))}
+              </DxcFlex>
+            ) : (
+              // Grid View
+              <table className="submissions-grid-table">
+                <thead>
+                  <tr>
+                    {visibleColumns.quotePolicy && <th>Quote / Policy #</th>}
+                    {visibleColumns.dateSubmitted && <th>Date Submitted</th>}
+                    {visibleColumns.dateReceived && <th>Date Received</th>}
+                    {visibleColumns.effectiveDate && <th>Effective Date</th>}
+                    {visibleColumns.lob && <th>LOB</th>}
+                    {visibleColumns.symbol && <th>Symbol</th>}
+                    {visibleColumns.primaryState && <th>Primary State</th>}
+                    {visibleColumns.applicant && <th>Applicant</th>}
+                    {visibleColumns.transactionStatus && <th>Transaction Status</th>}
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {paginatedSubmissions.map((submission) => (
+                    <tr key={submission.id} onClick={() => onSubmissionSelect(submission)}>
+                      {visibleColumns.quotePolicy && (
+                        <td>
+                          <a href="#" className="table-link" onClick={(e) => { e.stopPropagation(); onSubmissionSelect(submission); }}>
+                            {submission.id}
+                          </a>
+                        </td>
+                      )}
+                      {visibleColumns.dateSubmitted && <td>{submission.submittedDate}</td>}
+                      {visibleColumns.dateReceived && <td>{submission.receivedDate}</td>}
+                      {visibleColumns.effectiveDate && <td>{submission.effectiveDate}</td>}
+                      {visibleColumns.lob && <td>{submission.lineOfBusiness}</td>}
+                      {visibleColumns.symbol && <td>{submission.lineOfBusiness}</td>}
+                      {visibleColumns.primaryState && <td>SC</td>}
+                      {visibleColumns.applicant && <td>{submission.applicantName}</td>}
+                      {visibleColumns.transactionStatus && (
+                        <td>
+                          <DxcBadge
+                            label={submission.status}
+                            mode="contextual"
+                            color={getStatusColor(submission.status)}
+                            size="small"
+                          />
+                        </td>
+                      )}
+                      <td>
+                        <DxcFlex gap="var(--spacing-gap-xs)" alignItems="center">
+                          <button className="icon-btn-small" title="Approve" onClick={(e) => e.stopPropagation()}>
+                            <span className="material-icons">check</span>
+                          </button>
+                          <button className="icon-btn-small" title="Decline" onClick={(e) => e.stopPropagation()}>
+                            <span className="material-icons">cancel</span>
+                          </button>
+                          <button className="icon-btn-small" title="Share" onClick={(e) => e.stopPropagation()}>
+                            <span className="material-icons">share</span>
+                          </button>
+                        </DxcFlex>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            )}
 
             {/* Pagination */}
             <DxcFlex justifyContent="space-between" alignItems="center">

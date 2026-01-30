@@ -30,19 +30,19 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-weight: 600;
-  font-size: 14px;
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-scale-02);
   transition: all 0.3s ease;
 }
 
 .step-indicator.completed {
-  background-color: #4CAF50;
-  color: white;
+  background-color: var(--color-green-600, #4CAF50);
+  color: var(--color-white, white);
 }
 
 .step-indicator.active {
-  background-color: #0095FF;
-  color: white;
+  background-color: var(--color-blue-600, #0095FF);
+  color: var(--color-white, white);
 }
 
 .step-indicator.pending {
@@ -69,8 +69,8 @@
 }
 
 .upload-area:hover {
-  border-color: #0095FF;
-  background-color: #F0F8FF;
+  border-color: var(--color-blue-600, #0095FF);
+  background-color: var(--color-blue-50, #F0F8FF);
 }
 
 .upload-label {
@@ -97,8 +97,8 @@
 .document-table th {
   padding: var(--spacing-padding-m);
   text-align: left;
-  font-weight: 600;
-  font-size: 14px;
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-scale-02);
   color: var(--color-fg-neutral-stronger);
   border-bottom: 1px solid var(--color-border-neutral-lighter);
 }
@@ -106,7 +106,7 @@
 .document-table td {
   padding: var(--spacing-padding-m);
   border-bottom: 1px solid var(--color-border-neutral-lighter);
-  font-size: 14px;
+  font-size: var(--font-scale-02);
 }
 
 .document-table tbody tr:hover {
@@ -121,7 +121,7 @@
   background: none;
   border: none;
   cursor: pointer;
-  padding: 4px;
+  padding: var(--spacing-padding-xxs);
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -132,17 +132,42 @@
 
 .icon-btn-small:hover {
   background-color: var(--color-bg-neutral-light);
-  color: #D0021B;
+  color: var(--color-red-600, #D0021B);
 }
 
 .icon-btn-small .material-icons {
   font-size: 18px;
 }
 
+/* Processing Banner */
+.processing-banner {
+  background-color: var(--color-blue-50, #E5F4FF);
+  border: 1px solid var(--color-blue-600, #0095FF);
+  border-radius: var(--border-radius-m);
+  padding: var(--spacing-padding-m);
+  margin-bottom: var(--spacing-gap-m);
+}
+
+.close-banner-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--color-fg-neutral-stronger);
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s ease;
+}
+
+.close-banner-btn:hover {
+  color: var(--color-fg-neutral-darkest);
+}
+
 /* Validation Warning */
 .validation-warning {
-  background-color: #FFF4E5;
-  border: 1px solid #FF6B00;
+  background-color: var(--color-orange-50, #FFF4E5);
+  border: 1px solid var(--color-orange-600, #FF6B00);
   border-radius: var(--border-radius-m);
   padding: var(--spacing-padding-m);
   margin-bottom: var(--spacing-gap-m);
@@ -169,17 +194,17 @@
 }
 
 .field-indicator.error {
-  color: #D0021B;
+  color: var(--color-red-600, #D0021B);
 }
 
 .field-indicator.warning {
-  color: #FF6B00;
+  color: var(--color-orange-600, #FF6B00);
 }
 
 .confidence-dot {
   width: 10px;
   height: 10px;
   border-radius: 50%;
-  background-color: #FF6B00;
+  background-color: var(--color-orange-600, #FF6B00);
   display: inline-block;
 }
