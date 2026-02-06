@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import {
-  DxcHeading,
   DxcFlex,
   DxcTypography,
   DxcButton,
@@ -75,204 +74,164 @@ const UnderwritingWorkbench = ({ submission }) => {
     license: 'KY-INS-1928463',
   };
 
-  const mockVehicles = [
-    {
-      autoNo: '1001',
-      year: '1998',
-      make: 'Ford',
-      model: 'Contour',
-      bodyType: '4 Door Hardtop',
-      vin: '1001-123xxxx',
-      costNew: '$12,999.00',
-      state: 'WA',
-      territory: 'A01',
-      class: '9876',
-      use: 'Comml',
-      coverage: 'Liab',
-    },
-    // Add more vehicles as needed
-  ];
-
   const renderTabContent = () => {
     switch (activeTabIndex) {
       case 0: // Overview
         return (
           <DxcInset>
-            <DxcFlex direction="column" gap="var(--spacing-gap-xl)">
-              {/* Risk Assessment Cards */}
-              <DxcFlex gap="var(--spacing-gap-m)" wrap="wrap">
-                <div className="risk-indicator-card risk-warning">
-                  <DxcFlex alignItems="center" gap="var(--spacing-gap-m)">
-                    <span className="material-icons" style={{ fontSize: '32px', color: '#FF6B00' }}>warning</span>
-                    <DxcFlex direction="column" gap="var(--spacing-gap-xs)">
-                      <DxcTypography fontSize="font-scale-03" fontWeight="font-weight-semibold" color="#FF6B00">
+            <DxcFlex direction="column" gap="var(--spacing-gap-l)">
+              {/* Risk Assessment Summary */}
+              <div>
+                <DxcTypography fontSize="font-scale-03" fontWeight="font-weight-semibold" color="#333333">
+                  Risk Assessment
+                </DxcTypography>
+                <DxcFlex direction="column" gap="var(--spacing-gap-s)" style={{ marginTop: 'var(--spacing-gap-m)' }}>
+                  <div className="risk-row risk-row-warning">
+                    <span className="material-icons-outlined risk-row-icon" style={{ color: '#F6921E' }}>warning_amber</span>
+                    <DxcFlex direction="column" gap="2px" style={{ flex: 1 }}>
+                      <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold" color="#F6921E">
                         High Risk Industry
                       </DxcTypography>
-                      <DxcTypography fontSize="font-scale-02">
+                      <DxcTypography fontSize="font-scale-01" color="#808285">
                         Construction industry has a higher risk of accidents, injuries, and liable claims
                       </DxcTypography>
                     </DxcFlex>
-                  </DxcFlex>
-                </div>
-
-                <div className="risk-indicator-card risk-error">
-                  <DxcFlex alignItems="center" gap="var(--spacing-gap-m)">
-                    <span className="material-icons" style={{ fontSize: '32px', color: '#D0021B' }}>trending_down</span>
-                    <DxcFlex direction="column" gap="var(--spacing-gap-xs)">
-                      <DxcTypography fontSize="font-scale-03" fontWeight="font-weight-semibold" color="#D0021B">
+                    <span className="risk-severity-pill risk-severity-high">High</span>
+                  </div>
+                  <div className="risk-row risk-row-error">
+                    <span className="material-icons-outlined risk-row-icon" style={{ color: '#D0021B' }}>trending_down</span>
+                    <DxcFlex direction="column" gap="2px" style={{ flex: 1 }}>
+                      <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold" color="#D0021B">
                         Poor Claims History
                       </DxcTypography>
-                      <DxcTypography fontSize="font-scale-02">
+                      <DxcTypography fontSize="font-scale-01" color="#808285">
                         This company has a history of frequent high dollar claims
                       </DxcTypography>
                     </DxcFlex>
-                  </DxcFlex>
-                </div>
-
-                <div className="risk-indicator-card risk-info">
-                  <DxcFlex alignItems="center" gap="var(--spacing-gap-m)">
-                    <span className="material-icons" style={{ fontSize: '32px', color: '#0095FF' }}>local_shipping</span>
-                    <DxcFlex direction="column" gap="var(--spacing-gap-xs)">
-                      <DxcTypography fontSize="font-scale-03" fontWeight="font-weight-semibold" color="#0095FF">
+                    <span className="risk-severity-pill risk-severity-critical">Critical</span>
+                  </div>
+                  <div className="risk-row risk-row-info">
+                    <span className="material-icons-outlined risk-row-icon" style={{ color: '#1B75BB' }}>health_and_safety</span>
+                    <DxcFlex direction="column" gap="2px" style={{ flex: 1 }}>
+                      <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold" color="#1B75BB">
                         Safety Concerns
                       </DxcTypography>
-                      <DxcTypography fontSize="font-scale-02">
+                      <DxcTypography fontSize="font-scale-01" color="#808285">
                         This company has a history of workplace violations
                       </DxcTypography>
                     </DxcFlex>
-                  </DxcFlex>
-                </div>
-              </DxcFlex>
+                    <span className="risk-severity-pill risk-severity-medium">Medium</span>
+                  </div>
+                </DxcFlex>
+              </div>
 
-              {/* Applicant Details and Agent Info */}
-              <DxcFlex gap="var(--spacing-gap-l)">
-                <div className="info-section" style={{ flex: 1 }}>
+              {/* Applicant Details - own card */}
+              <div className="detail-card">
+                <div className="detail-card-header">
                   <DxcFlex justifyContent="space-between" alignItems="center">
-                    <DxcHeading level={4} text="Applicant Details" />
+                    <DxcFlex alignItems="center" gap="var(--spacing-gap-s)">
+                      <span className="material-icons-outlined" style={{ color: '#1B75BB', fontSize: '20px' }}>person_outline</span>
+                      <DxcTypography fontSize="font-scale-03" fontWeight="font-weight-semibold" color="#333333">
+                        Applicant Details
+                      </DxcTypography>
+                    </DxcFlex>
                     <button className="icon-btn">
-                      <span className="material-icons">edit</span>
+                      <span className="material-icons-outlined">edit</span>
                     </button>
                   </DxcFlex>
-                  <DxcFlex direction="column" gap="var(--spacing-gap-m)" style={{ marginTop: 'var(--spacing-gap-m)' }}>
-                    <DxcFlex alignItems="center" gap="var(--spacing-gap-s)">
-                      <span className="material-icons info-icon">person</span>
-                      <DxcFlex direction="column" gap="var(--spacing-gap-xxs)">
-                        <DxcTypography fontSize="font-scale-01" color="var(--color-fg-neutral-stronger)">
-                          Applicant / Insured
-                        </DxcTypography>
-                        <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold">
-                          {mockApplicantData.applicant}
-                        </DxcTypography>
-                      </DxcFlex>
-                    </DxcFlex>
-                    <DxcFlex alignItems="center" gap="var(--spacing-gap-s)">
-                      <span className="material-icons info-icon">location_on</span>
-                      <DxcFlex direction="column" gap="var(--spacing-gap-xxs)">
-                        <DxcTypography fontSize="font-scale-01" color="var(--color-fg-neutral-stronger)">
-                          Address
-                        </DxcTypography>
-                        <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold">
-                          {mockApplicantData.address}
-                        </DxcTypography>
-                      </DxcFlex>
-                    </DxcFlex>
-                    <DxcFlex alignItems="center" gap="var(--spacing-gap-s)">
-                      <span className="material-icons info-icon">business</span>
-                      <DxcFlex direction="column" gap="var(--spacing-gap-xxs)">
-                        <DxcTypography fontSize="font-scale-01" color="var(--color-fg-neutral-stronger)">
-                          Years in Business
-                        </DxcTypography>
-                        <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold">
-                          {mockApplicantData.yearsInBusiness}
-                        </DxcTypography>
-                      </DxcFlex>
-                    </DxcFlex>
-                    <DxcFlex alignItems="center" gap="var(--spacing-gap-s)">
-                      <span className="material-icons info-icon">calendar_today</span>
-                      <DxcFlex direction="column" gap="var(--spacing-gap-xxs)">
-                        <DxcTypography fontSize="font-scale-01" color="var(--color-fg-neutral-stronger)">
-                          Age of Policy
-                        </DxcTypography>
-                        <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold">
-                          {mockApplicantData.ageOfPolicy}
-                        </DxcTypography>
-                      </DxcFlex>
-                    </DxcFlex>
-                    <DxcFlex alignItems="center" gap="var(--spacing-gap-s)">
-                      <span className="material-icons info-icon">attach_money</span>
-                      <DxcFlex direction="column" gap="var(--spacing-gap-xxs)">
-                        <DxcTypography fontSize="font-scale-01" color="var(--color-fg-neutral-stronger)">
-                          Annual Receipts
-                        </DxcTypography>
-                        <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold">
-                          {mockApplicantData.annualReceipts}
-                        </DxcTypography>
-                      </DxcFlex>
-                    </DxcFlex>
-                    <DxcFlex alignItems="center" gap="var(--spacing-gap-s)">
-                      <span className="material-icons info-icon">tag</span>
-                      <DxcFlex direction="column" gap="var(--spacing-gap-xxs)">
-                        <DxcTypography fontSize="font-scale-01" color="var(--color-fg-neutral-stronger)">
-                          SIC code
-                        </DxcTypography>
-                        <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold">
-                          {mockApplicantData.sicCode}
-                        </DxcTypography>
-                      </DxcFlex>
-                    </DxcFlex>
-                  </DxcFlex>
                 </div>
+                <div className="detail-card-body">
+                  <div className="detail-grid">
+                    <div className="detail-item">
+                      <DxcTypography fontSize="font-scale-01" color="#808285">Applicant / Insured</DxcTypography>
+                      <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold" color="#333333">
+                        {mockApplicantData.applicant}
+                      </DxcTypography>
+                    </div>
+                    <div className="detail-item">
+                      <DxcTypography fontSize="font-scale-01" color="#808285">Address</DxcTypography>
+                      <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold" color="#333333">
+                        {mockApplicantData.address}
+                      </DxcTypography>
+                    </div>
+                    <div className="detail-item">
+                      <DxcTypography fontSize="font-scale-01" color="#808285">Years in Business</DxcTypography>
+                      <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold" color="#333333">
+                        {mockApplicantData.yearsInBusiness}
+                      </DxcTypography>
+                    </div>
+                    <div className="detail-item">
+                      <DxcTypography fontSize="font-scale-01" color="#808285">Age of Policy</DxcTypography>
+                      <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold" color="#333333">
+                        {mockApplicantData.ageOfPolicy}
+                      </DxcTypography>
+                    </div>
+                    <div className="detail-item">
+                      <DxcTypography fontSize="font-scale-01" color="#808285">Annual Receipts</DxcTypography>
+                      <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold" color="#333333">
+                        {mockApplicantData.annualReceipts}
+                      </DxcTypography>
+                    </div>
+                    <div className="detail-item">
+                      <DxcTypography fontSize="font-scale-01" color="#808285">SIC Code</DxcTypography>
+                      <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold" color="#333333">
+                        {mockApplicantData.sicCode}
+                      </DxcTypography>
+                    </div>
+                  </div>
+                </div>
+              </div>
 
-                <div className="info-section" style={{ flex: 1 }}>
+              {/* Agent / Broker Information - own card */}
+              <div className="detail-card">
+                <div className="detail-card-header">
                   <DxcFlex justifyContent="space-between" alignItems="center">
-                    <DxcHeading level={4} text="Agent / Broker Information" />
+                    <DxcFlex alignItems="center" gap="var(--spacing-gap-s)">
+                      <span className="material-icons-outlined" style={{ color: '#1B75BB', fontSize: '20px' }}>support_agent</span>
+                      <DxcTypography fontSize="font-scale-03" fontWeight="font-weight-semibold" color="#333333">
+                        Agent / Broker Information
+                      </DxcTypography>
+                    </DxcFlex>
                     <button className="icon-btn">
-                      <span className="material-icons">edit</span>
+                      <span className="material-icons-outlined">edit</span>
                     </button>
                   </DxcFlex>
-                  <DxcFlex direction="column" gap="var(--spacing-gap-m)" style={{ marginTop: 'var(--spacing-gap-m)' }}>
-                    <DxcTypography fontSize="font-scale-03" fontWeight="font-weight-semibold">
-                      {mockAgentData.name}
-                    </DxcTypography>
-                    <DxcTypography fontSize="font-scale-02" color="var(--color-fg-neutral-stronger)">
-                      {mockAgentData.company}
-                    </DxcTypography>
-                    <DxcFlex alignItems="center" gap="var(--spacing-gap-s)">
-                      <span className="material-icons info-icon">phone</span>
-                      <DxcFlex direction="column" gap="var(--spacing-gap-xxs)">
-                        <DxcTypography fontSize="font-scale-01" color="var(--color-fg-neutral-stronger)">
-                          Phone
-                        </DxcTypography>
-                        <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold">
-                          {mockAgentData.phone}
-                        </DxcTypography>
-                      </DxcFlex>
-                    </DxcFlex>
-                    <DxcFlex alignItems="center" gap="var(--spacing-gap-s)">
-                      <span className="material-icons info-icon">email</span>
-                      <DxcFlex direction="column" gap="var(--spacing-gap-xxs)">
-                        <DxcTypography fontSize="font-scale-01" color="var(--color-fg-neutral-stronger)">
-                          Email
-                        </DxcTypography>
-                        <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold">
-                          {mockAgentData.email}
-                        </DxcTypography>
-                      </DxcFlex>
-                    </DxcFlex>
-                    <DxcFlex alignItems="center" gap="var(--spacing-gap-s)">
-                      <span className="material-icons info-icon">badge</span>
-                      <DxcFlex direction="column" gap="var(--spacing-gap-xxs)">
-                        <DxcTypography fontSize="font-scale-01" color="var(--color-fg-neutral-stronger)">
-                          License
-                        </DxcTypography>
-                        <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold">
-                          {mockAgentData.license}
-                        </DxcTypography>
-                      </DxcFlex>
-                    </DxcFlex>
-                  </DxcFlex>
                 </div>
-              </DxcFlex>
+                <div className="detail-card-body">
+                  <div className="detail-grid">
+                    <div className="detail-item">
+                      <DxcTypography fontSize="font-scale-01" color="#808285">Agent Name</DxcTypography>
+                      <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold" color="#333333">
+                        {mockAgentData.name}
+                      </DxcTypography>
+                    </div>
+                    <div className="detail-item">
+                      <DxcTypography fontSize="font-scale-01" color="#808285">Company</DxcTypography>
+                      <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold" color="#333333">
+                        {mockAgentData.company}
+                      </DxcTypography>
+                    </div>
+                    <div className="detail-item">
+                      <DxcTypography fontSize="font-scale-01" color="#808285">Phone</DxcTypography>
+                      <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold" color="#333333">
+                        {mockAgentData.phone}
+                      </DxcTypography>
+                    </div>
+                    <div className="detail-item">
+                      <DxcTypography fontSize="font-scale-01" color="#808285">Email</DxcTypography>
+                      <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold" color="#333333">
+                        {mockAgentData.email}
+                      </DxcTypography>
+                    </div>
+                    <div className="detail-item">
+                      <DxcTypography fontSize="font-scale-01" color="#808285">License</DxcTypography>
+                      <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold" color="#333333">
+                        {mockAgentData.license}
+                      </DxcTypography>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </DxcFlex>
           </DxcInset>
         );
@@ -280,152 +239,173 @@ const UnderwritingWorkbench = ({ submission }) => {
       case 1: // Policy Data
         return (
           <DxcInset>
-            <DxcFlex direction="column" gap="var(--spacing-gap-xl)">
+            <DxcFlex direction="column" gap="var(--spacing-gap-l)">
               {/* General Policy / Quote Information */}
-              <div>
-                <DxcFlex alignItems="center" gap="var(--spacing-gap-s)" style={{ marginBottom: 'var(--spacing-gap-m)' }}>
-                  <span className="material-icons" style={{ color: '#0095FF' }}>description</span>
-                  <DxcHeading level={4} text="General Policy / Quote Information" />
-                </DxcFlex>
-                <div className="info-section">
-                  <div className="policy-info-grid">
-                    <div className="policy-info-item">
-                      <DxcTypography fontSize="font-scale-01" color="var(--color-fg-neutral-stronger)">
-                        Company Name:
-                      </DxcTypography>
-                      <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold">
-                        ABC Incorporated
-                      </DxcTypography>
+              <div className="detail-card">
+                <div className="detail-card-header">
+                  <DxcFlex alignItems="center" gap="var(--spacing-gap-s)">
+                    <span className="material-icons-outlined" style={{ color: '#1B75BB', fontSize: '20px' }}>description</span>
+                    <DxcTypography fontSize="font-scale-03" fontWeight="font-weight-semibold" color="#333333">
+                      General Policy / Quote Information
+                    </DxcTypography>
+                  </DxcFlex>
+                </div>
+                <div className="detail-card-body">
+                  <div className="detail-grid">
+                    <div className="detail-item">
+                      <DxcTypography fontSize="font-scale-01" color="#808285">Company Name</DxcTypography>
+                      <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold" color="#333333">ABC Incorporated</DxcTypography>
                     </div>
-                    <div className="policy-info-item">
-                      <DxcTypography fontSize="font-scale-01" color="var(--color-fg-neutral-stronger)">
-                        DBA:
-                      </DxcTypography>
-                      <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold">
-                        ABC Construction
-                      </DxcTypography>
+                    <div className="detail-item">
+                      <DxcTypography fontSize="font-scale-01" color="#808285">DBA</DxcTypography>
+                      <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold" color="#333333">ABC Construction</DxcTypography>
                     </div>
-                    <div className="policy-info-item">
-                      <DxcTypography fontSize="font-scale-01" color="var(--color-fg-neutral-stronger)">
-                        Business Type:
-                      </DxcTypography>
-                      <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold">
-                        Construction
-                      </DxcTypography>
+                    <div className="detail-item">
+                      <DxcTypography fontSize="font-scale-01" color="#808285">Business Type</DxcTypography>
+                      <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold" color="#333333">Construction</DxcTypography>
                     </div>
-                    <div className="policy-info-item">
-                      <DxcTypography fontSize="font-scale-01" color="var(--color-fg-neutral-stronger)">
-                        Years in Business:
-                      </DxcTypography>
-                      <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold">
-                        7 Years
-                      </DxcTypography>
+                    <div className="detail-item">
+                      <DxcTypography fontSize="font-scale-01" color="#808285">Years in Business</DxcTypography>
+                      <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold" color="#333333">7 Years</DxcTypography>
                     </div>
-                    <div className="policy-info-item">
-                      <DxcTypography fontSize="font-scale-01" color="var(--color-fg-neutral-stronger)">
-                        Number of Employees:
-                      </DxcTypography>
-                      <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold">
-                        50
-                      </DxcTypography>
+                    <div className="detail-item">
+                      <DxcTypography fontSize="font-scale-01" color="#808285">Number of Employees</DxcTypography>
+                      <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold" color="#333333">50</DxcTypography>
                     </div>
                   </div>
                 </div>
               </div>
 
               {/* Vehicle Details */}
-              <div>
-                <DxcFlex alignItems="center" gap="var(--spacing-gap-s)" style={{ marginBottom: 'var(--spacing-gap-m)' }}>
-                  <span className="material-icons" style={{ color: '#0095FF' }}>directions_car</span>
-                  <DxcHeading level={4} text="Vehicle Details" />
-                </DxcFlex>
-                <DxcSelect
-                  label="Select Vehicle"
-                  options={[{ label: '1998 Ford Focus - 123xxx', value: '1' }]}
-                  value="1"
-                  style={{ marginBottom: 'var(--spacing-gap-m)' }}
-                />
-
-                <DxcFlex justifyContent="space-between" alignItems="center" style={{ marginBottom: 'var(--spacing-gap-m)' }}>
-                  <DxcHeading level={5} text="Vehicle 1 - 1998 Ford Focus - 123xxx" />
-                  <DxcButton
-                    label="View Quote"
-                    icon="launch"
-                    mode="text"
-                    onClick={() => {}}
-                  />
-                </DxcFlex>
-
-                <div className="policy-info-grid">
-                  <div className="policy-info-item">
-                    <DxcTypography fontSize="font-scale-01" color="var(--color-fg-neutral-stronger)">Year:</DxcTypography>
-                    <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold">1998</DxcTypography>
-                  </div>
-                  <div className="policy-info-item">
-                    <DxcTypography fontSize="font-scale-01" color="var(--color-fg-neutral-stronger)">Cost New:</DxcTypography>
-                    <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold">$12,299.00</DxcTypography>
-                  </div>
-                  <div className="policy-info-item">
-                    <DxcTypography fontSize="font-scale-01" color="var(--color-fg-neutral-stronger)">Make:</DxcTypography>
-                    <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold">Ford</DxcTypography>
-                  </div>
-                  <div className="policy-info-item">
-                    <DxcTypography fontSize="font-scale-01" color="var(--color-fg-neutral-stronger)">State:</DxcTypography>
-                    <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold">WA</DxcTypography>
-                  </div>
-                  <div className="policy-info-item">
-                    <DxcTypography fontSize="font-scale-01" color="var(--color-fg-neutral-stronger)">Model:</DxcTypography>
-                    <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold">Contour</DxcTypography>
-                  </div>
-                  <div className="policy-info-item">
-                    <DxcTypography fontSize="font-scale-01" color="var(--color-fg-neutral-stronger)">Territory:</DxcTypography>
-                    <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold">001</DxcTypography>
-                  </div>
-                  <div className="policy-info-item">
-                    <DxcTypography fontSize="font-scale-01" color="var(--color-fg-neutral-stronger)">Body Type:</DxcTypography>
-                    <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold">4 Door Hardtop</DxcTypography>
-                  </div>
-                  <div className="policy-info-item">
-                    <DxcTypography fontSize="font-scale-01" color="var(--color-fg-neutral-stronger)">Class:</DxcTypography>
-                    <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold">9876</DxcTypography>
-                  </div>
-                  <div className="policy-info-item">
-                    <DxcTypography fontSize="font-scale-01" color="var(--color-fg-neutral-stronger)">VIN:</DxcTypography>
-                    <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold">1001-1223453</DxcTypography>
-                  </div>
-                  <div className="policy-info-item">
-                    <DxcTypography fontSize="font-scale-01" color="var(--color-fg-neutral-stronger)">Use:</DxcTypography>
-                    <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold">Commercial</DxcTypography>
-                  </div>
-                  <div className="policy-info-item">
-                    <DxcTypography fontSize="font-scale-01" color="var(--color-fg-neutral-stronger)">Vehicle Type:</DxcTypography>
-                    <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold">Sedan</DxcTypography>
-                  </div>
-                  <div className="policy-info-item">
-                    <DxcTypography fontSize="font-scale-01" color="var(--color-fg-neutral-stronger)">Coverage:</DxcTypography>
-                    <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold">
-                      Liab<br/>Comm'l<br/>No Fault<br/>Addt'l No Fault<br/>Med Pay<br/>Towing and Liable
+              <div className="detail-card">
+                <div className="detail-card-header">
+                  <DxcFlex justifyContent="space-between" alignItems="center">
+                    <DxcFlex alignItems="center" gap="var(--spacing-gap-s)">
+                      <span className="material-icons-outlined" style={{ color: '#1B75BB', fontSize: '20px' }}>directions_car</span>
+                      <DxcTypography fontSize="font-scale-03" fontWeight="font-weight-semibold" color="#333333">
+                        Vehicle Details
+                      </DxcTypography>
+                    </DxcFlex>
+                    <DxcButton label="View Quote" iconPosition="after" icon="open_in_new" mode="text" onClick={() => {}} />
+                  </DxcFlex>
+                </div>
+                <div className="detail-card-body">
+                  <DxcFlex direction="column" gap="var(--spacing-gap-m)">
+                    <DxcSelect
+                      label="Select Vehicle"
+                      options={[{ label: '1998 Ford Focus - 123xxx', value: '1' }]}
+                      value="1"
+                    />
+                    <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold" color="#333333">
+                      Vehicle 1 - 1998 Ford Focus - 123xxx
                     </DxcTypography>
-                  </div>
-                  <div className="policy-info-item">
-                    <DxcTypography fontSize="font-scale-01" color="var(--color-fg-neutral-stronger)">Symbol:</DxcTypography>
-                    <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold">10</DxcTypography>
-                  </div>
+                    <div className="detail-grid">
+                      <div className="detail-item">
+                        <DxcTypography fontSize="font-scale-01" color="#808285">Year</DxcTypography>
+                        <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold" color="#333333">1998</DxcTypography>
+                      </div>
+                      <div className="detail-item">
+                        <DxcTypography fontSize="font-scale-01" color="#808285">Cost New</DxcTypography>
+                        <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold" color="#333333">$12,299.00</DxcTypography>
+                      </div>
+                      <div className="detail-item">
+                        <DxcTypography fontSize="font-scale-01" color="#808285">Make</DxcTypography>
+                        <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold" color="#333333">Ford</DxcTypography>
+                      </div>
+                      <div className="detail-item">
+                        <DxcTypography fontSize="font-scale-01" color="#808285">State</DxcTypography>
+                        <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold" color="#333333">WA</DxcTypography>
+                      </div>
+                      <div className="detail-item">
+                        <DxcTypography fontSize="font-scale-01" color="#808285">Model</DxcTypography>
+                        <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold" color="#333333">Contour</DxcTypography>
+                      </div>
+                      <div className="detail-item">
+                        <DxcTypography fontSize="font-scale-01" color="#808285">Territory</DxcTypography>
+                        <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold" color="#333333">001</DxcTypography>
+                      </div>
+                      <div className="detail-item">
+                        <DxcTypography fontSize="font-scale-01" color="#808285">Body Type</DxcTypography>
+                        <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold" color="#333333">4 Door Hardtop</DxcTypography>
+                      </div>
+                      <div className="detail-item">
+                        <DxcTypography fontSize="font-scale-01" color="#808285">Class</DxcTypography>
+                        <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold" color="#333333">9876</DxcTypography>
+                      </div>
+                      <div className="detail-item">
+                        <DxcTypography fontSize="font-scale-01" color="#808285">VIN</DxcTypography>
+                        <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold" color="#333333">1001-1223453</DxcTypography>
+                      </div>
+                      <div className="detail-item">
+                        <DxcTypography fontSize="font-scale-01" color="#808285">Use</DxcTypography>
+                        <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold" color="#333333">Commercial</DxcTypography>
+                      </div>
+                      <div className="detail-item">
+                        <DxcTypography fontSize="font-scale-01" color="#808285">Vehicle Type</DxcTypography>
+                        <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold" color="#333333">Sedan</DxcTypography>
+                      </div>
+                      <div className="detail-item">
+                        <DxcTypography fontSize="font-scale-01" color="#808285">Coverage</DxcTypography>
+                        <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold" color="#333333">
+                          Liab, Comm'l, No Fault, Med Pay, Towing
+                        </DxcTypography>
+                      </div>
+                      <div className="detail-item">
+                        <DxcTypography fontSize="font-scale-01" color="#808285">Symbol</DxcTypography>
+                        <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold" color="#333333">10</DxcTypography>
+                      </div>
+                    </div>
+                  </DxcFlex>
                 </div>
               </div>
 
               {/* Driver Details */}
-              <div>
-                <DxcFlex alignItems="center" gap="var(--spacing-gap-s)" style={{ marginBottom: 'var(--spacing-gap-m)' }}>
-                  <span className="material-icons" style={{ color: '#0095FF' }}>person</span>
-                  <DxcHeading level={4} text="Driver Details" />
-                </DxcFlex>
-                <DxcSelect
-                  label="Select Driver"
-                  options={[{ label: 'Scott Carpenter', value: '1' }]}
-                  value="1"
-                  style={{ marginBottom: 'var(--spacing-gap-m)' }}
-                />
+              <div className="detail-card">
+                <div className="detail-card-header">
+                  <DxcFlex alignItems="center" gap="var(--spacing-gap-s)">
+                    <span className="material-icons-outlined" style={{ color: '#1B75BB', fontSize: '20px' }}>person_outline</span>
+                    <DxcTypography fontSize="font-scale-03" fontWeight="font-weight-semibold" color="#333333">
+                      Driver Details
+                    </DxcTypography>
+                  </DxcFlex>
+                </div>
+                <div className="detail-card-body">
+                  <DxcFlex direction="column" gap="var(--spacing-gap-m)">
+                    <DxcSelect
+                      label="Select Driver"
+                      options={[{ label: 'Scott Carpenter', value: '1' }]}
+                      value="1"
+                    />
+                    {/* Driver Codes grid subordinate to Driver Details */}
+                    <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold" color="#333333">
+                      Driver Codes
+                    </DxcTypography>
+                    <table className="data-table">
+                      <thead>
+                        <tr>
+                          <th>Code</th>
+                          <th>Description</th>
+                          <th>Effective Date</th>
+                          <th>Points</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>DV01</td>
+                          <td>Clean Record Discount</td>
+                          <td>01/01/2026</td>
+                          <td>0</td>
+                        </tr>
+                        <tr>
+                          <td>DV05</td>
+                          <td>Defensive Driving Course</td>
+                          <td>06/15/2025</td>
+                          <td>-2</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </DxcFlex>
+                </div>
               </div>
             </DxcFlex>
           </DxcInset>
@@ -434,127 +414,157 @@ const UnderwritingWorkbench = ({ submission }) => {
       case 2: // Data Reports
         return (
           <DxcInset>
-            <DxcFlex direction="column" gap="var(--spacing-gap-xl)">
+            <DxcFlex direction="column" gap="var(--spacing-gap-l)">
               {/* Customer/Business Data Reports */}
-              <div>
-                <DxcFlex alignItems="center" gap="var(--spacing-gap-s)" style={{ marginBottom: 'var(--spacing-gap-m)' }}>
-                  <span className="material-icons" style={{ color: '#0095FF' }}>assessment</span>
-                  <DxcHeading level={4} text="Customer / Business Data Reports" />
-                </DxcFlex>
-                <table className="data-table">
-                  <thead>
-                    <tr>
-                      <th>Report</th>
-                      <th>Source</th>
-                      <th>Status</th>
-                      <th>Date Ordered</th>
-                      <th>Results (If Available)</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td><a href="#" className="table-link">Credit Score</a></td>
-                      <td>Dun & Bradstreet</td>
-                      <td><span className="status-badge status-available">✓ Available</span></td>
-                      <td>08/03/2011</td>
-                      <td>Excellent</td>
-                    </tr>
-                    <tr>
-                      <td><a href="#" className="table-link">Prior Claims</a></td>
-                      <td>ISO ClaimSearch</td>
-                      <td><span className="status-badge status-available">✓ Available</span></td>
-                      <td>10/31/2015</td>
-                      <td>0 in 5 years</td>
-                    </tr>
-                    <tr>
-                      <td>Business License</td>
-                      <td>State Database</td>
-                      <td>
-                        <DxcFlex alignItems="center" gap="var(--spacing-gap-xs)">
-                          <span className="material-icons" style={{ fontSize: '16px', color: '#FF6B00' }}>hourglass_empty</span>
-                          <span style={{ color: '#FF6B00', fontSize: 'var(--font-scale-01)' }}>Processing</span>
-                        </DxcFlex>
-                      </td>
-                      <td></td>
-                      <td></td>
-                    </tr>
-                  </tbody>
-                </table>
+              <div className="detail-card">
+                <div className="detail-card-header">
+                  <DxcFlex alignItems="center" gap="var(--spacing-gap-s)">
+                    <span className="material-icons-outlined" style={{ color: '#1B75BB', fontSize: '20px' }}>assessment</span>
+                    <DxcTypography fontSize="font-scale-03" fontWeight="font-weight-semibold" color="#333333">
+                      Customer / Business Data Reports
+                    </DxcTypography>
+                  </DxcFlex>
+                </div>
+                <div className="detail-card-body">
+                  <table className="data-table">
+                    <thead>
+                      <tr>
+                        <th>Report</th>
+                        <th>Source</th>
+                        <th>Status</th>
+                        <th>Date Ordered</th>
+                        <th>Results (If Available)</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>
+                          <a href="#" className="table-link">
+                            Credit Score
+                            <span className="material-icons-outlined external-link-icon">open_in_new</span>
+                          </a>
+                        </td>
+                        <td>Dun & Bradstreet</td>
+                        <td><span className="status-pill status-available">Available</span></td>
+                        <td>08/03/2011</td>
+                        <td>Excellent</td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <a href="#" className="table-link">
+                            Prior Claims
+                            <span className="material-icons-outlined external-link-icon">open_in_new</span>
+                          </a>
+                        </td>
+                        <td>ISO ClaimSearch</td>
+                        <td><span className="status-pill status-available">Available</span></td>
+                        <td>10/31/2015</td>
+                        <td>0 in 5 years</td>
+                      </tr>
+                      <tr>
+                        <td>Business License</td>
+                        <td>State Database</td>
+                        <td><span className="status-pill status-processing">Processing</span></td>
+                        <td></td>
+                        <td></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
               </div>
 
               {/* Vehicle Details Data Reports */}
-              <div>
-                <DxcFlex alignItems="center" gap="var(--spacing-gap-s)" style={{ marginBottom: 'var(--spacing-gap-m)' }}>
-                  <span className="material-icons" style={{ color: '#0095FF' }}>directions_car</span>
-                  <DxcHeading level={4} text="Vehicle Details Data Reports" />
-                </DxcFlex>
-                <DxcSelect
-                  label="Select Vehicle"
-                  options={[{ label: '1998 Ford Focus - 123xxx', value: '1' }]}
-                  value="1"
-                  style={{ marginBottom: 'var(--spacing-gap-m)' }}
-                />
-                <table className="data-table">
-                  <thead>
-                    <tr>
-                      <th>Report</th>
-                      <th>Source</th>
-                      <th>Status</th>
-                      <th>Date Ordered</th>
-                      <th>Results (If Available)</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>Vehicle History</td>
-                      <td>Carfax</td>
-                      <td><button className="order-btn">🛒 Order</button></td>
-                      <td></td>
-                      <td></td>
-                    </tr>
-                    <tr>
-                      <td><a href="#" className="table-link">Clue Report</a></td>
-                      <td>LexisNexis</td>
-                      <td><span className="status-badge status-available">✓ Available</span></td>
-                      <td>10/31/2015</td>
-                      <td></td>
-                    </tr>
-                  </tbody>
-                </table>
+              <div className="detail-card">
+                <div className="detail-card-header">
+                  <DxcFlex alignItems="center" gap="var(--spacing-gap-s)">
+                    <span className="material-icons-outlined" style={{ color: '#1B75BB', fontSize: '20px' }}>directions_car</span>
+                    <DxcTypography fontSize="font-scale-03" fontWeight="font-weight-semibold" color="#333333">
+                      Vehicle Details Data Reports
+                    </DxcTypography>
+                  </DxcFlex>
+                </div>
+                <div className="detail-card-body">
+                  <DxcFlex direction="column" gap="var(--spacing-gap-m)">
+                    <DxcSelect
+                      label="Select Vehicle"
+                      options={[{ label: '1998 Ford Focus - 123xxx', value: '1' }]}
+                      value="1"
+                    />
+                    <table className="data-table">
+                      <thead>
+                        <tr>
+                          <th>Report</th>
+                          <th>Source</th>
+                          <th>Status</th>
+                          <th>Date Ordered</th>
+                          <th>Results (If Available)</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>Vehicle History</td>
+                          <td>Carfax</td>
+                          <td><span className="status-pill status-order">Order</span></td>
+                          <td></td>
+                          <td></td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <a href="#" className="table-link">
+                              Clue Report
+                              <span className="material-icons-outlined external-link-icon">open_in_new</span>
+                            </a>
+                          </td>
+                          <td>LexisNexis</td>
+                          <td><span className="status-pill status-available">Available</span></td>
+                          <td>10/31/2015</td>
+                          <td></td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </DxcFlex>
+                </div>
               </div>
 
               {/* Driver Details */}
-              <div>
-                <DxcFlex alignItems="center" gap="var(--spacing-gap-s)" style={{ marginBottom: 'var(--spacing-gap-m)' }}>
-                  <span className="material-icons" style={{ color: '#0095FF' }}>person</span>
-                  <DxcHeading level={4} text="Driver Details" />
-                </DxcFlex>
-                <DxcSelect
-                  label="Select Driver"
-                  options={[{ label: 'Scott Carpenter', value: '1' }]}
-                  value="1"
-                  style={{ marginBottom: 'var(--spacing-gap-m)' }}
-                />
-                <table className="data-table">
-                  <thead>
-                    <tr>
-                      <th>Report</th>
-                      <th>Source</th>
-                      <th>Status</th>
-                      <th>Date Ordered</th>
-                      <th>Results (If Available)</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>Commercial MVR</td>
-                      <td>LexisNexis</td>
-                      <td><button className="order-btn">🛒 Order</button></td>
-                      <td></td>
-                      <td></td>
-                    </tr>
-                  </tbody>
-                </table>
+              <div className="detail-card">
+                <div className="detail-card-header">
+                  <DxcFlex alignItems="center" gap="var(--spacing-gap-s)">
+                    <span className="material-icons-outlined" style={{ color: '#1B75BB', fontSize: '20px' }}>person_outline</span>
+                    <DxcTypography fontSize="font-scale-03" fontWeight="font-weight-semibold" color="#333333">
+                      Driver Details
+                    </DxcTypography>
+                  </DxcFlex>
+                </div>
+                <div className="detail-card-body">
+                  <DxcFlex direction="column" gap="var(--spacing-gap-m)">
+                    <DxcSelect
+                      label="Select Driver"
+                      options={[{ label: 'Scott Carpenter', value: '1' }]}
+                      value="1"
+                    />
+                    <table className="data-table">
+                      <thead>
+                        <tr>
+                          <th>Report</th>
+                          <th>Source</th>
+                          <th>Status</th>
+                          <th>Date Ordered</th>
+                          <th>Results (If Available)</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>Commercial MVR</td>
+                          <td>LexisNexis</td>
+                          <td><span className="status-pill status-order">Order</span></td>
+                          <td></td>
+                          <td></td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </DxcFlex>
+                </div>
               </div>
             </DxcFlex>
           </DxcInset>
@@ -565,24 +575,26 @@ const UnderwritingWorkbench = ({ submission }) => {
           <DxcInset>
             <DxcFlex direction="column" gap="var(--spacing-gap-l)">
               <DxcFlex justifyContent="space-between" alignItems="center">
-                <DxcHeading level={4} text="Upload Supporting Documents" />
-                <DxcButton
-                  label="Request Documentation"
-                  icon="email"
-                  mode="secondary"
-                  onClick={() => {}}
-                />
+                <DxcTypography fontSize="font-scale-03" fontWeight="font-weight-semibold" color="#333333">
+                  Upload Supporting Documents
+                </DxcTypography>
+                <button className="link-btn" onClick={() => {}}>
+                  <span className="material-icons-outlined" style={{ fontSize: '18px' }}>mail_outline</span>
+                  Request Documentation
+                </button>
               </DxcFlex>
 
-              <DxcTypography fontSize="font-scale-02">
+              <DxcTypography fontSize="font-scale-02" color="#808285">
                 Supported formats include pdf, doc, docx, xsl, xslx, jpg, and png
               </DxcTypography>
 
               <div className="upload-section">
-                <DxcHeading level={5} text="Upload document" />
+                <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold" color="#333333" style={{ marginBottom: 'var(--spacing-gap-s)' }}>
+                  Upload document
+                </DxcTypography>
                 <DxcFlex gap="var(--spacing-gap-m)" alignItems="flex-end">
                   <button className="select-file-btn">Select file</button>
-                  <DxcTypography fontSize="font-scale-02" color="var(--color-fg-neutral-stronger)">
+                  <DxcTypography fontSize="font-scale-02" color="#808285">
                     or drop file
                   </DxcTypography>
                   <DxcTextInput
@@ -607,7 +619,8 @@ const UnderwritingWorkbench = ({ submission }) => {
                   style={{ marginTop: 'var(--spacing-gap-s)' }}
                 />
                 <DxcButton
-                  label="⬆ Upload Documents"
+                  label="Upload Documents"
+                  icon="upload"
                   mode="primary"
                   onClick={() => {}}
                   style={{ marginTop: 'var(--spacing-gap-m)' }}
@@ -615,8 +628,10 @@ const UnderwritingWorkbench = ({ submission }) => {
               </div>
 
               <div>
-                <DxcHeading level={5} text="Uploaded Documents" />
-                <table className="document-upload-table">
+                <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold" color="#333333" style={{ marginBottom: 'var(--spacing-gap-s)' }}>
+                  Uploaded Documents
+                </DxcTypography>
+                <table className="data-table">
                   <thead>
                     <tr>
                       <th>Document Name</th>
@@ -638,10 +653,10 @@ const UnderwritingWorkbench = ({ submission }) => {
                         <td>
                           <DxcFlex gap="var(--spacing-gap-xs)">
                             <button className="icon-btn-small">
-                              <span className="material-icons">download</span>
+                              <span className="material-icons-outlined">download</span>
                             </button>
                             <button className="icon-btn-small">
-                              <span className="material-icons">visibility</span>
+                              <span className="material-icons-outlined">visibility</span>
                             </button>
                           </DxcFlex>
                         </td>
@@ -657,129 +672,137 @@ const UnderwritingWorkbench = ({ submission }) => {
       case 4: // Quotation
         return (
           <DxcInset>
-            <DxcFlex direction="column" gap="var(--spacing-gap-xl)">
+            <DxcFlex direction="column" gap="var(--spacing-gap-l)">
               {/* Total Annual Premium */}
-              <div>
-                <DxcFlex alignItems="center" gap="var(--spacing-gap-s)" style={{ marginBottom: 'var(--spacing-gap-m)' }}>
-                  <span className="material-icons" style={{ color: '#0095FF' }}>calculate</span>
-                  <DxcHeading level={4} text="Quotation of Premium" />
-                </DxcFlex>
-                <div className="total-premium-box">
-                  <DxcFlex justifyContent="space-between" alignItems="center">
-                    <DxcTypography fontSize="font-scale-03" fontWeight="font-weight-semibold">
-                      Total Annual Premium
-                    </DxcTypography>
-                    <DxcTypography fontSize="font-scale-04" fontWeight="font-weight-bold" color="#0095FF">
-                      $11,145.00
+              <div className="detail-card">
+                <div className="detail-card-header">
+                  <DxcFlex alignItems="center" gap="var(--spacing-gap-s)">
+                    <span className="material-icons-outlined" style={{ color: '#1B75BB', fontSize: '20px' }}>calculate</span>
+                    <DxcTypography fontSize="font-scale-03" fontWeight="font-weight-semibold" color="#333333">
+                      Quotation of Premium
                     </DxcTypography>
                   </DxcFlex>
+                </div>
+                <div className="detail-card-body">
+                  <div className="total-premium-box">
+                    <DxcFlex justifyContent="space-between" alignItems="center">
+                      <DxcTypography fontSize="font-scale-03" fontWeight="font-weight-semibold" color="#333333">
+                        Total Annual Premium
+                      </DxcTypography>
+                      <DxcTypography fontSize="font-scale-04" fontWeight="font-weight-bold" color="#1B75BB">
+                        $11,145.00
+                      </DxcTypography>
+                    </DxcFlex>
+                  </div>
                 </div>
               </div>
 
               {/* Insurance Line Coverages */}
-              <div>
-                <DxcFlex justifyContent="space-between" alignItems="center" style={{ marginBottom: 'var(--spacing-gap-m)' }}>
-                  <DxcFlex alignItems="center" gap="var(--spacing-gap-s)">
-                    <span className="material-icons" style={{ color: '#0095FF' }}>list_alt</span>
-                    <DxcHeading level={4} text="Insurance Line Coverages" />
+              <div className="detail-card">
+                <div className="detail-card-header">
+                  <DxcFlex justifyContent="space-between" alignItems="center">
+                    <DxcFlex alignItems="center" gap="var(--spacing-gap-s)">
+                      <span className="material-icons-outlined" style={{ color: '#1B75BB', fontSize: '20px' }}>list_alt</span>
+                      <DxcTypography fontSize="font-scale-03" fontWeight="font-weight-semibold" color="#333333">
+                        Insurance Line Coverages
+                      </DxcTypography>
+                    </DxcFlex>
+                    <DxcButton label="View Quote" iconPosition="after" icon="open_in_new" mode="text" onClick={() => {}} />
                   </DxcFlex>
-                  <DxcButton
-                    label="View Quote"
-                    icon="launch"
-                    mode="text"
-                    onClick={() => {}}
-                  />
-                </DxcFlex>
-                <table className="data-table">
-                  <thead>
-                    <tr>
-                      <th>Category</th>
-                      <th>Limits/Deductible</th>
-                      <th>Premium</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>Liability</td>
-                      <td>$1,000,000 CSL</td>
-                      <td>$ 5,100</td>
-                    </tr>
-                    <tr>
-                      <td>Uninsured / Underinsured Motorist</td>
-                      <td>$1,000,000</td>
-                      <td>$480</td>
-                    </tr>
-                    <tr>
-                      <td>Comprehensive Deductible</td>
-                      <td>$1,000</td>
-                      <td>$985</td>
-                    </tr>
-                    <tr>
-                      <td>Collision Deductible</td>
-                      <td>$1,000</td>
-                      <td>$880</td>
-                    </tr>
-                    <tr>
-                      <td>Hired and Non-Owned Auto</td>
-                      <td>Included</td>
-                      <td>$1,985</td>
-                    </tr>
-                    <tr>
-                      <td>Towing and Labor</td>
-                      <td>Included</td>
-                      <td>$420</td>
-                    </tr>
-                  </tbody>
-                </table>
+                </div>
+                <div className="detail-card-body">
+                  <table className="data-table">
+                    <thead>
+                      <tr>
+                        <th>Category</th>
+                        <th>Limits/Deductible</th>
+                        <th>Premium</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>Liability</td>
+                        <td>$1,000,000 CSL</td>
+                        <td>$ 5,100</td>
+                      </tr>
+                      <tr>
+                        <td>Uninsured / Underinsured Motorist</td>
+                        <td>$1,000,000</td>
+                        <td>$480</td>
+                      </tr>
+                      <tr>
+                        <td>Comprehensive Deductible</td>
+                        <td>$1,000</td>
+                        <td>$985</td>
+                      </tr>
+                      <tr>
+                        <td>Collision Deductible</td>
+                        <td>$1,000</td>
+                        <td>$880</td>
+                      </tr>
+                      <tr>
+                        <td>Hired and Non-Owned Auto</td>
+                        <td>Included</td>
+                        <td>$1,985</td>
+                      </tr>
+                      <tr>
+                        <td>Towing and Labor</td>
+                        <td>Included</td>
+                        <td>$420</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
               </div>
 
               {/* Fleet Vehicles */}
-              <div>
-                <DxcFlex justifyContent="space-between" alignItems="center" style={{ marginBottom: 'var(--spacing-gap-m)' }}>
-                  <DxcFlex alignItems="center" gap="var(--spacing-gap-s)">
-                    <span className="material-icons" style={{ color: '#0095FF' }}>local_shipping</span>
-                    <DxcHeading level={4} text="Fleet Vehicles" />
+              <div className="detail-card">
+                <div className="detail-card-header">
+                  <DxcFlex justifyContent="space-between" alignItems="center">
+                    <DxcFlex alignItems="center" gap="var(--spacing-gap-s)">
+                      <span className="material-icons-outlined" style={{ color: '#1B75BB', fontSize: '20px' }}>local_shipping</span>
+                      <DxcTypography fontSize="font-scale-03" fontWeight="font-weight-semibold" color="#333333">
+                        Fleet Vehicles
+                      </DxcTypography>
+                    </DxcFlex>
+                    <DxcButton label="View Quote" iconPosition="after" icon="open_in_new" mode="text" onClick={() => {}} />
                   </DxcFlex>
-                  <DxcButton
-                    label="View Quote"
-                    icon="launch"
-                    mode="text"
-                    onClick={() => {}}
-                  />
-                </DxcFlex>
-                <table className="data-table">
-                  <thead>
-                    <tr>
-                      <th>#</th>
-                      <th>Vehicle</th>
-                      <th>Use</th>
-                      <th>Stated Value</th>
-                      <th>Comp</th>
-                      <th>Collision</th>
-                      <th>Total</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>1</td>
-                      <td>F-150 (2023)</td>
-                      <td>Service</td>
-                      <td>$ 45,100</td>
-                      <td>$ 280</td>
-                      <td>$ 450</td>
-                      <td>$ 46,500</td>
-                    </tr>
-                    <tr>
-                      <td>2</td>
-                      <td>F-150 (2022)</td>
-                      <td>Service</td>
-                      <td>$ 40,100</td>
-                      <td>$ 280</td>
-                      <td>$ 400</td>
-                      <td>$ 46,100</td>
-                    </tr>
-                  </tbody>
-                </table>
+                </div>
+                <div className="detail-card-body">
+                  <table className="data-table">
+                    <thead>
+                      <tr>
+                        <th>#</th>
+                        <th>Vehicle</th>
+                        <th>Use</th>
+                        <th>Stated Value</th>
+                        <th>Comp</th>
+                        <th>Collision</th>
+                        <th>Total</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>1</td>
+                        <td>F-150 (2023)</td>
+                        <td>Service</td>
+                        <td>$ 45,100</td>
+                        <td>$ 280</td>
+                        <td>$ 450</td>
+                        <td>$ 46,500</td>
+                      </tr>
+                      <tr>
+                        <td>2</td>
+                        <td>F-150 (2022)</td>
+                        <td>Service</td>
+                        <td>$ 40,100</td>
+                        <td>$ 280</td>
+                        <td>$ 400</td>
+                        <td>$ 46,100</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
               </div>
             </DxcFlex>
           </DxcInset>
@@ -788,107 +811,118 @@ const UnderwritingWorkbench = ({ submission }) => {
       case 5: // Notes/Messages
         return (
           <DxcInset>
-            <DxcFlex direction="column" gap="var(--spacing-gap-xl)">
+            <DxcFlex direction="column" gap="var(--spacing-gap-l)">
               {/* Notes Section */}
-              <div>
-                <DxcFlex justifyContent="space-between" alignItems="center" style={{ marginBottom: 'var(--spacing-gap-m)' }}>
-                  <DxcFlex alignItems="center" gap="var(--spacing-gap-s)">
-                    <span className="material-icons" style={{ color: '#0095FF' }}>note</span>
-                    <DxcHeading level={4} text="Notes" />
+              <div className="detail-card">
+                <div className="detail-card-header">
+                  <DxcFlex justifyContent="space-between" alignItems="center">
+                    <DxcFlex alignItems="center" gap="var(--spacing-gap-s)">
+                      <span className="material-icons-outlined" style={{ color: '#1B75BB', fontSize: '20px' }}>sticky_note_2</span>
+                      <DxcTypography fontSize="font-scale-03" fontWeight="font-weight-semibold" color="#333333">
+                        Notes
+                      </DxcTypography>
+                    </DxcFlex>
+                    <DxcButton
+                      label="+ Add Note"
+                      mode="primary"
+                      onClick={() => setShowAddNoteModal(true)}
+                    />
                   </DxcFlex>
-                  <DxcButton
-                    label="+ Add Note"
-                    mode="primary"
-                    onClick={() => setShowAddNoteModal(true)}
-                  />
-                </DxcFlex>
-                <table className="notes-table">
-                  <thead>
-                    <tr>
-                      <th>Date</th>
-                      <th>Type</th>
-                      <th>Note</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {notes.map((note, index) => (
-                      <tr key={index}>
-                        <td>{note.date}</td>
-                        <td>
-                          <DxcBadge
-                            label={note.type}
-                            mode="contextual"
-                            color={note.type === 'Reminder' ? 'info' : 'warning'}
-                          />
-                        </td>
-                        <td>{note.note}</td>
+                </div>
+                <div className="detail-card-body">
+                  <table className="data-table">
+                    <thead>
+                      <tr>
+                        <th>Date</th>
+                        <th>Type</th>
+                        <th>Note</th>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
+                    </thead>
+                    <tbody>
+                      {notes.map((note, index) => (
+                        <tr key={index}>
+                          <td>{note.date}</td>
+                          <td>
+                            <DxcBadge
+                              label={note.type}
+                              mode="contextual"
+                              color={note.type === 'Reminder' ? 'info' : 'warning'}
+                            />
+                          </td>
+                          <td>{note.note}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
               </div>
 
               {/* Message Center */}
-              <div>
-                <DxcFlex justifyContent="space-between" alignItems="center" style={{ marginBottom: 'var(--spacing-gap-m)' }}>
-                  <DxcFlex alignItems="center" gap="var(--spacing-gap-s)">
-                    <span className="material-icons" style={{ color: '#0095FF' }}>email</span>
-                    <DxcHeading level={4} text="Message Center" />
+              <div className="detail-card">
+                <div className="detail-card-header">
+                  <DxcFlex justifyContent="space-between" alignItems="center">
+                    <DxcFlex alignItems="center" gap="var(--spacing-gap-s)">
+                      <span className="material-icons-outlined" style={{ color: '#1B75BB', fontSize: '20px' }}>mail_outline</span>
+                      <DxcTypography fontSize="font-scale-03" fontWeight="font-weight-semibold" color="#333333">
+                        Message Center
+                      </DxcTypography>
+                    </DxcFlex>
+                    <DxcButton
+                      label="+ New Message"
+                      mode="primary"
+                      onClick={() => setShowNewMessageModal(true)}
+                    />
                   </DxcFlex>
-                  <DxcButton
-                    label="+ New Message"
-                    mode="primary"
-                    onClick={() => setShowNewMessageModal(true)}
-                  />
-                </DxcFlex>
-
-                <div className="message-tabs">
-                  <button
-                    className={`message-tab ${activeMessageTab === 0 ? 'active' : ''}`}
-                    onClick={() => setActiveMessageTab(0)}
-                  >
-                    Inbox
-                  </button>
-                  <button
-                    className={`message-tab ${activeMessageTab === 1 ? 'active' : ''}`}
-                    onClick={() => setActiveMessageTab(1)}
-                  >
-                    Sent
-                  </button>
-                  <button
-                    className={`message-tab ${activeMessageTab === 2 ? 'active' : ''}`}
-                    onClick={() => setActiveMessageTab(2)}
-                  >
-                    Drafts
-                  </button>
-                  <button
-                    className={`message-tab ${activeMessageTab === 3 ? 'active' : ''}`}
-                    onClick={() => setActiveMessageTab(3)}
-                  >
-                    Archived
-                  </button>
                 </div>
+                <div className="detail-card-body">
+                  <div className="message-tabs">
+                    <button
+                      className={`message-tab ${activeMessageTab === 0 ? 'active' : ''}`}
+                      onClick={() => setActiveMessageTab(0)}
+                    >
+                      Inbox
+                    </button>
+                    <button
+                      className={`message-tab ${activeMessageTab === 1 ? 'active' : ''}`}
+                      onClick={() => setActiveMessageTab(1)}
+                    >
+                      Sent
+                    </button>
+                    <button
+                      className={`message-tab ${activeMessageTab === 2 ? 'active' : ''}`}
+                      onClick={() => setActiveMessageTab(2)}
+                    >
+                      Drafts
+                    </button>
+                    <button
+                      className={`message-tab ${activeMessageTab === 3 ? 'active' : ''}`}
+                      onClick={() => setActiveMessageTab(3)}
+                    >
+                      Archived
+                    </button>
+                  </div>
 
-                <table className="messages-table">
-                  <thead>
-                    <tr>
-                      <th>Date</th>
-                      <th>Subject</th>
-                      <th>From</th>
-                      <th>Message</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {messages.map((msg, index) => (
-                      <tr key={index}>
-                        <td>{msg.date}</td>
-                        <td><a href="#" className="table-link">{msg.subject}</a></td>
-                        <td>{msg.from}</td>
-                        <td>{msg.message}</td>
+                  <table className="data-table">
+                    <thead>
+                      <tr>
+                        <th>Date</th>
+                        <th>Subject</th>
+                        <th>From</th>
+                        <th>Message</th>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
+                    </thead>
+                    <tbody>
+                      {messages.map((msg, index) => (
+                        <tr key={index}>
+                          <td>{msg.date}</td>
+                          <td><a href="#" className="table-link">{msg.subject}</a></td>
+                          <td>{msg.from}</td>
+                          <td>{msg.message}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
               </div>
             </DxcFlex>
           </DxcInset>
@@ -900,10 +934,12 @@ const UnderwritingWorkbench = ({ submission }) => {
             {submissionAccepted ? (
               // Success Screen
               <DxcFlex direction="column" gap="var(--spacing-gap-l)">
-                <DxcHeading level={3} text="Success!" style={{ color: '#0095FF' }} />
+                <DxcTypography fontSize="font-scale-05" fontWeight="font-weight-bold" color="#37A526">
+                  Success!
+                </DxcTypography>
 
                 <div className="success-message-box">
-                  <DxcTypography fontSize="font-scale-02">
+                  <DxcTypography fontSize="font-scale-02" color="#333333">
                     Submission {submission.id} has been accepted, the agent has been notified, and the quote is ready to convert to a policy.
                   </DxcTypography>
                 </div>
@@ -931,7 +967,9 @@ const UnderwritingWorkbench = ({ submission }) => {
             ) : (
               // Underwriting Actions Form
               <DxcFlex direction="column" gap="var(--spacing-gap-l)">
-                <DxcHeading level={4} text="Underwriting Actions" />
+                <DxcTypography fontSize="font-scale-03" fontWeight="font-weight-semibold" color="#333333">
+                  Underwriting Actions
+                </DxcTypography>
 
                 <DxcTextInput
                   label="Subject"
@@ -942,23 +980,15 @@ const UnderwritingWorkbench = ({ submission }) => {
                   <label style={{
                     fontSize: 'var(--font-scale-02)',
                     fontWeight: 'var(--font-weight-semibold)',
-                    color: 'var(--color-fg-neutral-stronger)'
+                    color: '#333333'
                   }}>
                     Message (Max limit 3000 characters)
                   </label>
                   <textarea
+                    className="message-textarea"
                     placeholder="Enter your text here..."
                     maxLength={3000}
                     rows={12}
-                    style={{
-                      width: '100%',
-                      padding: 'var(--spacing-padding-m)',
-                      fontSize: 'var(--font-scale-02)',
-                      fontFamily: 'var(--font-family-sans)',
-                      border: '1px solid var(--color-border-neutral-medium)',
-                      borderRadius: 'var(--border-radius-s)',
-                      resize: 'vertical',
-                    }}
                   />
                 </div>
 
@@ -993,152 +1023,112 @@ const UnderwritingWorkbench = ({ submission }) => {
 
   return (
     <div style={{ padding: '24px', width: '100%', backgroundColor: '#f5f5f5' }}>
-      <DxcFlex direction="column" gap="var(--spacing-gap-m)">
-        {/* Breadcrumb */}
-        <DxcFlex gap="var(--spacing-gap-xs)" alignItems="center">
-          <DxcTypography fontSize="font-scale-02" color="var(--color-fg-neutral-stronger)">
-            Submissions
-          </DxcTypography>
-          <DxcTypography fontSize="font-scale-02" color="var(--color-fg-neutral-stronger)">/</DxcTypography>
-          <DxcTypography fontSize="font-scale-02" color="#0095FF">
-            {submission.applicantName}
-          </DxcTypography>
-        </DxcFlex>
+      {/* Page Container - wraps all content in white card */}
+      <div className="page-container">
+        <DxcFlex direction="column" gap="var(--spacing-gap-m)">
+          {/* Breadcrumb */}
+          <DxcFlex gap="var(--spacing-gap-xs)" alignItems="center">
+            <DxcTypography fontSize="font-scale-02" color="#808285">
+              Submissions
+            </DxcTypography>
+            <DxcTypography fontSize="font-scale-02" color="#808285">/</DxcTypography>
+            <DxcTypography fontSize="font-scale-02" color="#1B75BB">
+              {submission.applicantName}
+            </DxcTypography>
+          </DxcFlex>
 
-        {/* Header */}
-        <DxcFlex justifyContent="space-between" alignItems="center">
-          <DxcFlex direction="column" gap="var(--spacing-gap-xs)">
-            <DxcHeading level={2} text={submission.applicantName} />
-            <DxcFlex gap="var(--spacing-gap-m)" alignItems="center">
-              <DxcTypography fontSize="font-scale-02" color="var(--color-fg-neutral-stronger)">
-                Submission #: {submission.id}
+          {/* Header */}
+          <DxcFlex justifyContent="space-between" alignItems="center">
+            <DxcFlex direction="column" gap="var(--spacing-gap-xs)">
+              <DxcTypography fontSize="font-scale-05" fontWeight="font-weight-bold" color="#333333">
+                {submission.applicantName}
               </DxcTypography>
-              <DxcBadge
-                label="New Business"
-                mode="contextual"
-                color="success"
+              <DxcFlex gap="var(--spacing-gap-m)" alignItems="center">
+                <DxcTypography fontSize="font-scale-02" color="#808285">
+                  Submission #: {submission.id}
+                </DxcTypography>
+                <DxcBadge
+                  label="New Business"
+                  mode="contextual"
+                  color="success"
+                />
+              </DxcFlex>
+            </DxcFlex>
+            <DxcFlex gap="var(--spacing-gap-m)" alignItems="center">
+              <DxcButton
+                label="Notes"
+                icon="sticky_note_2"
+                mode="secondary"
+                onClick={() => setActiveTabIndex(5)}
+              />
+              <DxcButton
+                label="Reassign"
+                icon="swap_horiz"
+                mode="secondary"
+                onClick={() => {}}
+              />
+              <DxcButton
+                label="Decline"
+                icon="cancel"
+                mode="secondary"
+                onClick={() => {}}
+              />
+              <DxcButton
+                label="Accept"
+                icon="check"
+                onClick={() => setShowValidationModal(true)}
               />
             </DxcFlex>
           </DxcFlex>
-          <DxcFlex gap="var(--spacing-gap-m)" alignItems="center">
-            <button className="icon-btn" title="Print">
-              <span className="material-icons">print</span>
-            </button>
-            <DxcButton
-              label="Reassign"
-              icon="swap_horiz"
-              mode="secondary"
-              onClick={() => {}}
-            />
-            <DxcButton
-              label="Decline"
-              icon="cancel"
-              mode="secondary"
-              onClick={() => {}}
-            />
-            <DxcButton
-              label="Accept"
-              icon="check"
-              onClick={() => setShowValidationModal(true)}
-            />
-          </DxcFlex>
-        </DxcFlex>
 
-        {/* Tabs Section */}
-        <div style={{
-          backgroundColor: "var(--color-bg-neutral-lightest)",
-          borderRadius: "var(--border-radius-m)",
-          boxShadow: "var(--shadow-mid-02)",
-        }}>
-          <DxcTabs iconPosition="left">
-            <DxcTabs.Tab
-              label="Overview"
-              active={activeTabIndex === 0}
-              onClick={() => setActiveTabIndex(0)}
-            >
-              <div />
-            </DxcTabs.Tab>
-            <DxcTabs.Tab
-              label="Policy Data"
-              active={activeTabIndex === 1}
-              onClick={() => setActiveTabIndex(1)}
-            >
-              <div />
-            </DxcTabs.Tab>
-            <DxcTabs.Tab
-              label="Data Reports"
-              active={activeTabIndex === 2}
-              onClick={() => setActiveTabIndex(2)}
-            >
-              <div />
-            </DxcTabs.Tab>
-            <DxcTabs.Tab
-              label="Document Upload"
-              active={activeTabIndex === 3}
-              onClick={() => setActiveTabIndex(3)}
-            >
-              <div />
-            </DxcTabs.Tab>
-            <DxcTabs.Tab
-              label="Quotation"
-              active={activeTabIndex === 4}
-              onClick={() => setActiveTabIndex(4)}
-            >
-              <div />
-            </DxcTabs.Tab>
-            <DxcTabs.Tab
-              label="Notes/ Messages"
-              active={activeTabIndex === 5}
-              onClick={() => setActiveTabIndex(5)}
-            >
-              <div />
-            </DxcTabs.Tab>
-            <DxcTabs.Tab
-              label="Actions"
-              active={activeTabIndex === 6}
-              onClick={() => setActiveTabIndex(6)}
-            >
-              <div />
-            </DxcTabs.Tab>
-          </DxcTabs>
+          {/* Tabs Section */}
+          <div className="tabs-card">
+            <DxcTabs iconPosition="left">
+              <DxcTabs.Tab label="Overview" active={activeTabIndex === 0} onClick={() => setActiveTabIndex(0)}><div /></DxcTabs.Tab>
+              <DxcTabs.Tab label="Policy Data" active={activeTabIndex === 1} onClick={() => setActiveTabIndex(1)}><div /></DxcTabs.Tab>
+              <DxcTabs.Tab label="Data Reports" active={activeTabIndex === 2} onClick={() => setActiveTabIndex(2)}><div /></DxcTabs.Tab>
+              <DxcTabs.Tab label="Document Upload" active={activeTabIndex === 3} onClick={() => setActiveTabIndex(3)}><div /></DxcTabs.Tab>
+              <DxcTabs.Tab label="Quotation" active={activeTabIndex === 4} onClick={() => setActiveTabIndex(4)}><div /></DxcTabs.Tab>
+              <DxcTabs.Tab label="Notes/ Messages" active={activeTabIndex === 5} onClick={() => setActiveTabIndex(5)}><div /></DxcTabs.Tab>
+              <DxcTabs.Tab label="Actions" active={activeTabIndex === 6} onClick={() => setActiveTabIndex(6)}><div /></DxcTabs.Tab>
+            </DxcTabs>
 
-          {/* Render Tab Content */}
-          <div style={{ padding: 'var(--spacing-padding-l)' }}>
-            {renderTabContent()}
+            {/* Render Tab Content */}
+            <div style={{ padding: 'var(--spacing-padding-l)' }}>
+              {renderTabContent()}
+            </div>
           </div>
-        </div>
-      </DxcFlex>
+        </DxcFlex>
+      </div>
 
       {/* Validation Error Modal */}
       {showValidationModal && (
         <DxcDialog onCloseClick={() => setShowValidationModal(false)}>
           <div style={{ padding: 'var(--spacing-padding-l)', minWidth: '500px' }}>
             <DxcFlex direction="column" gap="var(--spacing-gap-m)">
-              <DxcHeading level={3} text="Submission Failed" />
-              <DxcTypography fontSize="font-scale-02">
+              <DxcTypography fontSize="font-scale-04" fontWeight="font-weight-bold" color="#D0021B">
+                Submission Failed
+              </DxcTypography>
+              <DxcTypography fontSize="font-scale-02" color="#333333">
                 Submission failed due to the following reasons:
               </DxcTypography>
               <DxcFlex direction="column" gap="var(--spacing-gap-s)">
                 {validationErrors.map((error, index) => (
                   <DxcFlex key={index} alignItems="center" gap="var(--spacing-gap-s)">
-                    <span className="material-icons" style={{ color: '#D0021B', fontSize: '20px' }}>error</span>
-                    <DxcTypography fontSize="font-scale-02">{error}</DxcTypography>
+                    <span className="material-icons-outlined" style={{ color: '#D0021B', fontSize: '20px' }}>error_outline</span>
+                    <DxcTypography fontSize="font-scale-02" color="#333333">{error}</DxcTypography>
                   </DxcFlex>
                 ))}
               </DxcFlex>
               <DxcFlex justifyContent="space-between">
-                <DxcButton
-                  label="Back to Review"
-                  mode="secondary"
-                  onClick={() => setShowValidationModal(false)}
-                />
+                <DxcButton label="Back to Review" mode="secondary" onClick={() => setShowValidationModal(false)} />
                 <DxcButton
                   label="Accept Anyway"
                   mode="primary"
                   onClick={() => {
                     setShowValidationModal(false);
                     setSubmissionAccepted(true);
-                    setActiveTabIndex(6); // Switch to Actions tab to show success
+                    setActiveTabIndex(6);
                   }}
                 />
               </DxcFlex>
@@ -1152,8 +1142,9 @@ const UnderwritingWorkbench = ({ submission }) => {
         <DxcDialog onCloseClick={() => setShowAddNoteModal(false)}>
           <div style={{ padding: 'var(--spacing-padding-l)', minWidth: '500px' }}>
             <DxcFlex direction="column" gap="var(--spacing-gap-m)">
-              <DxcHeading level={3} text="Add Note" />
-
+              <DxcTypography fontSize="font-scale-04" fontWeight="font-weight-bold" color="#333333">
+                Add Note
+              </DxcTypography>
               <DxcSelect
                 label="Type"
                 options={[
@@ -1164,51 +1155,25 @@ const UnderwritingWorkbench = ({ submission }) => {
                 value={newNoteType}
                 onChange={(value) => setNewNoteType(value)}
               />
-
               <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-gap-xs)' }}>
-                <label style={{
-                  fontSize: 'var(--font-scale-02)',
-                  fontWeight: 'var(--font-weight-semibold)',
-                  color: 'var(--color-fg-neutral-stronger)'
-                }}>
+                <label style={{ fontSize: 'var(--font-scale-02)', fontWeight: 'var(--font-weight-semibold)', color: '#333333' }}>
                   Note
                 </label>
                 <textarea
+                  className="message-textarea"
                   placeholder="Enter your text here..."
                   value={newNoteText}
                   onChange={(e) => setNewNoteText(e.target.value)}
                   rows={6}
-                  style={{
-                    width: '100%',
-                    padding: 'var(--spacing-padding-m)',
-                    fontSize: 'var(--font-scale-02)',
-                    fontFamily: 'var(--font-family-sans)',
-                    border: '1px solid var(--color-border-neutral-medium)',
-                    borderRadius: 'var(--border-radius-s)',
-                    resize: 'vertical',
-                  }}
                 />
               </div>
-
               <DxcFlex justifyContent="flex-end" gap="var(--spacing-gap-m)">
-                <DxcButton
-                  label="Cancel"
-                  mode="secondary"
-                  onClick={() => {
-                    setShowAddNoteModal(false);
-                    setNewNoteText('');
-                    setNewNoteType('Reminder');
-                  }}
-                />
+                <DxcButton label="Cancel" mode="secondary" onClick={() => { setShowAddNoteModal(false); setNewNoteText(''); setNewNoteType('Reminder'); }} />
                 <DxcButton
                   label="Add"
                   mode="primary"
                   onClick={() => {
-                    const newNote = {
-                      date: new Date().toLocaleDateString(),
-                      type: newNoteType,
-                      note: newNoteText
-                    };
+                    const newNote = { date: new Date().toLocaleDateString(), type: newNoteType, note: newNoteText };
                     setNotes([newNote, ...notes]);
                     setShowAddNoteModal(false);
                     setNewNoteText('');
@@ -1226,70 +1191,30 @@ const UnderwritingWorkbench = ({ submission }) => {
         <DxcDialog onCloseClick={() => setShowNewMessageModal(false)}>
           <div style={{ padding: 'var(--spacing-padding-l)', minWidth: '600px' }}>
             <DxcFlex direction="column" gap="var(--spacing-gap-m)">
-              <DxcHeading level={3} text="New Message" />
-
-              <DxcTextInput
-                label="To"
-                placeholder="Enter recipient email..."
-                value={newMessageTo}
-                onChange={({ value }) => setNewMessageTo(value)}
-                size="fillParent"
-              />
-
-              <DxcTextInput
-                label="Subject"
-                placeholder="Enter message subject..."
-                value={newMessageSubject}
-                onChange={({ value }) => setNewMessageSubject(value)}
-                size="fillParent"
-              />
-
+              <DxcTypography fontSize="font-scale-04" fontWeight="font-weight-bold" color="#333333">
+                New Message
+              </DxcTypography>
+              <DxcTextInput label="To" placeholder="Enter recipient email..." value={newMessageTo} onChange={({ value }) => setNewMessageTo(value)} size="fillParent" />
+              <DxcTextInput label="Subject" placeholder="Enter message subject..." value={newMessageSubject} onChange={({ value }) => setNewMessageSubject(value)} size="fillParent" />
               <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-gap-xs)' }}>
-                <label style={{
-                  fontSize: 'var(--font-scale-02)',
-                  fontWeight: 'var(--font-weight-semibold)',
-                  color: 'var(--color-fg-neutral-stronger)'
-                }}>
+                <label style={{ fontSize: 'var(--font-scale-02)', fontWeight: 'var(--font-weight-semibold)', color: '#333333' }}>
                   Message
                 </label>
                 <textarea
+                  className="message-textarea"
                   placeholder="Enter your message here..."
                   value={newMessageBody}
                   onChange={(e) => setNewMessageBody(e.target.value)}
                   rows={8}
-                  style={{
-                    width: '100%',
-                    padding: 'var(--spacing-padding-m)',
-                    fontSize: 'var(--font-scale-02)',
-                    fontFamily: 'var(--font-family-sans)',
-                    border: '1px solid var(--color-border-neutral-medium)',
-                    borderRadius: 'var(--border-radius-s)',
-                    resize: 'vertical',
-                  }}
                 />
               </div>
-
               <DxcFlex justifyContent="flex-end" gap="var(--spacing-gap-m)">
-                <DxcButton
-                  label="Cancel"
-                  mode="secondary"
-                  onClick={() => {
-                    setShowNewMessageModal(false);
-                    setNewMessageTo('');
-                    setNewMessageSubject('');
-                    setNewMessageBody('');
-                  }}
-                />
+                <DxcButton label="Cancel" mode="secondary" onClick={() => { setShowNewMessageModal(false); setNewMessageTo(''); setNewMessageSubject(''); setNewMessageBody(''); }} />
                 <DxcButton
                   label="Send Message"
                   mode="primary"
                   onClick={() => {
-                    const newMessage = {
-                      date: new Date().toLocaleDateString(),
-                      subject: newMessageSubject,
-                      from: 'you@assuremail.com',
-                      message: newMessageBody
-                    };
+                    const newMessage = { date: new Date().toLocaleDateString(), subject: newMessageSubject, from: 'you@assuremail.com', message: newMessageBody };
                     setMessages([newMessage, ...messages]);
                     setShowNewMessageModal(false);
                     setNewMessageTo('');

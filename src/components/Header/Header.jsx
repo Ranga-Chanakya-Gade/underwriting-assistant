@@ -8,7 +8,7 @@ const Header = ({ userName = "Sarah Johnson", userRole = "Commercial Lines" }) =
         {/* Logo and Brand */}
         <DxcFlex alignItems="center" gap="var(--spacing-gap-m)">
           <img
-            src="/bloom-logo.svg"
+            src="/bloom-logo.jpg"
             alt="Bloom Insurance Logo"
             className="header-logo"
             onError={(e) => {

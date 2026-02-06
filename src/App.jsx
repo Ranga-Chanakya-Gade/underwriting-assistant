@@ -97,7 +97,7 @@ function App() {
           <DxcFlex gap="var(--spacing-gap-m)" alignItems="center">
             {/* Bloom Insurance Logo */}
             <img
-              src="/bloom-logo.svg"
+              src="/bloom-logo.jpg"
               alt="Bloom Insurance"
               style={{ height: '40px', width: 'auto' }}
               onError={(e) => {
@@ -128,9 +128,11 @@ function App() {
               className="header-icon-btn"
               title="Assure Answers - AI Assistant"
             >
-              <span className="material-icons" style={{ fontSize: '22px', color: '#1B75BB' }}>
-                smart_toy
-              </span>
+              <img
+                src="/ai-icon.png"
+                alt="Assure Answers"
+                style={{ width: '24px', height: '24px', borderRadius: '50%' }}
+              />
             </button>
 
             {/* Divider */}

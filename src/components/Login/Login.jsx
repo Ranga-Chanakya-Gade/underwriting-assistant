@@ -65,7 +65,7 @@ const Login = ({ onLogin }) => {
           {/* Logo */}
           <div className="login-logo">
             <img
-              src="/bloom-logo.svg"
+              src="/bloom-logo.jpg"
               alt="Bloom Insurance"
               style={{ height: '50px', width: 'auto' }}
             />

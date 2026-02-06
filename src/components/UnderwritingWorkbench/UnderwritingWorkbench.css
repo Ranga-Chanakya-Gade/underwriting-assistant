@@ -1,53 +1,122 @@
-/* Risk Indicator Cards */
-.risk-indicator-card {
-  padding: var(--spacing-padding-m);
+/* ─── Page Container ────────────────────────────────────────────────────── */
+.page-container {
+  background-color: var(--color-bg-neutral-lightest, #ffffff);
   border-radius: var(--border-radius-m);
-  border-left: 4px solid;
-  background-color: var(--color-bg-neutral-lightest);
-  flex: 1;
-  min-width: 280px;
+  box-shadow: var(--shadow-mid-02);
+  padding: var(--spacing-padding-l);
 }
 
-.risk-indicator-card.risk-warning {
-  border-left-color: var(--color-orange-600, #FF6B00);
-  background-color: var(--color-orange-50, #FFF4E5);
-}
-
-.risk-indicator-card.risk-error {
-  border-left-color: var(--color-red-600, #D0021B);
-  background-color: var(--color-red-50, #FFF0F0);
-}
-
-.risk-indicator-card.risk-info {
-  border-left-color: var(--color-blue-600, #0095FF);
-  background-color: var(--color-blue-50, #F0F8FF);
-}
-
-/* Info Section */
-.info-section {
-  padding: var(--spacing-padding-m);
+/* ─── Tabs Card ─────────────────────────────────────────────────────────── */
+.tabs-card {
   background-color: var(--color-bg-neutral-lightest);
   border-radius: var(--border-radius-m);
   border: 1px solid var(--color-border-neutral-lighter);
 }
 
-.info-icon {
-  color: var(--color-blue-600, #0095FF);
-  font-size: var(--font-scale-03);
+/* ─── Detail Card ──────────────────────────────────────────────────────── */
+.detail-card {
+  border: 1px solid var(--color-border-neutral-lighter);
+  border-radius: var(--border-radius-m);
+  overflow: hidden;
+  background-color: var(--color-bg-neutral-lightest);
 }
 
-/* Data Tables */
+.detail-card-header {
+  background-color: #F8F9FA;
+  padding: var(--spacing-padding-m) var(--spacing-padding-l);
+  border-bottom: 1px solid var(--color-border-neutral-lighter);
+}
+
+.detail-card-body {
+  padding: var(--spacing-padding-l);
+}
+
+/* ─── Detail Grid (label/value layout inside cards) ────────────────────── */
+.detail-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: var(--spacing-gap-m);
+}
+
+.detail-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+/* ─── Risk Rows (Overview tab) ─────────────────────────────────────────── */
+.risk-row {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-gap-m);
+  padding: var(--spacing-padding-m);
+  border-radius: var(--border-radius-m);
+  border-left: 4px solid transparent;
+}
+
+.risk-row-warning {
+  border-left-color: #F6921E;
+  background-color: #FFF8E1;
+}
+
+.risk-row-error {
+  border-left-color: #D0021B;
+  background-color: #FFF0F0;
+}
+
+.risk-row-info {
+  border-left-color: #1B75BB;
+  background-color: #E8F4FD;
+}
+
+.risk-row-icon {
+  font-size: 24px;
+  flex-shrink: 0;
+}
+
+/* ─── Risk Severity Pills ──────────────────────────────────────────────── */
+.risk-severity-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 12px;
+  border-radius: 999px;
+  font-size: var(--font-scale-01);
+  font-weight: var(--font-weight-semibold);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.risk-severity-high {
+  background-color: #FFF8E1;
+  color: #F6921E;
+  border: 1px solid #F6921E;
+}
+
+.risk-severity-critical {
+  background-color: #FFF0F0;
+  color: #D0021B;
+  border: 1px solid #D0021B;
+}
+
+.risk-severity-medium {
+  background-color: #E8F4FD;
+  color: #1B75BB;
+  border: 1px solid #1B75BB;
+}
+
+/* ─── Data Tables ───────────────────────────────────────────────────────── */
 .data-table {
   width: 100%;
   border-collapse: collapse;
   background-color: var(--color-bg-neutral-lightest);
   border-radius: var(--border-radius-m);
   overflow: hidden;
+  border: 1px solid var(--color-border-neutral-lighter);
 }
 
 .data-table thead {
-  background-color: var(--color-blue-600, #0095FF);
-  color: var(--color-white, white);
+  background-color: #1B75BB;
+  color: white;
 }
 
 .data-table th {
@@ -72,76 +141,61 @@
 }
 
 .table-link {
-  color: var(--color-blue-600, #0095FF);
+  color: #1B75BB;
   text-decoration: none;
   font-weight: var(--font-weight-medium);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
 }
 
 .table-link:hover {
   text-decoration: underline;
 }
 
-.status-badge {
-  display: inline-block;
-  padding: var(--spacing-padding-xxs) var(--spacing-padding-s);
-  border-radius: var(--border-radius-s);
+/* ─── External Link Icon ───────────────────────────────────────────────── */
+.external-link-icon {
+  font-size: 16px !important;
+  vertical-align: middle;
+}
+
+/* ─── Status Pills (Data Reports) ──────────────────────────────────────── */
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 12px;
+  border-radius: 999px;
   font-size: var(--font-scale-01);
   font-weight: var(--font-weight-semibold);
+  white-space: nowrap;
 }
 
-.status-badge.status-available {
-  background-color: var(--color-green-50, #E8F5E9);
-  color: var(--color-green-600, #24A148);
+.status-pill.status-available {
+  background-color: #E8F5E9;
+  color: #37A526;
+  border: 1px solid #37A526;
 }
 
-.order-btn {
-  background-color: var(--color-blue-50, #F0F8FF);
-  border: 1px solid var(--color-blue-600, #0095FF);
-  color: var(--color-blue-600, #0095FF);
-  padding: var(--spacing-padding-xxs) var(--spacing-padding-s);
-  border-radius: var(--border-radius-s);
+.status-pill.status-processing {
+  background-color: #FFF8E1;
+  color: #F6921E;
+  border: 1px solid #F6921E;
+}
+
+.status-pill.status-order {
+  background-color: #E8F4FD;
+  color: #1B75BB;
+  border: 1px solid #1B75BB;
   cursor: pointer;
-  font-size: var(--font-scale-01);
-  font-weight: var(--font-weight-semibold);
   transition: all 0.2s ease;
 }
 
-.order-btn:hover {
-  background-color: var(--color-blue-600, #0095FF);
-  color: var(--color-white, white);
+.status-pill.status-order:hover {
+  background-color: #1B75BB;
+  color: white;
 }
 
-/* Document Upload Table */
-.document-upload-table {
-  width: 100%;
-  border-collapse: collapse;
-  background-color: var(--color-bg-neutral-lightest);
-  border-radius: var(--border-radius-m);
-  overflow: hidden;
-}
-
-.document-upload-table thead {
-  background-color: var(--color-blue-600, #0095FF);
-  color: var(--color-white, white);
-}
-
-.document-upload-table th {
-  padding: var(--spacing-padding-m);
-  text-align: left;
-  font-weight: var(--font-weight-semibold);
-  font-size: var(--font-scale-02);
-}
-
-.document-upload-table td {
-  padding: var(--spacing-padding-m);
-  border-bottom: 1px solid var(--color-border-neutral-lighter);
-  font-size: var(--font-scale-02);
-}
-
-.document-upload-table tbody tr:hover {
-  background-color: var(--color-bg-neutral-lighter);
-}
-
+/* ─── Upload Section ───────────────────────────────────────────────────── */
 .upload-section {
   padding: var(--spacing-padding-m);
   background-color: var(--color-bg-neutral-lightest);
@@ -151,7 +205,7 @@
 
 .select-file-btn {
   padding: var(--spacing-padding-s) var(--spacing-padding-m);
-  background-color: var(--color-white, white);
+  background-color: white;
   border: 1px solid var(--color-border-neutral-medium);
   border-radius: var(--border-radius-s);
   cursor: pointer;
@@ -162,72 +216,32 @@
 
 .select-file-btn:hover {
   background-color: var(--color-bg-neutral-lighter);
-  border-color: var(--color-blue-600, #0095FF);
+  border-color: #1B75BB;
 }
 
-/* Notes Table */
-.notes-table {
-  width: 100%;
-  border-collapse: collapse;
-  background-color: var(--color-bg-neutral-lightest);
-  border-radius: var(--border-radius-m);
-  overflow: hidden;
-}
-
-.notes-table thead {
-  background-color: var(--color-blue-600, #0095FF);
-  color: var(--color-white, white);
-}
-
-.notes-table th {
-  padding: var(--spacing-padding-m);
-  text-align: left;
+/* ─── Link Button (Request Documentation) ──────────────────────────────── */
+.link-btn {
+  background: none;
+  border: none;
+  color: #1B75BB;
+  cursor: pointer;
+  font-family: var(--font-family-sans);
+  font-size: var(--font-scale-02);
   font-weight: var(--font-weight-semibold);
-  font-size: var(--font-scale-02);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: var(--spacing-padding-xs) 0;
+  text-decoration: none;
+  transition: color 0.2s ease;
 }
 
-.notes-table td {
-  padding: var(--spacing-padding-m);
-  border-bottom: 1px solid var(--color-border-neutral-lighter);
-  font-size: var(--font-scale-02);
+.link-btn:hover {
+  color: #145a8e;
+  text-decoration: underline;
 }
 
-.notes-table tbody tr:hover {
-  background-color: var(--color-bg-neutral-lighter);
-}
-
-/* Messages Table */
-.messages-table {
-  width: 100%;
-  border-collapse: collapse;
-  background-color: var(--color-bg-neutral-lightest);
-  border-radius: var(--border-radius-m);
-  overflow: hidden;
-}
-
-.messages-table thead {
-  background-color: var(--color-blue-600, #0095FF);
-  color: var(--color-white, white);
-}
-
-.messages-table th {
-  padding: var(--spacing-padding-m);
-  text-align: left;
-  font-weight: var(--font-weight-semibold);
-  font-size: var(--font-scale-02);
-}
-
-.messages-table td {
-  padding: var(--spacing-padding-m);
-  border-bottom: 1px solid var(--color-border-neutral-lighter);
-  font-size: var(--font-scale-02);
-}
-
-.messages-table tbody tr:hover {
-  background-color: var(--color-bg-neutral-lighter);
-}
-
-/* Message Tabs */
+/* ─── Message Tabs ──────────────────────────────────────────────────────── */
 .message-tabs {
   display: flex;
   gap: var(--spacing-gap-xs);
@@ -250,22 +264,22 @@
 }
 
 .message-tab:hover {
-  color: var(--color-blue-600, #0095FF);
+  color: #1B75BB;
   background-color: var(--color-bg-neutral-lighter);
 }
 
 .message-tab.active {
-  color: var(--color-blue-600, #0095FF);
-  border-bottom-color: var(--color-blue-600, #0095FF);
+  color: #1B75BB;
+  border-bottom-color: #1B75BB;
   font-weight: var(--font-weight-semibold);
 }
 
-/* Icon Buttons */
+/* ─── Icon Buttons ──────────────────────────────────────────────────────── */
 .icon-btn {
   background: none;
   border: none;
   cursor: pointer;
-  color: var(--color-blue-600, #0095FF);
+  color: #1B75BB;
   padding: var(--spacing-padding-xs);
   display: flex;
   align-items: center;
@@ -282,7 +296,7 @@
   background: none;
   border: none;
   cursor: pointer;
-  color: var(--color-blue-600, #0095FF);
+  color: #1B75BB;
   padding: var(--spacing-padding-xxs);
   display: flex;
   align-items: center;
@@ -295,30 +309,41 @@
   background-color: var(--color-bg-neutral-lighter);
 }
 
-/* Success Message Box */
+/* ─── Message Textarea ─────────────────────────────────────────────────── */
+.message-textarea {
+  width: 100%;
+  padding: var(--spacing-padding-m);
+  border: 1px solid var(--color-border-neutral-medium);
+  border-radius: var(--border-radius-s);
+  font-family: var(--font-family-sans);
+  font-size: var(--font-scale-02);
+  color: #333333;
+  resize: vertical;
+  transition: border-color 0.2s ease;
+  box-sizing: border-box;
+}
+
+.message-textarea:focus {
+  outline: none;
+  border-color: #1B75BB;
+  box-shadow: 0 0 0 2px rgba(27, 117, 187, 0.15);
+}
+
+.message-textarea::placeholder {
+  color: #808285;
+}
+
+/* ─── Success Message Box ───────────────────────────────────────────────── */
 .success-message-box {
-  background-color: var(--color-grey-100, #F5F5F5);
+  background-color: #F8F9FA;
   border-radius: var(--border-radius-m);
   padding: var(--spacing-padding-l);
 }
 
-/* Policy Info Grid */
-.policy-info-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: var(--spacing-gap-m);
-}
-
-.policy-info-item {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-gap-xs);
-}
-
-/* Total Premium Box */
+/* ─── Total Premium Box ─────────────────────────────────────────────────── */
 .total-premium-box {
   background-color: var(--color-bg-neutral-lightest);
-  border: 2px solid var(--color-blue-600, #0095FF);
+  border: 2px solid #1B75BB;
   border-radius: var(--border-radius-m);
   padding: var(--spacing-padding-l);
 }
