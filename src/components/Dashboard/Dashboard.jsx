@@ -345,7 +345,43 @@ const Dashboard = ({ onSubmissionSelect }) => {
                             color={getStatusColor(submission.status)}
                             size="small"
                           />
+                          {/* Routing & Priority Indicators */}
+                          {submission.routing?.fastTrackEligible && (
+                            <DxcBadge
+                              label="Fast-Track"
+                              mode="contextual"
+                              color="success"
+                              size="small"
+                            />
+                          )}
+                          {submission.referral?.required && (
+                            <DxcBadge
+                              label="Referral Required"
+                              mode="contextual"
+                              color="warning"
+                              size="small"
+                            />
+                          )}
+                          {submission.daysInQueue > 0 && (
+                            <DxcTypography fontSize="11px" color="#666666" style={{ fontStyle: 'italic' }}>
+                              {submission.daysInQueue}d in queue
+                            </DxcTypography>
+                          )}
                         </DxcFlex>
+
+                        {/* Routing Logic Display */}
+                        {submission.routing && (
+                          <div style={{
+                            padding: '8px 12px',
+                            backgroundColor: submission.routing.fastTrackEligible ? '#E8F5E9' : '#FFF3E0',
+                            borderRadius: '4px',
+                            borderLeft: submission.routing.fastTrackEligible ? '3px solid #37A526' : '3px solid #FFA500'
+                          }}>
+                            <DxcTypography fontSize="11px" color="#333333" fontWeight="font-weight-medium">
+                              🤖 {submission.routing.decision} - {submission.routing.reason}
+                            </DxcTypography>
+                          </div>
+                        )}
 
                         {/* Submission Details */}
                         <DxcFlex gap="var(--spacing-gap-l)" wrap="wrap">

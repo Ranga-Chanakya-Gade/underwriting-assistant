@@ -10,6 +10,10 @@ import {
   DxcSelect,
   DxcDialog,
 } from '@dxc-technology/halstack-react';
+import WorkflowProgress from '../shared/WorkflowProgress';
+import GuidelinesPanel from '../shared/GuidelinesPanel';
+import LossRunsPanel from '../shared/LossRunsPanel';
+import ReportsPanel from '../shared/ReportsPanel';
 import './UnderwritingWorkbench.css';
 
 const UnderwritingWorkbench = ({ submission }) => {
@@ -80,50 +84,418 @@ const UnderwritingWorkbench = ({ submission }) => {
         return (
           <DxcInset>
             <DxcFlex direction="column" gap="var(--spacing-gap-l)">
-              {/* Risk Assessment Summary */}
-              <div>
-                <DxcTypography fontSize="font-scale-03" fontWeight="font-weight-semibold" color="#333333">
-                  Risk Assessment
-                </DxcTypography>
-                <DxcFlex direction="column" gap="var(--spacing-gap-s)" style={{ marginTop: 'var(--spacing-gap-m)' }}>
-                  <div className="risk-row risk-row-warning">
-                    <span className="material-icons-outlined risk-row-icon" style={{ color: '#F6921E' }}>warning_amber</span>
-                    <DxcFlex direction="column" gap="2px" style={{ flex: 1 }}>
-                      <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold" color="#F6921E">
-                        High Risk Industry
-                      </DxcTypography>
-                      <DxcTypography fontSize="font-scale-01" color="#808285">
-                        Construction industry has a higher risk of accidents, injuries, and liable claims
+              {/* Workflow Progress */}
+              {submission.workflow && <WorkflowProgress workflow={submission.workflow} />}
+
+              {/* Guidelines & Authority */}
+              {submission.guidelines && submission.referral && (
+                <GuidelinesPanel
+                  guidelines={submission.guidelines}
+                  referral={submission.referral}
+                  coverageAmount={submission.coverageAmount}
+                />
+              )}
+
+              {/* AI-Powered Risk Assessment & Recommendations */}
+              {submission.aiRecommendations && (
+                <div>
+                  <DxcFlex alignItems="center" gap="var(--spacing-gap-s)" style={{ marginBottom: 'var(--spacing-gap-m)' }}>
+                    <span className="material-icons" style={{ color: '#1B75BB', fontSize: '24px' }}>psychology</span>
+                    <DxcTypography fontSize="font-scale-03" fontWeight="font-weight-semibold" color="#333333">
+                      AI Risk Assessment & Recommendations
+                    </DxcTypography>
+                  </DxcFlex>
+
+                  <DxcFlex direction="column" gap="var(--spacing-gap-m)">
+                    {/* AI Pricing Recommendation */}
+                    {submission.aiRecommendations.pricing && (
+                      <div style={{
+                        padding: 'var(--spacing-padding-m)',
+                        backgroundColor: '#E5F1FA',
+                        borderRadius: 'var(--border-radius-s)',
+                        borderLeft: '4px solid #1B75BB'
+                      }}>
+                        <DxcFlex gap="var(--spacing-gap-s)" alignItems="flex-start">
+                          <span className="material-icons" style={{ color: '#1B75BB', fontSize: '20px' }}>lightbulb</span>
+                          <div style={{ flex: 1 }}>
+                            <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold" color="#1B75BB">
+                              AI Pricing Recommendation
+                            </DxcTypography>
+                            <DxcTypography fontSize="font-scale-02" color="#333333" style={{ marginTop: '4px' }}>
+                              {submission.aiRecommendations.pricing.suggestion}
+                            </DxcTypography>
+                            <DxcTypography fontSize="font-scale-01" color="#666666" style={{ marginTop: '8px' }}>
+                              <strong>Reasoning:</strong> {submission.aiRecommendations.pricing.reasoning}
+                            </DxcTypography>
+                            {submission.aiRecommendations.pricing.comparable && (
+                              <DxcTypography fontSize="font-scale-01" color="#666666" style={{ marginTop: '4px' }}>
+                                <strong>Comparable:</strong> {submission.aiRecommendations.pricing.comparable}
+                              </DxcTypography>
+                            )}
+                          </div>
+                        </DxcFlex>
+                      </div>
+                    )}
+
+                    {/* Red Flags */}
+                    {submission.aiRecommendations.redFlags && submission.aiRecommendations.redFlags.length > 0 && (
+                      <div>
+                        <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold" color="#D02E2E" style={{ marginBottom: '8px' }}>
+                          Risk Factors Identified
+                        </DxcTypography>
+                        <DxcFlex direction="column" gap="var(--spacing-gap-s)">
+                          {submission.aiRecommendations.redFlags.map((flag, index) => (
+                            <div key={index} className="risk-row risk-row-error">
+                              <span className="material-icons-outlined risk-row-icon" style={{ color: '#D02E2E' }}>warning</span>
+                              <DxcFlex direction="column" gap="2px" style={{ flex: 1 }}>
+                                <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold" color="#D02E2E">
+                                  {flag.title}
+                                </DxcTypography>
+                                <DxcTypography fontSize="font-scale-01" color="#666666">
+                                  {flag.description}
+                                </DxcTypography>
+                              </DxcFlex>
+                              <span className={`risk-severity-pill risk-severity-${flag.severity.toLowerCase()}`}>
+                                {flag.severity}
+                              </span>
+                            </div>
+                          ))}
+                        </DxcFlex>
+                      </div>
+                    )}
+
+                    {/* Positive Factors */}
+                    {submission.aiRecommendations.positiveFactors && submission.aiRecommendations.positiveFactors.length > 0 && (
+                      <div>
+                        <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold" color="#37A526" style={{ marginBottom: '8px' }}>
+                          Positive Risk Factors
+                        </DxcTypography>
+                        <DxcFlex direction="column" gap="var(--spacing-gap-s)">
+                          {submission.aiRecommendations.positiveFactors.map((factor, index) => (
+                            <div key={index} className="risk-row risk-row-success">
+                              <span className="material-icons-outlined risk-row-icon" style={{ color: '#37A526' }}>check_circle</span>
+                              <DxcFlex direction="column" gap="2px" style={{ flex: 1 }}>
+                                <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold" color="#37A526">
+                                  {factor.title}
+                                </DxcTypography>
+                                <DxcTypography fontSize="font-scale-01" color="#666666">
+                                  {factor.description}
+                                </DxcTypography>
+                              </DxcFlex>
+                            </div>
+                          ))}
+                        </DxcFlex>
+                      </div>
+                    )}
+
+                    {/* Comparable Risks */}
+                    {submission.aiRecommendations.comparableRisks && submission.aiRecommendations.comparableRisks.length > 0 && (
+                      <div style={{
+                        padding: 'var(--spacing-padding-m)',
+                        backgroundColor: '#F5F5F5',
+                        borderRadius: 'var(--border-radius-s)'
+                      }}>
+                        <DxcFlex gap="var(--spacing-gap-s)" alignItems="flex-start">
+                          <span className="material-icons" style={{ color: '#666666', fontSize: '20px' }}>analytics</span>
+                          <div style={{ flex: 1 }}>
+                            <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold" color="#333333">
+                              Comparable Risks Analysis
+                            </DxcTypography>
+                            <div style={{ marginTop: '12px' }}>
+                              {submission.aiRecommendations.comparableRisks.map((risk, index) => (
+                                <div key={index} style={{
+                                  padding: '8px 0',
+                                  borderBottom: index < submission.aiRecommendations.comparableRisks.length - 1 ? '1px solid #E0E0E0' : 'none'
+                                }}>
+                                  <DxcTypography fontSize="font-scale-02" color="#333333" fontWeight="font-weight-medium">
+                                    {risk.name}
+                                  </DxcTypography>
+                                  <DxcFlex gap="var(--spacing-gap-m)" style={{ marginTop: '4px' }}>
+                                    <DxcTypography fontSize="font-scale-01" color="#666666">
+                                      Revenue: {risk.revenue}
+                                    </DxcTypography>
+                                    <DxcTypography fontSize="font-scale-01" color="#666666">
+                                      Fleet: {risk.fleet}
+                                    </DxcTypography>
+                                    <DxcTypography fontSize="font-scale-01" color="#666666">
+                                      Loss Ratio: {risk.lossRatio}
+                                    </DxcTypography>
+                                    <DxcTypography fontSize="font-scale-01" color="#37A526" fontWeight="font-weight-semibold">
+                                      Premium: {risk.premium}
+                                    </DxcTypography>
+                                  </DxcFlex>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        </DxcFlex>
+                      </div>
+                    )}
+                  </DxcFlex>
+                </div>
+              )}
+
+              {/* Compliance & Authorization */}
+              {submission.compliance && (
+                <div style={{
+                  padding: 'var(--spacing-padding-m)',
+                  backgroundColor: '#FFFFFF',
+                  borderRadius: 'var(--border-radius-s)',
+                  border: '1px solid #E0E0E0'
+                }}>
+                  <DxcFlex direction="column" gap="var(--spacing-gap-m)">
+                    <DxcFlex alignItems="center" gap="var(--spacing-gap-s)">
+                      <span className="material-icons" style={{ color: '#1B75BB', fontSize: '24px' }}>verified_user</span>
+                      <DxcTypography fontSize="font-scale-03" fontWeight="font-weight-semibold" color="#333333">
+                        Compliance & Authorization
                       </DxcTypography>
                     </DxcFlex>
-                    <span className="risk-severity-pill risk-severity-high">High</span>
-                  </div>
-                  <div className="risk-row risk-row-error">
-                    <span className="material-icons-outlined risk-row-icon" style={{ color: '#D0021B' }}>trending_down</span>
-                    <DxcFlex direction="column" gap="2px" style={{ flex: 1 }}>
-                      <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold" color="#D0021B">
-                        Poor Claims History
-                      </DxcTypography>
-                      <DxcTypography fontSize="font-scale-01" color="#808285">
-                        This company has a history of frequent high dollar claims
-                      </DxcTypography>
-                    </DxcFlex>
-                    <span className="risk-severity-pill risk-severity-critical">Critical</span>
-                  </div>
-                  <div className="risk-row risk-row-info">
-                    <span className="material-icons-outlined risk-row-icon" style={{ color: '#1B75BB' }}>health_and_safety</span>
-                    <DxcFlex direction="column" gap="2px" style={{ flex: 1 }}>
-                      <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold" color="#1B75BB">
-                        Safety Concerns
-                      </DxcTypography>
-                      <DxcTypography fontSize="font-scale-01" color="#808285">
-                        This company has a history of workplace violations
-                      </DxcTypography>
-                    </DxcFlex>
-                    <span className="risk-severity-pill risk-severity-medium">Medium</span>
-                  </div>
-                </DxcFlex>
-              </div>
+
+                    {/* Compliance Checklist */}
+                    <div style={{
+                      display: 'grid',
+                      gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+                      gap: 'var(--spacing-gap-m)'
+                    }}>
+                      {/* State Filing Compliance */}
+                      <div style={{
+                        padding: 'var(--spacing-padding-s)',
+                        backgroundColor: submission.compliance.stateFilingCompliant ? '#E8F5E9' : '#FFF3E0',
+                        borderRadius: 'var(--border-radius-s)',
+                        borderLeft: `4px solid ${submission.compliance.stateFilingCompliant ? '#37A526' : '#FFA500'}`
+                      }}>
+                        <DxcFlex gap="var(--spacing-gap-xs)" alignItems="center">
+                          <span className="material-icons" style={{
+                            color: submission.compliance.stateFilingCompliant ? '#37A526' : '#FFA500',
+                            fontSize: '20px'
+                          }}>
+                            {submission.compliance.stateFilingCompliant ? 'check_circle' : 'warning'}
+                          </span>
+                          <div>
+                            <DxcTypography fontSize="font-scale-01" color="#666666">
+                              State Filing
+                            </DxcTypography>
+                            <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold" color={
+                              submission.compliance.stateFilingCompliant ? '#37A526' : '#FFA500'
+                            }>
+                              {submission.compliance.stateFilingCompliant ? 'Compliant' : 'Pending'}
+                            </DxcTypography>
+                          </div>
+                        </DxcFlex>
+                      </div>
+
+                      {/* Required Documents */}
+                      <div style={{
+                        padding: 'var(--spacing-padding-s)',
+                        backgroundColor: submission.compliance.requiredDocsReceived ? '#E8F5E9' : '#FFF3E0',
+                        borderRadius: 'var(--border-radius-s)',
+                        borderLeft: `4px solid ${submission.compliance.requiredDocsReceived ? '#37A526' : '#FFA500'}`
+                      }}>
+                        <DxcFlex gap="var(--spacing-gap-xs)" alignItems="center">
+                          <span className="material-icons" style={{
+                            color: submission.compliance.requiredDocsReceived ? '#37A526' : '#FFA500',
+                            fontSize: '20px'
+                          }}>
+                            {submission.compliance.requiredDocsReceived ? 'check_circle' : 'warning'}
+                          </span>
+                          <div>
+                            <DxcTypography fontSize="font-scale-01" color="#666666">
+                              Required Documents
+                            </DxcTypography>
+                            <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold" color={
+                              submission.compliance.requiredDocsReceived ? '#37A526' : '#FFA500'
+                            }>
+                              {submission.compliance.requiredDocsReceived ? 'Complete' : 'Incomplete'}
+                            </DxcTypography>
+                          </div>
+                        </DxcFlex>
+                      </div>
+
+                      {/* Guidelines Followed */}
+                      <div style={{
+                        padding: 'var(--spacing-padding-s)',
+                        backgroundColor: submission.compliance.guidelinesFollowed ? '#E8F5E9' : '#FFEBEE',
+                        borderRadius: 'var(--border-radius-s)',
+                        borderLeft: `4px solid ${submission.compliance.guidelinesFollowed ? '#37A526' : '#D02E2E'}`
+                      }}>
+                        <DxcFlex gap="var(--spacing-gap-xs)" alignItems="center">
+                          <span className="material-icons" style={{
+                            color: submission.compliance.guidelinesFollowed ? '#37A526' : '#D02E2E',
+                            fontSize: '20px'
+                          }}>
+                            {submission.compliance.guidelinesFollowed ? 'check_circle' : 'cancel'}
+                          </span>
+                          <div>
+                            <DxcTypography fontSize="font-scale-01" color="#666666">
+                              Guidelines
+                            </DxcTypography>
+                            <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold" color={
+                              submission.compliance.guidelinesFollowed ? '#37A526' : '#D02E2E'
+                            }>
+                              {submission.compliance.guidelinesFollowed ? 'Followed' : 'Exception'}
+                            </DxcTypography>
+                          </div>
+                        </DxcFlex>
+                      </div>
+
+                      {/* Authority Verified */}
+                      <div style={{
+                        padding: 'var(--spacing-padding-s)',
+                        backgroundColor: submission.compliance.authorityVerified ? '#E8F5E9' : '#FFF3E0',
+                        borderRadius: 'var(--border-radius-s)',
+                        borderLeft: `4px solid ${submission.compliance.authorityVerified ? '#37A526' : '#FFA500'}`
+                      }}>
+                        <DxcFlex gap="var(--spacing-gap-xs)" alignItems="center">
+                          <span className="material-icons" style={{
+                            color: submission.compliance.authorityVerified ? '#37A526' : '#FFA500',
+                            fontSize: '20px'
+                          }}>
+                            {submission.compliance.authorityVerified ? 'check_circle' : 'pending'}
+                          </span>
+                          <div>
+                            <DxcTypography fontSize="font-scale-01" color="#666666">
+                              Authority
+                            </DxcTypography>
+                            <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold" color={
+                              submission.compliance.authorityVerified ? '#37A526' : '#FFA500'
+                            }>
+                              {submission.compliance.authorityVerified ? 'Verified' : 'Pending'}
+                            </DxcTypography>
+                          </div>
+                        </DxcFlex>
+                      </div>
+                    </div>
+
+                    {/* Missing Documents Alert */}
+                    {submission.compliance.missingDocs && submission.compliance.missingDocs.length > 0 && (
+                      <div style={{
+                        padding: 'var(--spacing-padding-m)',
+                        backgroundColor: '#FFF3E0',
+                        borderRadius: 'var(--border-radius-s)',
+                        borderLeft: '4px solid #FFA500'
+                      }}>
+                        <DxcFlex gap="var(--spacing-gap-s)" alignItems="flex-start">
+                          <span className="material-icons" style={{ color: '#FFA500', fontSize: '20px' }}>
+                            description
+                          </span>
+                          <div style={{ flex: 1 }}>
+                            <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold" color="#FFA500">
+                              Missing Documents ({submission.compliance.missingDocs.length})
+                            </DxcTypography>
+                            <ul style={{
+                              margin: '8px 0 0 0',
+                              paddingLeft: '20px',
+                              listStyleType: 'disc'
+                            }}>
+                              {submission.compliance.missingDocs.map((doc, index) => (
+                                <li key={index}>
+                                  <DxcTypography fontSize="font-scale-01" color="#666666">
+                                    {doc}
+                                  </DxcTypography>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        </DxcFlex>
+                      </div>
+                    )}
+
+                    {/* Referral Transparency */}
+                    {submission.referral && submission.referral.required && (
+                      <div style={{
+                        padding: 'var(--spacing-padding-m)',
+                        backgroundColor: '#FFF3E0',
+                        borderRadius: 'var(--border-radius-s)',
+                        borderLeft: '4px solid #FFA500'
+                      }}>
+                        <DxcFlex gap="var(--spacing-gap-s)" alignItems="flex-start">
+                          <span className="material-icons" style={{ color: '#FFA500', fontSize: '20px' }}>
+                            forward_to_inbox
+                          </span>
+                          <div style={{ flex: 1 }}>
+                            <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold" color="#FFA500">
+                              Referral Required
+                            </DxcTypography>
+                            <div style={{
+                              marginTop: '8px',
+                              display: 'grid',
+                              gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))',
+                              gap: 'var(--spacing-gap-m)'
+                            }}>
+                              <div>
+                                <DxcTypography fontSize="font-scale-01" color="#666666">
+                                  Refer To
+                                </DxcTypography>
+                                <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold" color="#333333">
+                                  {submission.referral.referTo}
+                                </DxcTypography>
+                              </div>
+                              <div>
+                                <DxcTypography fontSize="font-scale-01" color="#666666">
+                                  Reason
+                                </DxcTypography>
+                                <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold" color="#333333">
+                                  {submission.referral.reason}
+                                </DxcTypography>
+                              </div>
+                              <div>
+                                <DxcTypography fontSize="font-scale-01" color="#666666">
+                                  Guideline Reference
+                                </DxcTypography>
+                                <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold" color="#333333">
+                                  {submission.referral.guidelineReference}
+                                </DxcTypography>
+                              </div>
+                            </div>
+                            {submission.referral.yourLimit && (
+                              <div style={{
+                                marginTop: '12px',
+                                padding: 'var(--spacing-padding-s)',
+                                backgroundColor: '#FFFFFF',
+                                borderRadius: 'var(--border-radius-s)'
+                              }}>
+                                <DxcTypography fontSize="font-scale-01" color="#666666">
+                                  <strong>Authority Check:</strong> Your authority limit is{' '}
+                                  <span style={{ color: '#37A526', fontWeight: 600 }}>
+                                    ${submission.referral.yourLimit.toLocaleString()}
+                                  </span>
+                                  {' '}but submission coverage is{' '}
+                                  <span style={{ color: '#D02E2E', fontWeight: 600 }}>
+                                    ${submission.coverageAmount.toLocaleString()}
+                                  </span>
+                                </DxcTypography>
+                              </div>
+                            )}
+                          </div>
+                        </DxcFlex>
+                      </div>
+                    )}
+
+                    {/* All Clear Message */}
+                    {submission.compliance.stateFilingCompliant &&
+                     submission.compliance.requiredDocsReceived &&
+                     submission.compliance.guidelinesFollowed &&
+                     submission.compliance.authorityVerified &&
+                     (!submission.referral || !submission.referral.required) && (
+                      <div style={{
+                        padding: 'var(--spacing-padding-m)',
+                        backgroundColor: '#E8F5E9',
+                        borderRadius: 'var(--border-radius-s)',
+                        textAlign: 'center'
+                      }}>
+                        <DxcFlex gap="var(--spacing-gap-s)" alignItems="center" justifyContent="center">
+                          <span className="material-icons" style={{ color: '#37A526', fontSize: '24px' }}>
+                            verified
+                          </span>
+                          <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold" color="#37A526">
+                            ✓ All compliance and authorization requirements met
+                          </DxcTypography>
+                        </DxcFlex>
+                      </div>
+                    )}
+                  </DxcFlex>
+                </div>
+              )}
 
               {/* Applicant Details - own card */}
               <div className="detail-card">
@@ -236,7 +608,29 @@ const UnderwritingWorkbench = ({ submission }) => {
           </DxcInset>
         );
 
-      case 1: // Policy Data
+      case 1: // Loss Runs
+        return (
+          <DxcInset>
+            {submission.lossRuns ? (
+              <LossRunsPanel lossRuns={submission.lossRuns} />
+            ) : (
+              <DxcTypography>No loss runs data available</DxcTypography>
+            )}
+          </DxcInset>
+        );
+
+      case 2: // Reports & Inspections
+        return (
+          <DxcInset>
+            {submission.reports ? (
+              <ReportsPanel reports={submission.reports} />
+            ) : (
+              <DxcTypography>No reports data available</DxcTypography>
+            )}
+          </DxcInset>
+        );
+
+      case 3: // Policy Data
         return (
           <DxcInset>
             <DxcFlex direction="column" gap="var(--spacing-gap-l)">
@@ -411,7 +805,7 @@ const UnderwritingWorkbench = ({ submission }) => {
           </DxcInset>
         );
 
-      case 2: // Data Reports
+      case 4: // Data Reports
         return (
           <DxcInset>
             <DxcFlex direction="column" gap="var(--spacing-gap-l)">
@@ -570,7 +964,7 @@ const UnderwritingWorkbench = ({ submission }) => {
           </DxcInset>
         );
 
-      case 3: // Document Upload
+      case 5: // Document Upload
         return (
           <DxcInset>
             <DxcFlex direction="column" gap="var(--spacing-gap-l)">
@@ -627,9 +1021,85 @@ const UnderwritingWorkbench = ({ submission }) => {
                 />
               </div>
 
+              {/* ACORD Forms Section */}
+              {submission.acordForms && submission.acordForms.length > 0 && (
+                <div style={{
+                  padding: 'var(--spacing-padding-l)',
+                  backgroundColor: '#E5F1FA',
+                  borderRadius: 'var(--border-radius-m)',
+                  borderLeft: '4px solid #1B75BB'
+                }}>
+                  <DxcFlex direction="column" gap="var(--spacing-gap-m)">
+                    <DxcFlex alignItems="center" gap="var(--spacing-gap-s)">
+                      <span className="material-icons" style={{ color: '#1B75BB', fontSize: '24px' }}>
+                        verified
+                      </span>
+                      <DxcTypography fontSize="font-scale-03" fontWeight="font-weight-semibold" color="#1B75BB">
+                        ACORD Forms - Auto-Extracted
+                      </DxcTypography>
+                    </DxcFlex>
+                    {submission.acordForms.map((form, index) => (
+                      <div key={index} style={{
+                        padding: 'var(--spacing-padding-m)',
+                        backgroundColor: '#FFFFFF',
+                        borderRadius: 'var(--border-radius-s)',
+                        border: '1px solid #1B75BB'
+                      }}>
+                        <DxcFlex direction="column" gap="var(--spacing-gap-s)">
+                          <DxcFlex justifyContent="space-between" alignItems="center">
+                            <DxcFlex alignItems="center" gap="var(--spacing-gap-s)">
+                              <DxcBadge
+                                label={form.type}
+                                mode="contextual"
+                                color="info"
+                              />
+                              <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold">
+                                {form.name}
+                              </DxcTypography>
+                            </DxcFlex>
+                            <DxcBadge
+                              label={`${form.confidenceScore}% confidence`}
+                              mode="contextual"
+                              color={form.confidenceScore >= 95 ? 'success' : form.confidenceScore >= 85 ? 'info' : 'warning'}
+                            />
+                          </DxcFlex>
+                          <DxcFlex gap="var(--spacing-gap-l)">
+                            <div>
+                              <DxcTypography fontSize="font-scale-01" color="#666666">
+                                Fields Extracted
+                              </DxcTypography>
+                              <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold" color="#37A526">
+                                {form.fieldsExtracted} / {form.totalFields}
+                              </DxcTypography>
+                            </div>
+                            <div>
+                              <DxcTypography fontSize="font-scale-01" color="#666666">
+                                Processing Time
+                              </DxcTypography>
+                              <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold">
+                                {form.extractionTime}
+                              </DxcTypography>
+                            </div>
+                          </DxcFlex>
+                          <div style={{
+                            padding: '8px 12px',
+                            backgroundColor: '#E8F5E9',
+                            borderRadius: '4px'
+                          }}>
+                            <DxcTypography fontSize="font-scale-01" color="#37A526">
+                              ✓ Auto-filled {form.fieldsExtracted} fields from this form - Manual entry time saved: ~{Math.floor(form.fieldsExtracted * 0.5)} min
+                            </DxcTypography>
+                          </div>
+                        </DxcFlex>
+                      </div>
+                    ))}
+                  </DxcFlex>
+                </div>
+              )}
+
               <div>
                 <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold" color="#333333" style={{ marginBottom: 'var(--spacing-gap-s)' }}>
-                  Uploaded Documents
+                  Other Documents
                 </DxcTypography>
                 <table className="data-table">
                   <thead>
@@ -669,7 +1139,7 @@ const UnderwritingWorkbench = ({ submission }) => {
           </DxcInset>
         );
 
-      case 4: // Quotation
+      case 6: // Quotation
         return (
           <DxcInset>
             <DxcFlex direction="column" gap="var(--spacing-gap-l)">
@@ -808,7 +1278,7 @@ const UnderwritingWorkbench = ({ submission }) => {
           </DxcInset>
         );
 
-      case 5: // Notes/Messages
+      case 7: // Notes/Messages
         return (
           <DxcInset>
             <DxcFlex direction="column" gap="var(--spacing-gap-l)">
@@ -928,7 +1398,7 @@ const UnderwritingWorkbench = ({ submission }) => {
           </DxcInset>
         );
 
-      case 6: // Actions
+      case 8: // Actions
         return (
           <DxcInset>
             {submissionAccepted ? (
@@ -1059,7 +1529,7 @@ const UnderwritingWorkbench = ({ submission }) => {
                 label="Notes"
                 icon="sticky_note_2"
                 mode="secondary"
-                onClick={() => setActiveTabIndex(5)}
+                onClick={() => setActiveTabIndex(7)}
               />
               <DxcButton
                 label="Reassign"
@@ -1085,12 +1555,14 @@ const UnderwritingWorkbench = ({ submission }) => {
           <div className="tabs-card">
             <DxcTabs iconPosition="left">
               <DxcTabs.Tab label="Overview" active={activeTabIndex === 0} onClick={() => setActiveTabIndex(0)}><div /></DxcTabs.Tab>
-              <DxcTabs.Tab label="Policy Data" active={activeTabIndex === 1} onClick={() => setActiveTabIndex(1)}><div /></DxcTabs.Tab>
-              <DxcTabs.Tab label="Data Reports" active={activeTabIndex === 2} onClick={() => setActiveTabIndex(2)}><div /></DxcTabs.Tab>
-              <DxcTabs.Tab label="Document Upload" active={activeTabIndex === 3} onClick={() => setActiveTabIndex(3)}><div /></DxcTabs.Tab>
-              <DxcTabs.Tab label="Quotation" active={activeTabIndex === 4} onClick={() => setActiveTabIndex(4)}><div /></DxcTabs.Tab>
-              <DxcTabs.Tab label="Notes/ Messages" active={activeTabIndex === 5} onClick={() => setActiveTabIndex(5)}><div /></DxcTabs.Tab>
-              <DxcTabs.Tab label="Actions" active={activeTabIndex === 6} onClick={() => setActiveTabIndex(6)}><div /></DxcTabs.Tab>
+              <DxcTabs.Tab label="Loss Runs" active={activeTabIndex === 1} onClick={() => setActiveTabIndex(1)}><div /></DxcTabs.Tab>
+              <DxcTabs.Tab label="Reports & Inspections" active={activeTabIndex === 2} onClick={() => setActiveTabIndex(2)}><div /></DxcTabs.Tab>
+              <DxcTabs.Tab label="Policy Data" active={activeTabIndex === 3} onClick={() => setActiveTabIndex(3)}><div /></DxcTabs.Tab>
+              <DxcTabs.Tab label="Data Reports" active={activeTabIndex === 4} onClick={() => setActiveTabIndex(4)}><div /></DxcTabs.Tab>
+              <DxcTabs.Tab label="Document Upload" active={activeTabIndex === 5} onClick={() => setActiveTabIndex(5)}><div /></DxcTabs.Tab>
+              <DxcTabs.Tab label="Quotation" active={activeTabIndex === 6} onClick={() => setActiveTabIndex(6)}><div /></DxcTabs.Tab>
+              <DxcTabs.Tab label="Notes/ Messages" active={activeTabIndex === 7} onClick={() => setActiveTabIndex(7)}><div /></DxcTabs.Tab>
+              <DxcTabs.Tab label="Actions" active={activeTabIndex === 8} onClick={() => setActiveTabIndex(8)}><div /></DxcTabs.Tab>
             </DxcTabs>
 
             {/* Render Tab Content */}
@@ -1128,7 +1600,7 @@ const UnderwritingWorkbench = ({ submission }) => {
                   onClick={() => {
                     setShowValidationModal(false);
                     setSubmissionAccepted(true);
-                    setActiveTabIndex(6);
+                    setActiveTabIndex(8);
                   }}
                 />
               </DxcFlex>
