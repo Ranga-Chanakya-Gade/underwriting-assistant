@@ -244,21 +244,21 @@
 
 /* ─── Document Viewer ───────────────────────────────────────────────────── */
 .document-viewer {
-  position: sticky;
-  top: var(--spacing-gap-l);
-  height: fit-content;
-  max-height: calc(100vh - 200px);
+  overflow-y: auto;
+  max-height: calc(100vh - 260px);
+  min-height: 0;
 }
 
 .document-preview {
   background-color: var(--color-bg-neutral-lightest);
   border: 1px solid var(--color-border-neutral-lighter);
   border-radius: var(--border-radius-m);
-  min-height: 600px;
+  min-height: 400px;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  overflow: auto;
+  justify-content: flex-start;
+  overflow: hidden;
 }
 
 /* ─── View Source Button ────────────────────────────────────────────────── */
