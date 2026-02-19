@@ -1,140 +1,264 @@
-/* Dashboard Styles - Bloom Design */
-
-/* Metric Cards - Shared */
-.metric-card,
-.metric-card-highlight,
-.metric-card-warning,
-.metric-card-success,
-.metric-card-error {
-  border-radius: var(--border-radius-m);
-  box-shadow: var(--shadow-mid-02);
-  padding: var(--spacing-padding-m);
-  min-width: 140px;
-  flex: 1 1 calc(14.28% - var(--spacing-gap-m));
-  display: flex;
-  align-items: flex-start;
-  gap: 12px;
+/* ─── Dashboard Wrapper ─────────────────────────────────────────────────── */
+.dashboard-wrapper {
+  padding: 24px;
+  width: 100%;
+  background-color: #f5f5f5;
+  box-sizing: border-box;
+  min-width: 0; /* prevent flex children from overflowing */
 }
 
-.metric-card {
+/* ─── Generic Cards ─────────────────────────────────────────────────────── */
+.dashboard-card {
   background-color: var(--color-bg-neutral-lightest);
+  border-radius: var(--border-radius-m);
+  box-shadow: var(--shadow-mid-04);
+  padding: var(--spacing-padding-m);
+  min-width: 0;
 }
 
-.metric-card-highlight {
-  background: linear-gradient(135deg, #00ADEE 0%, #1B75BB 100%);
+.dashboard-card-padded {
+  padding: var(--spacing-padding-l);
+  box-shadow: var(--shadow-mid-02);
 }
 
-.metric-card-warning {
-  background: linear-gradient(135deg, #F6921E 0%, #E07B00 100%);
+/* ─── Top Row (My Priorities + Key Metrics) ─────────────────────────────── */
+.dashboard-top-row {
+  display: flex;
+  gap: var(--spacing-gap-m);
+  flex-wrap: wrap;
+  align-items: stretch;
+  min-width: 0;
 }
 
-.metric-card-success {
-  background: linear-gradient(135deg, #8BC53F 0%, #37A526 100%);
+.dashboard-top-card {
+  background-color: var(--color-bg-neutral-lightest);
+  border-radius: var(--border-radius-m);
+  box-shadow: var(--shadow-mid-04);
+  padding: var(--spacing-padding-m);
+  box-sizing: border-box;
+  min-width: 0;
 }
 
-.metric-card-error {
-  background: linear-gradient(135deg, #EF5350 0%, #D0021B 100%);
+.top-card-sm {
+  flex: 1 1 280px;
 }
 
-.metric-icon-container {
-  width: 40px;
-  height: 40px;
-  border-radius: var(--border-radius-s);
+.top-card-lg {
+  flex: 2 1 400px;
+}
+
+/* ─── KPI Triple (My Priorities Today) ──────────────────────────────────── */
+.kpi-triple {
   display: flex;
   align-items: center;
+  gap: 0;
+  padding: 8px 0;
+}
+
+.kpi-divider {
+  padding: 0 var(--spacing-padding-xs);
+  flex-shrink: 0;
+  align-self: stretch;
+  display: flex;
+  align-items: center;
+}
+
+.kpi-divider-line {
+  height: 80px;
+  width: 1px;
+  background-color: var(--color-bg-neutral-light);
+}
+
+/* ─── Metrics Sub-cards Row ─────────────────────────────────────────────── */
+.metrics-sub-row {
+  display: flex;
+  gap: var(--spacing-gap-m);
+  flex-wrap: wrap;
+  align-items: stretch;
+}
+
+.metrics-sub-card {
+  flex: 1 1 120px;
+  min-width: 0;
+  border-top: 4px solid transparent;
+}
+
+.metrics-sub-inner {
+  background-color: var(--color-bg-neutral-lightest);
+  min-height: 100px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   justify-content: center;
+  gap: 4px;
+  padding: 8px 4px;
+  word-break: break-word;
+  text-align: center;
+}
+
+/* ─── Department Inventory Tiles ────────────────────────────────────────── */
+.inventory-tiles {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-gap-s);
+}
+
+.inventory-tile {
+  flex: 1 1 110px;
+  min-width: 0;
+  padding: 12px 8px;
+  border-radius: var(--border-radius-m);
+  border: 1px solid var(--border-color-neutral-lighter);
+  background-color: var(--color-bg-neutral-lightest);
+  cursor: pointer;
+  transition: all 0.15s;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.inventory-tile:hover {
+  border-color: var(--color-fg-secondary-medium);
+  background-color: var(--color-bg-neutral-lighter);
+}
+
+.inventory-tile.active {
+  border: 2px solid var(--color-fg-secondary-medium);
+  background-color: var(--color-bg-neutral-lighter);
+}
+
+/* ─── Filter Bar ────────────────────────────────────────────────────────── */
+.filter-bar {
+  display: flex;
+  gap: var(--spacing-gap-m);
+  flex-wrap: wrap;
+  align-items: flex-end;
+}
+
+.filter-bar-search {
+  flex: 1 1 240px;
+  min-width: 0;
+}
+
+.filter-bar-controls {
+  display: flex;
+  gap: var(--spacing-gap-m);
+  align-items: center;
+  flex-shrink: 0;
+  flex-wrap: wrap;
+}
+
+/* ─── Submission Card Header ────────────────────────────────────────────── */
+.submission-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--spacing-gap-m);
+  flex-wrap: wrap;
+}
+
+.submission-card-title {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--spacing-gap-s);
+  min-width: 0;
+  flex: 1;
+}
+
+.submission-card-actions {
+  display: flex;
+  gap: var(--spacing-gap-xs);
+  align-items: center;
   flex-shrink: 0;
 }
 
-.metric-content {
+/* ─── Submission Card Meta Row ──────────────────────────────────────────── */
+.submission-card-meta {
   display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
-/* Submissions Container */
-.submissions-container {
-  background-color: var(--color-bg-neutral-lightest);
-  border-radius: var(--border-radius-m);
-  box-shadow: var(--shadow-mid-02);
-  padding: var(--spacing-padding-l);
-}
-
-/* Submission Cards */
-.submission-card {
-  background-color: var(--color-bg-neutral-lightest);
-  border: 1px solid var(--color-border-neutral-lighter);
-  border-radius: var(--border-radius-m);
-  padding: var(--spacing-padding-m);
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.submission-card:hover {
-  box-shadow: var(--shadow-mid-02);
-  border-color: #1B75BB;
-}
-
-/* View Toggle - Icon Buttons */
-.view-toggle-group {
-  display: flex;
-  border: 1px solid var(--color-border-neutral-medium);
-  border-radius: var(--border-radius-s);
-  overflow: hidden;
-}
-
-.view-toggle-icon-btn {
-  background: var(--color-bg-neutral-lightest);
-  border: none;
-  cursor: pointer;
-  padding: 6px 10px;
-  display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  justify-content: center;
-  transition: all 0.2s ease;
-  color: var(--color-fg-neutral-stronger);
+  gap: var(--spacing-gap-s);
+  row-gap: 4px;
 }
 
-.view-toggle-icon-btn:first-child {
-  border-right: 1px solid var(--color-border-neutral-medium);
-}
-
-.view-toggle-icon-btn .material-icons {
-  font-size: 20px;
-}
-
-.view-toggle-icon-btn.active {
-  background-color: #1B75BB;
-  color: #ffffff;
-}
-
-.view-toggle-icon-btn:not(.active):hover {
-  background-color: var(--color-bg-neutral-lighter);
-}
-
-/* Icon Buttons */
-.icon-btn {
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: var(--spacing-padding-xs);
+.meta-dot {
+  display: inline-block;
+  width: 4px;
+  height: 4px;
   border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.2s ease;
-  color: var(--color-fg-neutral-stronger);
+  background-color: var(--color-fg-neutral-medium);
+  flex-shrink: 0;
 }
 
-.icon-btn:hover {
+/* Hide meta dots when they fall at start of a wrapped line */
+@media (max-width: 600px) {
+  .meta-dot {
+    display: none;
+  }
+}
+
+/* ─── Table ─────────────────────────────────────────────────────────────── */
+.table-scroll-wrapper {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border-radius: var(--border-radius-m);
+}
+
+.submissions-grid-table {
+  width: 100%;
+  min-width: 600px; /* table won't squeeze below this */
+  border-collapse: collapse;
+  background-color: var(--color-bg-neutral-lightest);
+}
+
+.submissions-grid-table thead {
+  background-color: #1B75BB;
+  color: white;
+}
+
+.submissions-grid-table th {
+  padding: var(--spacing-padding-m);
+  text-align: left;
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-scale-02);
+  cursor: pointer;
+  user-select: none;
+  white-space: nowrap;
+}
+
+.submissions-grid-table th:hover {
+  background-color: #155E96;
+}
+
+.submissions-grid-table td {
+  padding: var(--spacing-padding-m);
+  border-bottom: 1px solid var(--color-border-neutral-lighter);
+  font-size: var(--font-scale-02);
+}
+
+.submissions-grid-table tbody tr {
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.submissions-grid-table tbody tr:hover {
   background-color: var(--color-bg-neutral-lighter);
+}
+
+.table-link {
   color: #1B75BB;
+  text-decoration: none;
+  font-weight: var(--font-weight-medium);
 }
 
-.icon-btn .material-icons {
-  font-size: 20px;
+.table-link:hover {
+  text-decoration: underline;
 }
 
+/* ─── Icon Buttons ──────────────────────────────────────────────────────── */
 .icon-btn-small {
   background: none;
   border: none;
@@ -157,7 +281,7 @@
   font-size: 18px;
 }
 
-/* Column Selector */
+/* ─── Column Selector ───────────────────────────────────────────────────── */
 .column-selector-btn {
   background: var(--color-bg-neutral-lightest);
   border: 1px solid var(--color-border-neutral-medium);
@@ -171,6 +295,7 @@
   display: flex;
   align-items: center;
   gap: var(--spacing-gap-xs);
+  white-space: nowrap;
 }
 
 .column-selector-btn:hover {
@@ -214,54 +339,81 @@
   height: 16px;
 }
 
-/* Grid Table */
-.submissions-grid-table {
-  width: 100%;
-  border-collapse: collapse;
-  background-color: var(--color-bg-neutral-lightest);
-  border-radius: var(--border-radius-m);
-  overflow: hidden;
+/* ═══════════════════════════════════════════════════════════════════════════
+   RESPONSIVE BREAKPOINTS
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ── Tablet: ≤ 1100px ───────────────────────────────────────────────────── */
+@media (max-width: 1100px) {
+  /* Key Metrics: 4 → 2×2 */
+  .top-card-lg .metrics-sub-card {
+    flex: 1 1 calc(50% - var(--spacing-gap-m));
+  }
 }
 
-.submissions-grid-table thead {
-  background-color: #1B75BB;
-  color: var(--color-white, white);
+/* ── Tablet narrow / large mobile: ≤ 860px ──────────────────────────────── */
+@media (max-width: 860px) {
+  /* Top two cards stack vertically */
+  .top-card-sm,
+  .top-card-lg {
+    flex: 1 1 100%;
+  }
+
+  /* Processing Performance: 3 → wrap */
+  .metrics-sub-card {
+    flex: 1 1 calc(50% - var(--spacing-gap-m));
+  }
+
+  .dashboard-wrapper {
+    padding: 16px;
+  }
 }
 
-.submissions-grid-table th {
-  padding: var(--spacing-padding-m);
-  text-align: left;
-  font-weight: var(--font-weight-semibold);
-  font-size: var(--font-scale-02);
-  cursor: pointer;
-  user-select: none;
-}
+/* ── Mobile: ≤ 600px ────────────────────────────────────────────────────── */
+@media (max-width: 600px) {
+  .dashboard-wrapper {
+    padding: 12px;
+  }
 
-.submissions-grid-table th:hover {
-  background-color: #155E96;
-}
+  /* KPI triple stacks */
+  .kpi-triple {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--spacing-gap-m);
+    padding: 4px 0;
+  }
 
-.submissions-grid-table td {
-  padding: var(--spacing-padding-m);
-  border-bottom: 1px solid var(--color-border-neutral-lighter);
-  font-size: var(--font-scale-02);
-}
+  .kpi-divider {
+    display: none;
+  }
 
-.submissions-grid-table tbody tr {
-  cursor: pointer;
-  transition: background-color 0.2s ease;
-}
+  /* All sub-cards go full width */
+  .metrics-sub-card {
+    flex: 1 1 100%;
+  }
 
-.submissions-grid-table tbody tr:hover {
-  background-color: var(--color-bg-neutral-lighter);
-}
+  /* Top card min-height loosened */
+  .dashboard-top-card {
+    min-height: unset;
+  }
 
-.table-link {
-  color: #1B75BB;
-  text-decoration: none;
-  font-weight: var(--font-weight-medium);
-}
+  /* Inventory tiles: 2 per row minimum */
+  .inventory-tile {
+    flex: 1 1 calc(50% - var(--spacing-gap-s));
+  }
 
-.table-link:hover {
-  text-decoration: underline;
+  /* Card actions move below title on very small screens */
+  .submission-card-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .submission-card-actions {
+    align-self: flex-end;
+  }
+
+  /* Filter bar: search full width */
+  .filter-bar-search {
+    flex: 1 1 100%;
+  }
 }

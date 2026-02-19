@@ -93,7 +93,7 @@ function App() {
   return (
     <DxcApplicationLayout
       header={(
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%', height: '64px', padding: '0 24px', backgroundColor: '#ffffff', borderBottom: '1px solid #e0e0e0' }}>
+        <div className="app-header">
           <DxcFlex gap="var(--spacing-gap-m)" alignItems="center">
             {/* Bloom Insurance Logo */}
             <img
@@ -138,15 +138,12 @@ function App() {
             {/* Divider */}
             <div style={{ width: '1px', height: '28px', backgroundColor: '#e0e0e0' }} />
 
-            <DxcFlex direction="column" gap="var(--spacing-gap-none)" alignItems="flex-end">
+            <div className="header-user-text">
               <DxcTypography fontWeight="font-weight-semibold" fontSize="font-scale-02">{user.name}</DxcTypography>
-              <DxcTypography
-                fontSize="font-scale-01"
-                color="var(--color-fg-neutral-medium)"
-              >
+              <DxcTypography fontSize="font-scale-01" color="var(--color-fg-neutral-medium)">
                 {user.role}
               </DxcTypography>
-            </DxcFlex>
+            </div>
             <div
               style={{
                 width: "36px",
