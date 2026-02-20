@@ -14,6 +14,10 @@ import WorkflowProgress from '../shared/WorkflowProgress';
 import GuidelinesPanel from '../shared/GuidelinesPanel';
 import LossRunsPanel from '../shared/LossRunsPanel';
 import ReportsPanel from '../shared/ReportsPanel';
+import GeographicRiskMap from '../shared/GeographicRiskMap';
+import WeatherAlerts from '../shared/WeatherAlerts';
+import { getGeoRiskData } from '../../data/mockGeoRiskData';
+import { getWeatherData } from '../../data/mockWeatherData';
 import './UnderwritingWorkbench.css';
 
 const UnderwritingWorkbench = ({ submission }) => {
@@ -1489,6 +1493,41 @@ const UnderwritingWorkbench = ({ submission }) => {
           </DxcInset>
         );
 
+      case 9: { // Risk Assessment
+        const geoRisk = getGeoRiskData(submission.id);
+        const weatherData = getWeatherData(submission.id);
+        return (
+          <DxcInset>
+            <DxcFlex direction="column" gap="var(--spacing-gap-l)">
+              {/* Section header */}
+              <DxcFlex alignItems="center" gap="var(--spacing-gap-s)">
+                <span className="material-icons" style={{ color: '#1B75BB', fontSize: '24px' }}>travel_explore</span>
+                <DxcTypography fontSize="font-scale-03" fontWeight="font-weight-semibold" color="#333333">
+                  Geographic Risk &amp; Weather Intelligence
+                </DxcTypography>
+              </DxcFlex>
+
+              {/* Geographic Risk Map */}
+              <GeographicRiskMap
+                data={geoRisk}
+                riskCategory={geoRisk?.category}
+              />
+
+              {/* Weather Alerts */}
+              <div>
+                <DxcFlex alignItems="center" gap="var(--spacing-gap-s)" style={{ marginBottom: 'var(--spacing-gap-m)' }}>
+                  <span className="material-icons-outlined" style={{ color: '#1B75BB', fontSize: '20px' }}>storm</span>
+                  <DxcTypography fontSize="font-scale-03" fontWeight="font-weight-semibold" color="#333333">
+                    Weather Alerts &amp; CAT Monitoring
+                  </DxcTypography>
+                </DxcFlex>
+                <WeatherAlerts weatherData={weatherData} />
+              </div>
+            </DxcFlex>
+          </DxcInset>
+        );
+      }
+
       default:
         return null;
     }
@@ -1566,6 +1605,7 @@ const UnderwritingWorkbench = ({ submission }) => {
               <DxcTabs.Tab label="Quotation" active={activeTabIndex === 6} onClick={() => setActiveTabIndex(6)}><div /></DxcTabs.Tab>
               <DxcTabs.Tab label="Notes / Messages" active={activeTabIndex === 7} onClick={() => setActiveTabIndex(7)}><div /></DxcTabs.Tab>
               <DxcTabs.Tab label="Actions" active={activeTabIndex === 8} onClick={() => setActiveTabIndex(8)}><div /></DxcTabs.Tab>
+              <DxcTabs.Tab label="Risk Assessment" active={activeTabIndex === 9} onClick={() => setActiveTabIndex(9)}><div /></DxcTabs.Tab>
             </DxcTabs>
 
             {/* Render Tab Content */}
