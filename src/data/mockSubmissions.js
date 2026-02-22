@@ -930,6 +930,155 @@ export const pcSubmissions = [
       guidelinesFollowed: true,
       authorityVerified: true
     }
+  },
+
+  // BLOOM: Additional submission for Quote Required bucket
+  {
+    id: 'UW-2026-PC-006',
+    applicantName: 'Metro Delivery Services',
+    status: 'Pending Review',
+    priority: 'Medium',
+    productType: 'P&C',
+    lineOfBusiness: 'Commercial Auto',
+    coverageType: 'Fleet',
+    coverageAmount: 1500000,
+    submittedDate: '2026-01-20',
+    receivedDate: '2026-01-20',
+    effectiveDate: '2026-02-20',
+    assignedTo: 'Sarah Chen',
+    riskScore: 58,
+    requirementsComplete: 92,
+    daysInQueue: 3,
+    routing: {
+      decision: 'Underwriter Review',
+      assignedTo: 'Sarah Chen',
+      fastTrackEligible: false
+    },
+    referral: {
+      required: false
+    },
+    workflow: {
+      currentStage: 'Quote',
+      stages: [
+        { name: 'Submission Received', status: 'complete', date: '2026-01-20 10:00' },
+        { name: 'Documents Processed', status: 'complete', date: '2026-01-20 10:15' },
+        { name: 'Triage Complete', status: 'complete', date: '2026-01-20 10:20' },
+        { name: 'Underwriting Review', status: 'complete', date: '2026-01-21 14:30' },
+        { name: 'Loss Control Inspection', status: 'complete', date: '2026-01-21 16:00' },
+        { name: 'Final Decision', status: 'complete', date: '2026-01-22 09:00' },
+        { name: 'Quote', status: 'current', date: null },
+        { name: 'Bind', status: 'pending', date: null }
+      ],
+      nextAction: 'Awaiting broker acceptance',
+      targetCompletionDate: '2026-01-27',
+      daysRemaining: 5
+    },
+    guidelines: {
+      appetiteMatch: 'Standard',
+      appetiteNotes: 'Standard delivery service risk',
+      requiredEndorsements: [],
+      restrictions: 'None'
+    }
+  },
+
+  // BLOOM: Additional submission for Quote Required bucket (Final Decision stage)
+  {
+    id: 'UW-2026-PC-007',
+    applicantName: 'City Courier Express',
+    status: 'In Review',
+    priority: 'Medium',
+    productType: 'P&C',
+    lineOfBusiness: 'Commercial Auto',
+    coverageType: 'Fleet',
+    coverageAmount: 1800000,
+    submittedDate: '2026-01-19',
+    receivedDate: '2026-01-19',
+    effectiveDate: '2026-02-18',
+    assignedTo: 'Sarah Chen',
+    riskScore: 62,
+    requirementsComplete: 88,
+    daysInQueue: 4,
+    routing: {
+      decision: 'Underwriter Review',
+      assignedTo: 'Sarah Chen',
+      fastTrackEligible: false
+    },
+    referral: {
+      required: false
+    },
+    workflow: {
+      currentStage: 'Final Decision',
+      stages: [
+        { name: 'Submission Received', status: 'complete', date: '2026-01-19 09:00' },
+        { name: 'Documents Processed', status: 'complete', date: '2026-01-19 09:15' },
+        { name: 'Triage Complete', status: 'complete', date: '2026-01-19 09:20' },
+        { name: 'Underwriting Review', status: 'complete', date: '2026-01-20 11:30' },
+        { name: 'Loss Control Inspection', status: 'complete', date: '2026-01-20 15:00' },
+        { name: 'Final Decision', status: 'current', date: null },
+        { name: 'Quote', status: 'pending', date: null },
+        { name: 'Bind', status: 'pending', date: null }
+      ],
+      nextAction: 'Final underwriting decision pending',
+      targetCompletionDate: '2026-01-26',
+      daysRemaining: 4
+    },
+    guidelines: {
+      appetiteMatch: 'Standard',
+      appetiteNotes: 'Urban delivery operation',
+      requiredEndorsements: [],
+      restrictions: 'None'
+    }
+  },
+
+  // BLOOM: Additional submission for Declined bucket
+  {
+    id: 'UW-2026-PC-008',
+    applicantName: 'High Risk Hauling LLC',
+    status: 'Declined',
+    priority: 'Low',
+    productType: 'P&C',
+    lineOfBusiness: 'Commercial Auto',
+    coverageType: 'Fleet',
+    coverageAmount: 3000000,
+    submittedDate: '2026-01-18',
+    receivedDate: '2026-01-18',
+    effectiveDate: '2026-02-15',
+    assignedTo: 'Sarah Chen',
+    riskScore: 92,
+    requirementsComplete: 100,
+    daysInQueue: 5,
+    routing: {
+      decision: 'Declined',
+      assignedTo: 'Sarah Chen',
+      reason: 'Excessive loss history',
+      fastTrackEligible: false
+    },
+    referral: {
+      required: false
+    },
+    workflow: {
+      currentStage: 'Final Decision',
+      stages: [
+        { name: 'Submission Received', status: 'complete', date: '2026-01-18 08:00' },
+        { name: 'Documents Processed', status: 'complete', date: '2026-01-18 08:15' },
+        { name: 'Triage Complete', status: 'complete', date: '2026-01-18 08:20' },
+        { name: 'Underwriting Review', status: 'complete', date: '2026-01-19 10:30' },
+        { name: 'Loss Control Inspection', status: 'complete', date: '2026-01-19 14:00' },
+        { name: 'Final Decision', status: 'complete', date: '2026-01-22 10:00' },
+        { name: 'Quote', status: 'skipped', date: null },
+        { name: 'Bind', status: 'skipped', date: null }
+      ],
+      nextAction: 'Submission declined',
+      targetCompletionDate: '2026-01-25',
+      daysRemaining: 0
+    },
+    guidelines: {
+      appetiteMatch: 'Out of Appetite',
+      appetiteNotes: 'Excessive claims frequency and severity',
+      requiredEndorsements: [],
+      restrictions: 'Declined due to loss history'
+    },
+    declineReason: 'Unacceptable loss history: 12 claims totaling $850,000 in past 3 years'
   }
 ];
 

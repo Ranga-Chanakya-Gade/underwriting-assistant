@@ -18,7 +18,7 @@ function App() {
     setIsAuthenticated(true);
   };
 
-  const handleLogout = () => {
+  const _handleLogout = () => {
     setUser(null);
     setIsAuthenticated(false);
     setCurrentView('dashboard');

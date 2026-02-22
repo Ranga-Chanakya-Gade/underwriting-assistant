@@ -77,24 +77,32 @@ const GuidelinesPanel = ({ guidelines, referral, coverageAmount }) => {
 
               <DxcFlex gap="var(--spacing-gap-l)">
                 <div>
-                  <DxcTypography fontSize="font-scale-01" color="#666666">
-                    Your Authority
-                  </DxcTypography>
-                  <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold">
-                    {formatCurrency(referral.yourLimit)}
-                  </DxcTypography>
+                  <div style={{ display: 'block', marginBottom: '4px' }}>
+                    <DxcTypography fontSize="font-scale-01" color="#666666">
+                      Your Authority
+                    </DxcTypography>
+                  </div>
+                  <div style={{ display: 'block' }}>
+                    <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold" color="#000000">
+                      {formatCurrency(referral.yourLimit)}
+                    </DxcTypography>
+                  </div>
                 </div>
                 <div>
-                  <DxcTypography fontSize="font-scale-01" color="#666666">
-                    Coverage Amount
-                  </DxcTypography>
-                  <DxcTypography
-                    fontSize="font-scale-02"
-                    fontWeight="font-weight-semibold"
-                    color={referral.required ? '#D02E2E' : '#37A526'}
-                  >
-                    {formatCurrency(coverageAmount)}
-                  </DxcTypography>
+                  <div style={{ display: 'block', marginBottom: '4px' }}>
+                    <DxcTypography fontSize="font-scale-01" color="#666666">
+                      Coverage Amount
+                    </DxcTypography>
+                  </div>
+                  <div style={{ display: 'block' }}>
+                    <DxcTypography
+                      fontSize="font-scale-02"
+                      fontWeight="font-weight-semibold"
+                      color="#000000"
+                    >
+                      {formatCurrency(coverageAmount)}
+                    </DxcTypography>
+                  </div>
                 </div>
               </DxcFlex>
 
@@ -105,15 +113,21 @@ const GuidelinesPanel = ({ guidelines, referral, coverageAmount }) => {
                   backgroundColor: '#FFFFFF',
                   borderRadius: 'var(--border-radius-s)'
                 }}>
-                  <DxcTypography fontSize="font-scale-01" color="#D02E2E" fontWeight="font-weight-semibold">
-                    ⚠️ Referral Required
-                  </DxcTypography>
-                  <DxcTypography fontSize="font-scale-02" color="#333333">
-                    {referral.reason} → Refer to: {referral.referTo}
-                  </DxcTypography>
-                  <DxcTypography fontSize="font-scale-01" color="#666666" style={{ marginTop: '4px' }}>
-                    Guideline Reference: {referral.guidelineReference}
-                  </DxcTypography>
+                  <div style={{ display: 'block', marginBottom: '8px' }}>
+                    <DxcTypography fontSize="font-scale-01" color="#D02E2E" fontWeight="font-weight-semibold">
+                      ⚠️ Referral Required
+                    </DxcTypography>
+                  </div>
+                  <div style={{ display: 'block', marginBottom: '8px' }}>
+                    <DxcTypography fontSize="font-scale-02" color="#333333">
+                      {referral.reason} → Refer to: {referral.referTo}
+                    </DxcTypography>
+                  </div>
+                  <div style={{ display: 'block' }}>
+                    <DxcTypography fontSize="font-scale-01" color="#666666">
+                      Guideline Reference: {referral.guidelineReference}
+                    </DxcTypography>
+                  </div>
                 </div>
               )}
             </DxcFlex>
@@ -122,32 +136,57 @@ const GuidelinesPanel = ({ guidelines, referral, coverageAmount }) => {
 
         {/* Appetite Notes */}
         <div>
-          <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold" color="#333333">
-            Appetite Guidance
-          </DxcTypography>
-          <DxcTypography fontSize="font-scale-02" color="#666666" style={{ marginTop: '8px' }}>
-            {guidelines.appetiteNotes}
-          </DxcTypography>
+          <div style={{ display: 'block', marginBottom: '8px' }}>
+            <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold" color="#333333">
+              Appetite Guidance
+            </DxcTypography>
+          </div>
+          <div style={{ display: 'block' }}>
+            <DxcTypography fontSize="font-scale-02" color="#666666">
+              {guidelines.appetiteNotes}
+            </DxcTypography>
+          </div>
         </div>
 
         {/* Required Endorsements */}
         {guidelines.requiredEndorsements && guidelines.requiredEndorsements.length > 0 && (
           <div>
-            <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold" color="#333333" style={{ marginBottom: '8px' }}>
+            <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold" color="#333333" style={{ marginBottom: '12px' }}>
               Required Endorsements
             </DxcTypography>
-            <DxcFlex gap="var(--spacing-gap-xs)" wrap="wrap">
+            <DxcFlex gap="var(--spacing-gap-s)" wrap="wrap">
               {guidelines.requiredEndorsements.map((endorsement, index) => (
                 <div
                   key={index}
                   style={{
-                    padding: '4px 12px',
-                    backgroundColor: '#E5F1FA',
-                    borderRadius: 'var(--border-radius-s)',
-                    border: '1px solid #1B75BB'
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '8px',
+                    padding: '10px 18px',
+                    background: 'linear-gradient(135deg, #E5F1FA 0%, #D0E8F7 100%)',
+                    borderRadius: '24px',
+                    border: '2px solid #1B75BB',
+                    boxShadow: '0 2px 8px rgba(27, 117, 187, 0.15)',
+                    cursor: 'pointer',
+                    transition: 'all 0.3s ease',
+                    position: 'relative',
+                    overflow: 'hidden'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.transform = 'translateY(-2px)';
+                    e.currentTarget.style.boxShadow = '0 4px 12px rgba(27, 117, 187, 0.25)';
+                    e.currentTarget.style.borderColor = '#0056A3';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.transform = 'translateY(0)';
+                    e.currentTarget.style.boxShadow = '0 2px 8px rgba(27, 117, 187, 0.15)';
+                    e.currentTarget.style.borderColor = '#1B75BB';
                   }}
                 >
-                  <DxcTypography fontSize="font-scale-01" color="#1B75BB" fontWeight="font-weight-medium">
+                  <span className="material-icons" style={{ color: '#1B75BB', fontSize: '18px' }}>
+                    verified
+                  </span>
+                  <DxcTypography fontSize="font-scale-01" color="#1B75BB" fontWeight="font-weight-semibold">
                     {endorsement}
                   </DxcTypography>
                 </div>
@@ -167,13 +206,17 @@ const GuidelinesPanel = ({ guidelines, referral, coverageAmount }) => {
               <span className="material-icons" style={{ color: '#FFA500', fontSize: '20px' }}>
                 info
               </span>
-              <div>
-                <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold" color="#FFA500">
-                  Restrictions
-                </DxcTypography>
-                <DxcTypography fontSize="font-scale-02" color="#333333" style={{ marginTop: '4px' }}>
-                  {guidelines.restrictions}
-                </DxcTypography>
+              <div style={{ flex: 1 }}>
+                <div style={{ display: 'block', marginBottom: '4px' }}>
+                  <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold" color="#FFA500">
+                    Restrictions
+                  </DxcTypography>
+                </div>
+                <div style={{ display: 'block' }}>
+                  <DxcTypography fontSize="font-scale-02" color="#333333">
+                    {guidelines.restrictions}
+                  </DxcTypography>
+                </div>
               </div>
             </DxcFlex>
           </div>

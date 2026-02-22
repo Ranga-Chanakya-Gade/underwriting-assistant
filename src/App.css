@@ -82,3 +82,214 @@
     padding: 8px 12px;
   }
 }
+
+/* ══════════════════════════════════════════════════════════════════════════════
+   BLOOM: SIDEBAR NAVIGATION STYLING
+   Enhanced styling for DxcApplicationLayout.Sidenav
+   Works in both collapsed and expanded states
+   ══════════════════════════════════════════════════════════════════════════════ */
+
+/* Make navigation icon spans visible with Bloom blue color */
+[class*="NavigationTreeContainer"] span[role="img"],
+[class*="NavigationTreeContainer"] span[aria-hidden="true"],
+[class*="NavigationTreeContainer"] [class*="IconContainer"] span {
+  color: #1B75BB !important; /* BLOOM: Blue for navigation icons */
+  opacity: 1 !important;
+  visibility: visible !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  font-size: 24px !important; /* BLOOM: Larger icons for better visibility */
+}
+
+/* Navigation button base styling */
+[class*="NavigationTreeContainer"] button {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  border-radius: 8px !important;
+  margin: 4px 8px !important; /* BLOOM: Spacing between highlight and container edges */
+  padding: 10px !important; /* BLOOM: Internal padding for better spacing */
+}
+
+/* Hover effect - subtle background with smooth transition */
+[class*="NavigationTreeContainer"] button:hover {
+  background: linear-gradient(90deg, rgba(27, 117, 187, 0.08) 0%, rgba(27, 117, 187, 0.12) 100%) !important;
+  transform: translateX(2px) !important;
+  box-shadow: 0 2px 8px rgba(27, 117, 187, 0.15) !important;
+}
+
+/* Hover effect for icons - make them darker blue */
+[class*="NavigationTreeContainer"] button:hover span[role="img"],
+[class*="NavigationTreeContainer"] button:hover span[aria-hidden="true"] {
+  color: #155A93 !important; /* BLOOM: Darker blue on hover */
+}
+
+/* Active/Selected state */
+[class*="NavigationTreeContainer"] button[aria-current="page"] {
+  background: rgba(27, 117, 187, 0.15) !important;
+  border-left: 4px solid #1B75BB !important; /* BLOOM: Blue accent bar */
+}
+
+/* Active state icons - keep Bloom blue */
+[class*="NavigationTreeContainer"] button[aria-current="page"] span[role="img"],
+[class*="NavigationTreeContainer"] button[aria-current="page"] span[aria-hidden="true"] {
+  color: #1B75BB !important;
+}
+
+/* Spacing between nav items */
+[class*="NavigationTreeContainer"] ul {
+  gap: 16px !important; /* BLOOM: Proper spacing between items */
+  padding: 12px 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+/* Override for NavigationTreeContainer buttons specifically */
+[class*="NavigationTreeContainer"] button:not([disabled]):not([class*="icon-only"]):not(.collapse-toggle):not(.nav-item):not(.footer-item) {
+  padding: 0 !important;
+  min-height: auto !important;
+}
+
+/* Collapsed state - ensure icons are centered and visible */
+[class*="NavigationTreeContainer"][class*="collapsed"] button {
+  justify-content: center !important;
+  align-items: center !important;
+}
+
+/* Icon container in collapsed state */
+[class*="NavigationTreeContainer"][class*="collapsed"] [class*="IconContainer"] {
+  margin: 0 auto !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+}
+
+/* Expanded state - ensure proper layout */
+[class*="NavigationTreeContainer"]:not([class*="collapsed"]) button {
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  padding: 12px 16px !important;
+  margin: 4px 8px !important; /* BLOOM: Consistent spacing in expanded state */
+}
+
+/* Label text color in expanded state */
+[class*="NavigationTreeContainer"] button span:not([role="img"]):not([aria-hidden="true"]) {
+  color: #333333 !important; /* BLOOM: Dark gray for text */
+  font-weight: 500 !important;
+}
+
+/* Active state label - make it bolder */
+[class*="NavigationTreeContainer"] button[aria-current="page"] span:not([role="img"]):not([aria-hidden="true"]) {
+  color: #1B75BB !important; /* BLOOM: Blue for active label */
+  font-weight: 600 !important;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════════
+   BLOOM: GLOBAL BUTTON STYLING
+   Enhanced styling for all DxcButton components across the application
+   ══════════════════════════════════════════════════════════════════════════════ */
+
+/* Primary Button - Bloom Blue */
+button[class*="DxcButton-primary"],
+[class*="DxcButton-root"][class*="primary"] {
+  background-color: #1B75BB !important; /* BLOOM: Primary blue */
+  border-color: #1B75BB !important;
+  color: #FFFFFF !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  border-radius: 4px !important;
+}
+
+button[class*="DxcButton-primary"]:hover:not(:disabled),
+[class*="DxcButton-root"][class*="primary"]:hover:not(:disabled) {
+  background-color: #155A93 !important; /* BLOOM: Darker blue on hover */
+  border-color: #155A93 !important;
+  box-shadow: 0 4px 8px rgba(27, 117, 187, 0.25) !important;
+  transform: translateY(-1px) !important;
+}
+
+button[class*="DxcButton-primary"]:focus:not(:disabled),
+[class*="DxcButton-root"][class*="primary"]:focus:not(:disabled) {
+  outline: 2px solid #1B75BB !important;
+  outline-offset: 2px !important;
+}
+
+/* Secondary Button - Bloom Gray with Blue Accent */
+button[class*="DxcButton-secondary"],
+[class*="DxcButton-root"][class*="secondary"] {
+  background-color: #F5F5F5 !important;
+  border: 1px solid #D1D3D4 !important;
+  color: #333333 !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  border-radius: 4px !important;
+}
+
+button[class*="DxcButton-secondary"]:hover:not(:disabled),
+[class*="DxcButton-root"][class*="secondary"]:hover:not(:disabled) {
+  background-color: #E8F5FB !important; /* BLOOM: Light blue background on hover */
+  border-color: #1B75BB !important;
+  color: #155A93 !important;
+  box-shadow: 0 2px 6px rgba(27, 117, 187, 0.15) !important;
+}
+
+button[class*="DxcButton-secondary"]:focus:not(:disabled),
+[class*="DxcButton-root"][class*="secondary"]:focus:not(:disabled) {
+  outline: 2px solid #1B75BB !important;
+  outline-offset: 2px !important;
+}
+
+/* Tertiary Button - Transparent with Blue Hover */
+button[class*="DxcButton-tertiary"],
+[class*="DxcButton-root"][class*="tertiary"] {
+  background-color: transparent !important;
+  border: none !important;
+  color: #666666 !important;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  border-radius: 4px !important;
+  padding: 8px !important;
+}
+
+button[class*="DxcButton-tertiary"]:hover:not(:disabled),
+[class*="DxcButton-root"][class*="tertiary"]:hover:not(:disabled) {
+  background-color: #F0F0F0 !important;
+  color: #1B75BB !important;
+}
+
+button[class*="DxcButton-tertiary"]:focus:not(:disabled),
+[class*="DxcButton-root"][class*="tertiary"]:focus:not(:disabled) {
+  outline: 2px solid #1B75BB !important;
+  outline-offset: 2px !important;
+  background-color: #F8F8F8 !important;
+}
+
+/* Tertiary button icons should be blue on hover */
+button[class*="DxcButton-tertiary"]:hover:not(:disabled) span[class*="material-icons"],
+[class*="DxcButton-root"][class*="tertiary"]:hover:not(:disabled) span[class*="material-icons"] {
+  color: #1B75BB !important;
+}
+
+/* Text Button - Minimal styling */
+button[class*="DxcButton-text"],
+[class*="DxcButton-root"][class*="text"] {
+  background-color: transparent !important;
+  border: none !important;
+  color: #1B75BB !important;
+  transition: all 0.2s ease !important;
+  text-decoration: none !important;
+}
+
+button[class*="DxcButton-text"]:hover:not(:disabled),
+[class*="DxcButton-root"][class*="text"]:hover:not(:disabled) {
+  text-decoration: underline !important;
+  color: #155A93 !important;
+}
+
+/* Disabled State - All button types */
+button[class*="DxcButton"]:disabled,
+[class*="DxcButton-root"]:disabled {
+  opacity: 0.5 !important;
+  cursor: not-allowed !important;
+  pointer-events: none !important;
+}
+
+/* Icon spacing in buttons */
+button[class*="DxcButton"] span[class*="material-icons"] {
+  transition: color 0.2s ease !important;
+}

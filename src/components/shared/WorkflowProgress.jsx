@@ -134,7 +134,7 @@ const WorkflowProgress = ({ workflow }) => {
                     fontSize="font-scale-01"
                     fontWeight={stage.status === 'current' ? 'font-weight-semibold' : 'font-weight-regular'}
                     color={getStageTextColor(stage.status)}
-                    style={{ lineHeight: '1.2' }}
+                    style={{ lineHeight: '1.3', display: 'block' }}
                   >
                     {stage.name}
                   </DxcTypography>
@@ -142,7 +142,7 @@ const WorkflowProgress = ({ workflow }) => {
                     <DxcTypography
                       fontSize="10px"
                       color="#999999"
-                      style={{ marginTop: '4px' }}
+                      style={{ marginTop: '8px', display: 'block', lineHeight: '1.2' }}
                     >
                       {new Date(stage.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
                     </DxcTypography>

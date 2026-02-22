@@ -168,7 +168,7 @@ const WeatherAlerts = ({ weatherData }) => {
         <div className="detail-card-body">
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '12px', marginBottom: '16px' }}>
             <div style={{ padding: '14px', borderRadius: '8px', backgroundColor: '#F2F7F6', border: '1px solid #e0e5e4', textAlign: 'center' }}>
-              <DxcTypography fontSize="font-scale-05" fontWeight="font-weight-bold" color="#1B75BB">
+              <DxcTypography fontSize="font-scale-05" fontWeight="font-weight-bold" color="#000000">
                 {weatherData.riskImpact.affectedProperties.toLocaleString()}
               </DxcTypography>
               <DxcTypography fontSize="font-scale-01" color="#808285" style={{ marginTop: '4px' }}>
@@ -176,7 +176,7 @@ const WeatherAlerts = ({ weatherData }) => {
               </DxcTypography>
             </div>
             <div style={{ padding: '14px', borderRadius: '8px', backgroundColor: '#F2F7F6', border: '1px solid #e0e5e4', textAlign: 'center' }}>
-              <DxcTypography fontSize="font-scale-05" fontWeight="font-weight-bold" color="#F6921E">
+              <DxcTypography fontSize="font-scale-05" fontWeight="font-weight-bold" color="#000000">
                 ${(weatherData.riskImpact.estimatedExposure / 1000000).toFixed(1)}M
               </DxcTypography>
               <DxcTypography fontSize="font-scale-01" color="#808285" style={{ marginTop: '4px' }}>
@@ -184,7 +184,7 @@ const WeatherAlerts = ({ weatherData }) => {
               </DxcTypography>
             </div>
             <div style={{ padding: '14px', borderRadius: '8px', backgroundColor: '#F2F7F6', border: '1px solid #e0e5e4', textAlign: 'center' }}>
-              <DxcTypography fontSize="font-scale-05" fontWeight="font-weight-bold" color="#D02E2E">
+              <DxcTypography fontSize="font-scale-05" fontWeight="font-weight-bold" color="#000000">
                 {weatherData.nearbyStorms.length}
               </DxcTypography>
               <DxcTypography fontSize="font-scale-01" color="#808285" style={{ marginTop: '4px' }}>

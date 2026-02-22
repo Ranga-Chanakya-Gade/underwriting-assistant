@@ -22,7 +22,7 @@ import './UnderwritingWorkbench.css';
 
 const UnderwritingWorkbench = ({ submission }) => {
   const [activeTabIndex, setActiveTabIndex] = useState(0);
-  const [uploadedDocs, setUploadedDocs] = useState([
+  const [uploadedDocs, _setUploadedDocs] = useState([
     { id: 1, name: 'Bldg1.jpg', description: 'Pic of Building', docType: 'Auto Info', uploadedBy: 'John Smith', uploadDate: '01/01/2026' },
     { id: 2, name: 'Home_Inspection.pdf', description: 'Inspection Report', docType: 'Insured Details', uploadedBy: 'Jane Gold', uploadDate: '01/01/2026' },
     { id: 3, name: 'My_Healthcard.png', description: 'Health ID', docType: 'Policy Info', uploadedBy: 'John Smith', uploadDate: '01/01/2026' },
@@ -100,18 +100,23 @@ const UnderwritingWorkbench = ({ submission }) => {
                 />
               )}
 
-              {/* AI-Powered Risk Assessment & Recommendations */}
+              {/* Risk Assessment & Recommendations */}
               {submission.aiRecommendations && (
-                <div>
+                <div style={{
+                  backgroundColor: 'var(--color-bg-neutral-lightest)',
+                  borderRadius: 'var(--border-radius-m)',
+                  padding: 'var(--spacing-padding-l)',
+                  boxShadow: 'var(--shadow-mid-02)'
+                }}>
                   <DxcFlex alignItems="center" gap="var(--spacing-gap-s)" style={{ marginBottom: 'var(--spacing-gap-m)' }}>
                     <span className="material-icons" style={{ color: '#1B75BB', fontSize: '24px' }}>psychology</span>
                     <DxcTypography fontSize="font-scale-03" fontWeight="font-weight-semibold" color="#333333">
-                      AI Risk Assessment & Recommendations
+                      Risk Assessment & Recommendations
                     </DxcTypography>
                   </DxcFlex>
 
                   <DxcFlex direction="column" gap="var(--spacing-gap-m)">
-                    {/* AI Pricing Recommendation */}
+                    {/* Automated Pricing Recommendation */}
                     {submission.aiRecommendations.pricing && (
                       <div style={{
                         padding: 'var(--spacing-padding-m)',
@@ -123,7 +128,7 @@ const UnderwritingWorkbench = ({ submission }) => {
                           <span className="material-icons" style={{ color: '#1B75BB', fontSize: '20px' }}>lightbulb</span>
                           <div style={{ flex: 1 }}>
                             <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold" color="#1B75BB">
-                              AI Pricing Recommendation
+                              Automated Pricing Recommendation
                             </DxcTypography>
                             <DxcTypography fontSize="font-scale-02" color="#333333" style={{ marginTop: '4px' }}>
                               {submission.aiRecommendations.pricing.suggestion}
@@ -217,14 +222,14 @@ const UnderwritingWorkbench = ({ submission }) => {
                                   padding: '8px 0',
                                   borderBottom: index < submission.aiRecommendations.comparableRisks.length - 1 ? '1px solid #E0E0E0' : 'none'
                                 }}>
-                                  <DxcTypography fontSize="font-scale-02" color="#333333" fontWeight="font-weight-medium">
+                                  <DxcTypography fontSize="font-scale-02" color="#000000" fontWeight="font-weight-medium">
                                     {risk.account || risk.name}
                                   </DxcTypography>
                                   <DxcFlex gap="var(--spacing-gap-m)" style={{ marginTop: '4px' }}>
-                                    <DxcTypography fontSize="font-scale-01" color="#666666">
+                                    <DxcTypography fontSize="font-scale-01" color="#000000">
                                       Loss Ratio: {typeof risk.lossRatio === 'number' ? (risk.lossRatio * 100).toFixed(0) + '%' : risk.lossRatio}
                                     </DxcTypography>
-                                    <DxcTypography fontSize="font-scale-01" color="#37A526" fontWeight="font-weight-semibold">
+                                    <DxcTypography fontSize="font-scale-01" color="#000000" fontWeight="font-weight-semibold">
                                       Premium: ${typeof risk.premium === 'number' ? risk.premium.toLocaleString() : risk.premium}
                                     </DxcTypography>
                                   </DxcFlex>
@@ -511,9 +516,13 @@ const UnderwritingWorkbench = ({ submission }) => {
                         Applicant Details
                       </DxcTypography>
                     </DxcFlex>
-                    <button className="icon-btn">
-                      <span className="material-icons-outlined">edit</span>
-                    </button>
+                    <DxcButton
+                      icon="edit"
+                      mode="tertiary"
+                      size="small"
+                      title="Edit"
+                      onClick={() => {}}
+                    />
                   </DxcFlex>
                 </div>
                 <div className="detail-card-body">
@@ -568,9 +577,13 @@ const UnderwritingWorkbench = ({ submission }) => {
                         Agent / Broker Information
                       </DxcTypography>
                     </DxcFlex>
-                    <button className="icon-btn">
-                      <span className="material-icons-outlined">edit</span>
-                    </button>
+                    <DxcButton
+                      icon="edit"
+                      mode="tertiary"
+                      size="small"
+                      title="Edit"
+                      onClick={() => {}}
+                    />
                   </DxcFlex>
                 </div>
                 <div className="detail-card-body">
@@ -684,7 +697,7 @@ const UnderwritingWorkbench = ({ submission }) => {
                         Vehicle Details
                       </DxcTypography>
                     </DxcFlex>
-                    <DxcButton label="View Quote" iconPosition="after" icon="open_in_new" mode="text" onClick={() => {}} />
+                    <DxcButton label="View Quote" iconPosition="after" icon="open_in_new" mode="secondary" size="small" onClick={() => {}} /> {/* BLOOM: Changed from text to secondary */}
                   </DxcFlex>
                 </div>
                 <div className="detail-card-body">
@@ -991,7 +1004,26 @@ const UnderwritingWorkbench = ({ submission }) => {
                   Upload document
                 </DxcTypography>
                 <DxcFlex gap="var(--spacing-gap-m)" alignItems="flex-end">
-                  <button className="select-file-btn">Select file</button>
+                  <div>
+                    <input
+                      type="file"
+                      id="doc-upload-input"
+                      accept=".pdf,.doc,.docx,.xls,.xlsx,.jpg,.jpeg,.png"
+                      style={{ display: 'none' }}
+                      onChange={(e) => {
+                        if (e.target.files && e.target.files[0]) {
+                          console.log('File selected:', e.target.files[0].name);
+                        }
+                      }}
+                    />
+                    <DxcButton
+                      label="Select file"
+                      icon="upload_file"
+                      mode="secondary"
+                      size="small"
+                      onClick={() => document.getElementById('doc-upload-input')?.click()}
+                    />
+                  </div>
                   <DxcTypography fontSize="font-scale-02" color="#808285">
                     or drop file
                   </DxcTypography>
@@ -1012,14 +1044,14 @@ const UnderwritingWorkbench = ({ submission }) => {
                     ]}
                   />
                 </DxcFlex>
-                <div style={{ marginTop: 'var(--spacing-gap-s)' }}>
-                  <DxcButton
-                    label="Add Another Document"
-                    icon="add"
-                    mode="text"
-                    onClick={() => {}}
-                  />
-                </div>
+                <DxcButton
+                  label="Add Another Document"
+                  icon="add"
+                  mode="secondary"
+                  size="small"
+                  onClick={() => {}}
+                  style={{ marginTop: 'var(--spacing-gap-s)' }}
+                />
                 <DxcButton
                   label="Upload Documents"
                   icon="upload"
@@ -1185,7 +1217,7 @@ const UnderwritingWorkbench = ({ submission }) => {
                         Insurance Line Coverages
                       </DxcTypography>
                     </DxcFlex>
-                    <DxcButton label="View Quote" iconPosition="after" icon="open_in_new" mode="text" onClick={() => {}} />
+                    <DxcButton label="View Quote" iconPosition="after" icon="open_in_new" mode="secondary" size="small" onClick={() => {}} /> {/* BLOOM: Changed from text to secondary */}
                   </DxcFlex>
                 </div>
                 <div className="detail-card-body">
@@ -1243,7 +1275,7 @@ const UnderwritingWorkbench = ({ submission }) => {
                         Fleet Vehicles
                       </DxcTypography>
                     </DxcFlex>
-                    <DxcButton label="View Quote" iconPosition="after" icon="open_in_new" mode="text" onClick={() => {}} />
+                    <DxcButton label="View Quote" iconPosition="after" icon="open_in_new" mode="secondary" size="small" onClick={() => {}} /> {/* BLOOM: Changed from text to secondary */}
                   </DxcFlex>
                 </div>
                 <div className="detail-card-body">
@@ -1440,8 +1472,9 @@ const UnderwritingWorkbench = ({ submission }) => {
                   <DxcButton
                     label="Convert Quote to Policy"
                     icon="policy"
+                    mode="primary"
                     onClick={() => {}}
-                  />
+                  /> {/* BLOOM: Added explicit mode="primary" */}
                 </DxcFlex>
               </DxcFlex>
             ) : (
@@ -1485,8 +1518,9 @@ const UnderwritingWorkbench = ({ submission }) => {
                   <DxcButton
                     label="Accept"
                     icon="check"
+                    mode="primary"
                     onClick={() => setShowValidationModal(true)}
-                  />
+                  /> {/* BLOOM: Added explicit mode="primary" */}
                 </DxcFlex>
               </DxcFlex>
             )}

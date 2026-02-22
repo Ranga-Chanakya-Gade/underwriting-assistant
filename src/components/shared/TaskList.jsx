@@ -140,7 +140,7 @@ const TaskList = ({ tasks, showCompleted = true, compact = false }) => {
 
       {/* Task List */}
       <DxcFlex direction="column" gap="var(--spacing-gap-s)">
-        {filteredTasks.map((task, index) => (
+        {filteredTasks.map((task) => (
           <div
             key={task.id}
             style={{
