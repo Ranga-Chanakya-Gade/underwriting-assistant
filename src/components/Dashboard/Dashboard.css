@@ -417,3 +417,181 @@
     flex: 1 1 100%;
   }
 }
+
+/* ══════════════════════════════════════════════════════════════════════════════
+   BLOOM FANCY SUBMISSION CARDS
+   Modern, polished card design with Bloom styling
+   ══════════════════════════════════════════════════════════════════════════════ */
+
+/* Submission card container styling - applies to DxcContainer elements */
+[class*="DxcContainer"] {
+  background: #FFFFFF !important;
+  border: 2px solid #D1D3D4 !important;
+  border-left: 4px solid #1B75BB !important; /* BLOOM: Blue accent */
+  border-radius: 8px !important;
+  padding: 16px !important;
+  margin-bottom: 12px !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08) !important;
+  cursor: pointer !important;
+  position: relative !important;
+}
+
+/* Hover effect for submission cards */
+[class*="DxcContainer"]:hover {
+  transform: translateY(-3px) translateX(2px) !important;
+  box-shadow: 0 8px 16px rgba(27, 117, 187, 0.2) !important;
+  border-left-color: #155A93 !important; /* BLOOM: Darker blue on hover */
+  background: linear-gradient(to right, #FFFFFF 0%, #F8FCFF 100%) !important;
+}
+
+/* Active/Click effect */
+[class*="DxcContainer"]:active {
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 8px rgba(27, 117, 187, 0.15) !important;
+}
+
+/* Add subtle gradient shimmer effect */
+[class*="DxcContainer"]::before {
+  content: '' !important;
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  background: linear-gradient(45deg, transparent 30%, rgba(27, 117, 187, 0.03) 50%, transparent 70%) !important;
+  border-radius: 8px !important;
+  pointer-events: none !important;
+  opacity: 0 !important;
+  transition: opacity 0.5s ease !important;
+  z-index: 1 !important;
+}
+
+[class*="DxcContainer"]:hover::before {
+  opacity: 1 !important;
+}
+
+/* Ensure content is above the shimmer effect */
+[class*="DxcContainer"] > * {
+  position: relative !important;
+  z-index: 2 !important;
+}
+
+/* Submission ID links - Make them stand out like clickable links */
+[class*="DxcContainer"] a,
+[class*="DxcContainer"] [class*="Typography"]:first-child {
+  color: #1B75BB !important; /* BLOOM: Blue for links */
+  cursor: pointer !important;
+  text-decoration: none !important;
+  transition: all 0.2s ease !important;
+  font-weight: 600 !important;
+}
+
+[class*="DxcContainer"]:hover a,
+[class*="DxcContainer"]:hover [class*="Typography"]:first-child {
+  color: #155A93 !important; /* BLOOM: Darker blue on hover */
+  text-decoration: underline !important;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════════
+   BLOOM: PAGINATION STYLING
+   Enhanced styling for DxcPaginator to follow Bloom design system
+   ══════════════════════════════════════════════════════════════════════════════ */
+
+/* Paginator container */
+[class*="DxcPaginator"] {
+  margin-top: 24px !important;
+  padding: 16px 0 !important;
+}
+
+/* Pagination buttons */
+[class*="DxcPaginator"] button {
+  transition: all 0.2s ease !important;
+  border-radius: 4px !important;
+}
+
+/* Active page button */
+[class*="DxcPaginator"] button[class*="selected"],
+[class*="DxcPaginator"] button[aria-current="page"] {
+  background-color: #1B75BB !important; /* BLOOM: Blue for active page */
+  color: #FFFFFF !important;
+  font-weight: 600 !important;
+}
+
+/* Pagination button hover */
+[class*="DxcPaginator"] button:hover:not([class*="selected"]):not(:disabled) {
+  background-color: #E8F5FB !important; /* BLOOM: Light blue hover */
+  color: #1B75BB !important;
+}
+
+/* Pagination button focus */
+[class*="DxcPaginator"] button:focus {
+  outline: 2px solid #1B75BB !important;
+  outline-offset: 2px !important;
+}
+
+/* Disabled pagination buttons */
+[class*="DxcPaginator"] button:disabled {
+  opacity: 0.4 !important;
+  cursor: not-allowed !important;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════════
+   BLOOM: TABS STYLING
+   Enhanced styling for DxcTabs (My Priorities section)
+   ══════════════════════════════════════════════════════════════════════════════ */
+
+/* Tab container */
+[class*="DxcTabs"] {
+  border-bottom: 2px solid #E0E0E0 !important;
+}
+
+/* Individual tab buttons */
+[class*="DxcTabs"] button[role="tab"] {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  color: #666666 !important;
+  font-weight: 500 !important;
+  padding: 12px 20px !important;
+  border-bottom: 3px solid transparent !important;
+}
+
+/* Tab icons */
+[class*="DxcTabs"] button[role="tab"] span[class*="material-icons"],
+[class*="DxcTabs"] button[role="tab"] span[role="img"] {
+  color: #666666 !important;
+  transition: color 0.3s ease !important;
+}
+
+/* Active tab */
+[class*="DxcTabs"] button[role="tab"][class*="active"],
+[class*="DxcTabs"] button[role="tab"][aria-selected="true"] {
+  color: #1B75BB !important; /* BLOOM: Blue for active tab */
+  font-weight: 600 !important;
+  border-bottom-color: #1B75BB !important;
+}
+
+/* Active tab icon */
+[class*="DxcTabs"] button[role="tab"][class*="active"] span[class*="material-icons"],
+[class*="DxcTabs"] button[role="tab"][class*="active"] span[role="img"],
+[class*="DxcTabs"] button[role="tab"][aria-selected="true"] span[class*="material-icons"],
+[class*="DxcTabs"] button[role="tab"][aria-selected="true"] span[role="img"] {
+  color: #1B75BB !important;
+}
+
+/* Tab hover state */
+[class*="DxcTabs"] button[role="tab"]:hover:not([class*="active"]) {
+  color: #1B75BB !important;
+  background-color: #F8FCFF !important;
+}
+
+/* Tab hover icon */
+[class*="DxcTabs"] button[role="tab"]:hover:not([class*="active"]) span[class*="material-icons"],
+[class*="DxcTabs"] button[role="tab"]:hover:not([class*="active"]) span[role="img"] {
+  color: #1B75BB !important;
+}
+
+/* Tab focus state */
+[class*="DxcTabs"] button[role="tab"]:focus {
+  outline: 2px solid #1B75BB !important;
+  outline-offset: -2px !important;
+}

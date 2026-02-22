@@ -215,13 +215,13 @@ const StateDetailPanel = ({ state, formatMoney }) => {
 
             <DxcFlex justifyContent="space-between">
               <DxcTypography fontSize="font-scale-01" color="#808285">Properties at Risk</DxcTypography>
-              <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-bold" color="#1B75BB">
+              <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-bold" color="#000000">
                 {state.catExposure.propertiesAtRisk.toLocaleString()}
               </DxcTypography>
             </DxcFlex>
             <DxcFlex justifyContent="space-between">
               <DxcTypography fontSize="font-scale-01" color="#808285">Total Insured Value</DxcTypography>
-              <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-bold" color="#F6921E">
+              <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-bold" color="#000000">
                 {formatMoney(state.catExposure.totalInsuredValue)}
               </DxcTypography>
             </DxcFlex>

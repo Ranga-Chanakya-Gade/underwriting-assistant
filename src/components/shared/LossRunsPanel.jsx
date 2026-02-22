@@ -89,7 +89,7 @@ const LossRunsPanel = ({ lossRuns }) => {
             <DxcTypography fontSize="font-scale-01" color="#666666">
               Total Claims
             </DxcTypography>
-            <DxcTypography fontSize="font-scale-04" fontWeight="font-weight-bold" color="#1B75BB">
+            <DxcTypography fontSize="font-scale-04" fontWeight="font-weight-bold" color="#000000">
               {summary.totalClaims}
             </DxcTypography>
           </div>
@@ -102,7 +102,7 @@ const LossRunsPanel = ({ lossRuns }) => {
             <DxcTypography fontSize="font-scale-01" color="#666666">
               Total Incurred
             </DxcTypography>
-            <DxcTypography fontSize="font-scale-03" fontWeight="font-weight-bold" color="#333333">
+            <DxcTypography fontSize="font-scale-03" fontWeight="font-weight-bold" color="#000000">
               {formatCurrency(summary.totalIncurred)}
             </DxcTypography>
           </div>
@@ -115,7 +115,7 @@ const LossRunsPanel = ({ lossRuns }) => {
             <DxcTypography fontSize="font-scale-01" color="#666666">
               Total Paid
             </DxcTypography>
-            <DxcTypography fontSize="font-scale-03" fontWeight="font-weight-bold" color="#37A526">
+            <DxcTypography fontSize="font-scale-03" fontWeight="font-weight-bold" color="#000000">
               {formatCurrency(summary.totalPaid)}
             </DxcTypography>
           </div>
@@ -128,7 +128,7 @@ const LossRunsPanel = ({ lossRuns }) => {
             <DxcTypography fontSize="font-scale-01" color="#666666">
               Total Reserved
             </DxcTypography>
-            <DxcTypography fontSize="font-scale-03" fontWeight="font-weight-bold" color="#FFA500">
+            <DxcTypography fontSize="font-scale-03" fontWeight="font-weight-bold" color="#000000">
               {formatCurrency(summary.totalReserved)}
             </DxcTypography>
           </div>
@@ -158,7 +158,7 @@ const LossRunsPanel = ({ lossRuns }) => {
           </div>
         </DxcFlex>
 
-        {/* AI Summary */}
+        {/* Loss History Analysis */}
         {aiSummary && (
           <div style={{
             padding: 'var(--spacing-padding-m)',
@@ -172,9 +172,9 @@ const LossRunsPanel = ({ lossRuns }) => {
               </span>
               <div>
                 <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold" color="#1B75BB">
-                  AI Analysis
+                  Loss History Analysis
                 </DxcTypography>
-                <DxcTypography fontSize="font-scale-02" color="#333333" style={{ marginTop: '4px' }}>
+                <DxcTypography fontSize="font-scale-02" color="#333333" style={{ marginTop: '8px' }}>
                   {aiSummary}
                 </DxcTypography>
               </div>
@@ -315,17 +315,17 @@ const LossRunsPanel = ({ lossRuns }) => {
                         </DxcFlex>
                       </td>
                       <td style={{ padding: '12px', textAlign: 'right' }}>
-                        <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold" color="#333333">
+                        <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold" color="#000000">
                           {formatCurrency(claim.incurred)}
                         </DxcTypography>
                       </td>
                       <td style={{ padding: '12px', textAlign: 'right' }}>
-                        <DxcTypography fontSize="font-scale-02" color="#37A526">
+                        <DxcTypography fontSize="font-scale-02" color="#000000">
                           {formatCurrency(claim.paid)}
                         </DxcTypography>
                       </td>
                       <td style={{ padding: '12px', textAlign: 'right' }}>
-                        <DxcTypography fontSize="font-scale-02" color="#FFA500">
+                        <DxcTypography fontSize="font-scale-02" color="#000000">
                           {formatCurrency(claim.reserved)}
                         </DxcTypography>
                       </td>
@@ -348,7 +348,7 @@ const LossRunsPanel = ({ lossRuns }) => {
             <span className="material-icons" style={{ fontSize: '48px', color: '#37A526', marginBottom: '12px' }}>
               verified
             </span>
-            <DxcTypography fontSize="font-scale-03" fontWeight="font-weight-semibold" color="#37A526">
+            <DxcTypography fontSize="font-scale-03" fontWeight="font-weight-semibold" color="#000000">
               Excellent Loss History
             </DxcTypography>
             <DxcTypography fontSize="font-scale-02" color="#666666" style={{ marginTop: '8px' }}>

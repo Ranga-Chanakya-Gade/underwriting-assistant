@@ -52,7 +52,7 @@ const ReportsPanel = ({ reports }) => {
     }
   };
 
-  const getStatusIcon = (status) => {
+  const _getStatusIcon = (status) => {
     switch (status) {
       case 'complete':
         return 'check_circle';
@@ -134,7 +134,7 @@ const ReportsPanel = ({ reports }) => {
                 <DxcTypography fontSize="font-scale-01" color="#666666">
                   Complete
                 </DxcTypography>
-                <DxcTypography fontSize="font-scale-03" fontWeight="font-weight-bold" color="#37A526">
+                <DxcTypography fontSize="font-scale-03" fontWeight="font-weight-bold" color="#000000">
                   {mvr.complete}
                 </DxcTypography>
               </div>
@@ -142,7 +142,7 @@ const ReportsPanel = ({ reports }) => {
                 <DxcTypography fontSize="font-scale-01" color="#666666">
                   Pending
                 </DxcTypography>
-                <DxcTypography fontSize="font-scale-03" fontWeight="font-weight-bold" color="#FFA500">
+                <DxcTypography fontSize="font-scale-03" fontWeight="font-weight-bold" color="#000000">
                   {mvr.pending}
                 </DxcTypography>
               </div>
@@ -150,7 +150,7 @@ const ReportsPanel = ({ reports }) => {
                 <DxcTypography fontSize="font-scale-01" color="#666666">
                   Flagged
                 </DxcTypography>
-                <DxcTypography fontSize="font-scale-03" fontWeight="font-weight-bold" color={mvr.flagged > 0 ? '#D02E2E' : '#37A526'}>
+                <DxcTypography fontSize="font-scale-03" fontWeight="font-weight-bold" color="#000000">
                   {mvr.flagged}
                 </DxcTypography>
               </div>
@@ -232,9 +232,7 @@ const ReportsPanel = ({ reports }) => {
                   <DxcTypography fontSize="font-scale-01" color="#666666">
                     Credit Score
                   </DxcTypography>
-                  <DxcTypography fontSize="font-scale-05" fontWeight="font-weight-bold" color={
-                    credit.score >= 700 ? '#37A526' : credit.score >= 650 ? '#FFA500' : '#D02E2E'
-                  }>
+                  <DxcTypography fontSize="font-scale-05" fontWeight="font-weight-bold" color="#000000">
                     {credit.score}
                   </DxcTypography>
                 </div>
@@ -360,7 +358,7 @@ const ReportsPanel = ({ reports }) => {
                 backgroundColor: '#E8F5E9',
                 borderRadius: 'var(--border-radius-s)'
               }}>
-                <DxcTypography fontSize="font-scale-02" color="#37A526">
+                <DxcTypography fontSize="font-scale-02" color="#000000">
                   ✓ Inspection waived - {lossControl.reason}
                 </DxcTypography>
               </div>

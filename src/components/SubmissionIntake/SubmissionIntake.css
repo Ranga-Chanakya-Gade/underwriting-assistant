@@ -29,56 +29,99 @@
   flex-direction: column;
   align-items: center;
   gap: var(--spacing-gap-xs);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); /* BLOOM: Smooth transition */
+  padding: 8px; /* BLOOM: Add padding for better hover target */
+  border-radius: var(--border-radius-m);
+}
+
+/* BLOOM: Clickable step hover state */
+.step-indicator-wrapper.clickable:hover {
+  background-color: #F8FCFF; /* BLOOM: Light blue background on hover */
+  transform: translateY(-2px); /* BLOOM: Subtle lift effect */
+}
+
+.step-indicator-wrapper.clickable:hover .step-indicator {
+  box-shadow: 0 4px 8px rgba(27, 117, 187, 0.25); /* BLOOM: Blue shadow */
+  transform: scale(1.1); /* BLOOM: Slight scale up */
+}
+
+/* BLOOM: Not clickable (future steps) */
+.step-indicator-wrapper.not-clickable {
+  opacity: 0.7;
 }
 
 .step-indicator {
-  width: 32px;
-  height: 32px;
+  width: 40px; /* BLOOM: Increased from 32px for better visibility */
+  height: 40px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   font-weight: var(--font-weight-semibold);
-  font-size: var(--font-scale-02);
-  transition: all 0.3s ease;
+  font-size: var(--font-scale-03); /* BLOOM: Larger font */
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); /* BLOOM: Smooth transition */
 }
 
 .step-indicator.completed {
-  background-color: #37A526;
+  background-color: #37A526; /* BLOOM: Green for completed */
   color: white;
+  border: 2px solid #37A526;
 }
 
 .step-indicator.active {
-  background-color: #1B75BB;
+  background-color: #1B75BB; /* BLOOM: Blue for active */
   color: white;
+  border: 2px solid #1B75BB;
+  box-shadow: 0 0 0 4px rgba(27, 117, 187, 0.15); /* BLOOM: Blue glow */
 }
 
 .step-indicator.pending {
   background-color: var(--color-bg-neutral-light);
   color: var(--color-fg-neutral-stronger);
+  border: 2px solid var(--color-border-neutral-medium);
 }
 
+/* BLOOM: Step connector line with dynamic state */
 .step-connector {
   flex: 1;
-  height: 2px;
+  height: 3px; /* BLOOM: Slightly thicker for better visibility */
   background-color: var(--color-bg-neutral-light);
   margin: 0 var(--spacing-gap-m);
-  margin-top: -24px;
+  margin-top: -28px; /* BLOOM: Adjusted for larger indicator */
+  transition: background-color 0.3s ease;
+  border-radius: 2px; /* BLOOM: Rounded edges */
+}
+
+/* BLOOM: Completed connector (green) */
+.step-connector.completed {
+  background-color: #37A526;
 }
 
 /* ─── Upload Area ───────────────────────────────────────────────────────── */
 .upload-area {
-  border: 2px dashed var(--color-border-neutral-lighter);
+  border: 3px dashed var(--color-border-neutral-lighter); /* BLOOM: Thicker border */
   border-radius: var(--border-radius-m);
   padding: var(--spacing-padding-xxl);
   text-align: center;
-  transition: all 0.2s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); /* BLOOM: Smooth transition */
   background-color: var(--color-bg-neutral-lightest);
 }
 
+/* BLOOM: Hover state */
 .upload-area:hover {
   border-color: #1B75BB;
   background-color: #E8F4FD;
+  transform: translateY(-2px); /* BLOOM: Subtle lift */
+  box-shadow: 0 4px 12px rgba(27, 117, 187, 0.15); /* BLOOM: Blue shadow */
+}
+
+/* BLOOM: Active dragging state */
+.upload-area.dragging {
+  border-color: #1B75BB !important;
+  background-color: #D6EDFF !important; /* BLOOM: Darker blue background */
+  border-style: solid !important; /* BLOOM: Change to solid border */
+  box-shadow: 0 0 0 4px rgba(27, 117, 187, 0.2) !important; /* BLOOM: Blue glow */
+  transform: scale(1.02) !important; /* BLOOM: Slight scale up */
 }
 
 .upload-label {
@@ -87,6 +130,18 @@
   align-items: center;
   gap: var(--spacing-gap-m);
   cursor: pointer;
+  transition: transform 0.2s ease; /* BLOOM: Smooth transition */
+}
+
+/* BLOOM: Upload icon animation on drag */
+.upload-area.dragging .material-icons {
+  animation: bounce 0.6s ease-in-out infinite; /* BLOOM: Bounce animation */
+}
+
+/* BLOOM: Bounce animation for upload icon */
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
 }
 
 /* ─── Document Table (grid design pattern) ──────────────────────────────── */
@@ -174,19 +229,33 @@
 
 /* ─── Separate Alerts (Step 3) ──────────────────────────────────────────── */
 .alert-error {
-  background-color: #FFF0F0;
-  border: 1px solid #D0021B;
-  border-left: 4px solid #D0021B;
+  background-color: #FFF8F8; /* BLOOM: More subtle pink - toned down from #FFF0F0 */
+  border: 1px solid #F5C6CB; /* BLOOM: Softer border color */
+  border-left: 3px solid #D0021B; /* BLOOM: Reduced from 4px to 3px */
   border-radius: var(--border-radius-m);
   padding: var(--spacing-padding-m);
+  transition: all 0.2s ease; /* BLOOM: Smooth transition */
+}
+
+/* BLOOM: Subtle hover effect for better interactivity */
+.alert-error:hover {
+  background-color: #FFF0F0;
+  border-left-width: 4px;
 }
 
 .alert-low-confidence {
-  background-color: #FFF8E1;
-  border: 1px solid #F6921E;
-  border-left: 4px solid #F6921E;
+  background-color: #FFFCF5; /* BLOOM: More subtle cream - toned down from #FFF8E1 */
+  border: 1px solid #FFE5B4; /* BLOOM: Softer border color */
+  border-left: 3px solid #F6921E; /* BLOOM: Reduced from 4px to 3px */
   border-radius: var(--border-radius-m);
   padding: var(--spacing-padding-m);
+  transition: all 0.2s ease; /* BLOOM: Smooth transition */
+}
+
+/* BLOOM: Subtle hover effect for better interactivity */
+.alert-low-confidence:hover {
+  background-color: #FFF8E1;
+  border-left-width: 4px;
 }
 
 /* ─── Form Section ──────────────────────────────────────────────────────── */
@@ -290,35 +359,104 @@
 
 /* ─── Step 4: Submission Checklist ──────────────────────────────────────── */
 .submission-checklist {
-  background-color: #F8F9FA;
-  border: 1px solid var(--color-border-neutral-lighter);
+  background: linear-gradient(135deg, #F0F8FF 0%, #F8F9FA 100%); /* BLOOM: Subtle gradient */
+  border: 2px solid #1B75BB; /* BLOOM: Thicker border */
   border-radius: var(--border-radius-m);
   padding: var(--spacing-padding-l);
+  position: relative;
+  overflow: hidden;
+  animation: fadeInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1); /* BLOOM: Entrance animation */
+  box-shadow: 0 4px 16px rgba(27, 117, 187, 0.15); /* BLOOM: Blue shadow */
+}
+
+/* BLOOM: Decorative corner accent */
+.submission-checklist::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 100px;
+  height: 100px;
+  background: linear-gradient(135deg, transparent 50%, rgba(27, 117, 187, 0.08) 50%);
+  pointer-events: none;
+}
+
+/* BLOOM: Checklist item hover effect with enhanced interactivity */
+.submission-checklist [class*="DxcFlex"]:hover {
+  background-color: rgba(27, 117, 187, 0.08);
+  padding: 12px;
+  margin: -12px;
+  border-radius: var(--border-radius-s);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transform: translateX(8px); /* BLOOM: Slide right on hover */
+}
+
+/* BLOOM: Success state - all items complete */
+.submission-checklist.all-complete {
+  background: linear-gradient(135deg, #E8F5E9 0%, #F0F8FF 100%);
+  border-color: #37A526;
+  box-shadow: 0 4px 20px rgba(55, 165, 38, 0.2);
 }
 
 /* ─── Step 4: Review Cards ──────────────────────────────────────────────── */
 .review-card {
-  border: 1px solid var(--color-border-neutral-lighter);
+  border: 2px solid #E8F4FD; /* BLOOM: Light blue border */
   border-radius: var(--border-radius-m);
   overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); /* BLOOM: Smooth transition */
+  position: relative;
+  animation: fadeInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1); /* BLOOM: Entrance animation */
+  animation-fill-mode: both;
+  box-shadow: 0 2px 8px rgba(27, 117, 187, 0.08); /* BLOOM: Initial shadow */
+}
+
+/* BLOOM: Staggered entrance animation for cards */
+.review-card:nth-child(1) { animation-delay: 0.1s; }
+.review-card:nth-child(2) { animation-delay: 0.2s; }
+.review-card:nth-child(3) { animation-delay: 0.3s; }
+.review-card:nth-child(4) { animation-delay: 0.4s; }
+.review-card:nth-child(5) { animation-delay: 0.5s; }
+.review-card:nth-child(6) { animation-delay: 0.6s; }
+
+/* BLOOM: Review card hover effect with enhanced depth */
+.review-card:hover {
+  box-shadow: 0 8px 24px rgba(27, 117, 187, 0.25); /* BLOOM: Enhanced blue shadow */
+  border-color: #1B75BB; /* BLOOM: Blue border on hover */
+  transform: translateY(-4px) scale(1.01); /* BLOOM: Lift and subtle scale */
 }
 
 .review-card-header {
-  background-color: #F8F9FA;
+  background: linear-gradient(135deg, #1B75BB 0%, #155A93 100%); /* BLOOM: Blue gradient */
   padding: var(--spacing-padding-m) var(--spacing-padding-l);
-  border-bottom: 1px solid var(--color-border-neutral-lighter);
+  border-bottom: none;
+  position: relative;
+  overflow: hidden;
+}
+
+/* BLOOM: White text in header */
+.review-card-header [class*="DxcTypography"] {
+  color: white !important;
 }
 
 .review-card-body {
   padding: var(--spacing-padding-l);
+  background: linear-gradient(to bottom, #FFFFFF 0%, #FAFBFC 100%); /* BLOOM: Subtle gradient */
 }
 
 .review-row {
   display: flex;
   align-items: baseline;
-  padding: var(--spacing-padding-xs) 0;
+  padding: var(--spacing-padding-xs) var(--spacing-padding-s); /* BLOOM: Added horizontal padding */
   border-bottom: 1px solid #f0f0f0;
   gap: var(--spacing-gap-l);
+  transition: background-color 0.2s ease; /* BLOOM: Smooth transition */
+  border-radius: var(--border-radius-s); /* BLOOM: Rounded corners */
+  margin: 0 calc(-1 * var(--spacing-padding-s)); /* BLOOM: Negative margin to expand hover */
+}
+
+/* BLOOM: Row hover effect */
+.review-row:hover {
+  background-color: #F8FCFF; /* BLOOM: Light blue background */
 }
 
 .review-row:last-child {
@@ -328,22 +466,44 @@
 .review-label {
   flex: 0 0 200px;
   font-size: var(--font-scale-02, 0.875rem);
-  color: #808285;
-  font-weight: 500;
+  color: #666666; /* BLOOM: Slightly darker gray */
+  font-weight: 600; /* BLOOM: Bolder weight */
 }
 
 .review-value {
   flex: 1;
   font-size: var(--font-scale-02, 0.875rem);
-  color: #333333;
+  color: #000000; /* BLOOM: Black for data values */
+  font-weight: 500; /* BLOOM: Medium weight */
 }
 
 /* ─── Step 4: Action Bar ────────────────────────────────────────────────── */
 .action-bar {
-  background-color: #F8F9FA;
-  border: 1px solid var(--color-border-neutral-lighter);
+  background: linear-gradient(135deg, #F0F8FF 0%, #FFFFFF 50%, #F8F9FA 100%); /* BLOOM: Enhanced gradient */
+  border: 3px solid #1B75BB; /* BLOOM: Thicker border */
   border-radius: var(--border-radius-m);
-  padding: var(--spacing-padding-m) var(--spacing-padding-l);
+  padding: var(--spacing-padding-l) var(--spacing-padding-xl);
+  box-shadow: 0 -4px 20px rgba(27, 117, 187, 0.2), 0 4px 16px rgba(27, 117, 187, 0.1); /* BLOOM: Double shadow for depth */
+  position: relative;
+  animation: fadeInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) 0.7s both; /* BLOOM: Delayed entrance */
+}
+
+/* BLOOM: Accent glow effect */
+.action-bar::before {
+  content: '';
+  position: absolute;
+  top: -3px;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #1B75BB 0%, #37A526 50%, #1B75BB 100%);
+  animation: glowPulse 3s ease-in-out infinite;
+}
+
+/* BLOOM: Glow pulse animation */
+@keyframes glowPulse {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
 }
 
 /* ─── Zoom Controls ─────────────────────────────────────────────────────── */
@@ -372,3 +532,78 @@
   opacity: 0.4;
   cursor: not-allowed;
 }
+
+/* ─── Step 4: Entrance Animations ───────────────────────────────────────── */
+/* BLOOM: Fade in and slide up animation */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ─── Step 4: Page-Level Styling ────────────────────────────────────────── */
+/* BLOOM: Background pattern for Step 4 */
+.step-content-container[data-step="4"] {
+  position: relative;
+  background-image:
+    radial-gradient(circle at 20px 20px, rgba(27, 117, 187, 0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+/* BLOOM: Progress completion indicator */
+.completion-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #37A526 0%, #2E8B1F 100%);
+  color: white;
+  font-size: 24px;
+  font-weight: bold;
+  box-shadow: 0 4px 16px rgba(55, 165, 38, 0.3);
+  animation: scaleIn 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+}
+
+/* BLOOM: Completion badge ring */
+.completion-badge::before {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  border: 3px solid #37A526;
+  opacity: 0.3;
+  animation: ringPulse 2s ease-in-out infinite;
+}
+
+/* BLOOM: Scale in animation */
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* BLOOM: Ring pulse animation */
+@keyframes ringPulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.3;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 0;
+  }
+}
+

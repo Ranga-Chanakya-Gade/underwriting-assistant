@@ -38,16 +38,41 @@ const Dashboard = ({ onSubmissionSelect }) => {
 
   const submissions = pcSubmissions;
 
-  const metrics = useMemo(() => ({
-    totalSubmissions: 12,
-    newSubmissions: 2,
-    quotesRequired: 6,
-    writtenPremiumYTD: 24.8,
-    pendingReview: 7,
-    approvedThisMonth: 42,
-    declinedThisMonth: 7,
-    approvalRate: 87,
-  }), []);
+  // BLOOM: Calculate metrics dynamically from actual submissions data
+  const metrics = useMemo(() => {
+    const totalSubmissions = submissions.length;
+    const newSubmissions = submissions.filter(s => s.status === 'New Submission').length;
+    const pendingReview = submissions.filter(s => s.status === 'Pending Review' || s.status === 'Requirements Needed').length;
+    const approvedThisMonth = submissions.filter(s => s.status === 'Approved').length;
+    const declinedThisMonth = submissions.filter(s => s.status === 'Declined').length;
+
+    // Quote Required: submissions at Quote or Final Decision stage
+    const quotesRequired = submissions.filter(s =>
+      s.workflow?.currentStage === 'Quote' ||
+      s.workflow?.currentStage === 'Final Decision' ||
+      s.workflow?.stages?.some(stage =>
+        stage.name === 'Quote' && stage.status === 'current'
+      ) ||
+      s.workflow?.stages?.some(stage =>
+        stage.name === 'Final Decision' && stage.status === 'current'
+      )
+    ).length;
+
+    const approvalRate = totalSubmissions > 0
+      ? Math.round((approvedThisMonth / totalSubmissions) * 100)
+      : 0;
+
+    return {
+      totalSubmissions,
+      newSubmissions,
+      quotesRequired,
+      writtenPremiumYTD: 24.8, // Keep as business metric
+      pendingReview,
+      approvedThisMonth,
+      declinedThisMonth,
+      approvalRate,
+    };
+  }, [submissions]);
 
   const fastTrackCount = useMemo(
     () => submissions.filter(s => s.routing?.fastTrackEligible).length,
@@ -59,6 +84,7 @@ const Dashboard = ({ onSubmissionSelect }) => {
   );
 
   const workflowGroups = useMemo(() => [
+    { key: 'all',            label: 'All Submissions',      count: metrics.totalSubmissions },
     { key: 'new_business',   label: 'New Business',        count: metrics.newSubmissions },
     { key: 'quote_required', label: 'Quote Required',       count: metrics.quotesRequired },
     { key: 'referral',       label: 'Referral Required',    count: referralCount },
@@ -75,11 +101,45 @@ const Dashboard = ({ onSubmissionSelect }) => {
 
     if (subsetFilter) {
       switch (subsetFilter) {
-        case 'referral':      filtered = filtered.filter(s => s.referral?.required); break;
-        case 'fast_track':    filtered = filtered.filter(s => s.routing?.fastTrackEligible); break;
-        case 'pending_review':filtered = filtered.filter(s => s.status === 'Pending Review'); break;
-        case 'approved':      filtered = filtered.filter(s => s.status === 'Approved'); break;
-        default: break;
+        case 'all':
+          // No filtering - show all submissions
+          break;
+        case 'new_business':
+          // Filter submissions with 'New Submission' status
+          filtered = filtered.filter(s => s.status === 'New Submission');
+          break;
+        case 'quote_required':
+          // Filter submissions at Quote or Final Decision stage (must match metrics calculation)
+          filtered = filtered.filter(s =>
+            s.workflow?.currentStage === 'Quote' ||
+            s.workflow?.currentStage === 'Final Decision' ||
+            s.workflow?.stages?.some(stage =>
+              stage.name === 'Quote' && stage.status === 'current'
+            ) ||
+            s.workflow?.stages?.some(stage =>
+              stage.name === 'Final Decision' && stage.status === 'current'
+            )
+          );
+          break;
+        case 'referral':
+          filtered = filtered.filter(s => s.referral?.required);
+          break;
+        case 'fast_track':
+          filtered = filtered.filter(s => s.routing?.fastTrackEligible);
+          break;
+        case 'pending_review':
+          // Match metrics: Pending Review OR Requirements Needed
+          filtered = filtered.filter(s => s.status === 'Pending Review' || s.status === 'Requirements Needed');
+          break;
+        case 'approved':
+          filtered = filtered.filter(s => s.status === 'Approved');
+          break;
+        case 'declined':
+          // Filter submissions with 'Declined' status
+          filtered = filtered.filter(s => s.status === 'Declined');
+          break;
+        default:
+          break;
       }
     }
 
@@ -116,10 +176,10 @@ const Dashboard = ({ onSubmissionSelect }) => {
               <div className="kpi-triple">
 
                 <DxcFlex direction="column" gap="var(--spacing-gap-s)" alignItems="center" justifyContent="center" grow={1} basis="0">
-                  <DxcTypography fontSize="32px" fontWeight="font-weight-semibold" color="var(--color-fg-secondary-strong)" textAlign="center">
+                  <DxcTypography fontSize="32px" fontWeight="font-weight-semibold" color="#000000" /* BLOOM: Data values must be black */ textAlign="center">
                     {metrics.totalSubmissions}
                   </DxcTypography>
-                  <DxcTypography fontSize="font-scale-03" fontWeight="font-weight-semibold" color="var(--color-fg-neutral-stronger)" textAlign="center">
+                  <DxcTypography fontSize="font-scale-03" fontWeight="font-weight-semibold" color="#000000" /* BLOOM */ textAlign="center">
                     Total Submissions
                   </DxcTypography>
                 </DxcFlex>
@@ -127,10 +187,10 @@ const Dashboard = ({ onSubmissionSelect }) => {
                 <div className="kpi-divider"><div className="kpi-divider-line" /></div>
 
                 <DxcFlex direction="column" gap="var(--spacing-gap-s)" alignItems="center" justifyContent="center" grow={1} basis="0">
-                  <DxcTypography fontSize="32px" fontWeight="font-weight-semibold" color="var(--color-fg-error-medium)" textAlign="center">
+                  <DxcTypography fontSize="32px" fontWeight="font-weight-semibold" color="#000000" /* BLOOM: Data values must be black */ textAlign="center">
                     {metrics.newSubmissions}
                   </DxcTypography>
-                  <DxcTypography fontSize="font-scale-03" fontWeight="font-weight-semibold" color="var(--color-fg-neutral-stronger)" textAlign="center">
+                  <DxcTypography fontSize="font-scale-03" fontWeight="font-weight-semibold" color="#000000" /* BLOOM */ textAlign="center">
                     New Today
                   </DxcTypography>
                 </DxcFlex>
@@ -138,10 +198,10 @@ const Dashboard = ({ onSubmissionSelect }) => {
                 <div className="kpi-divider"><div className="kpi-divider-line" /></div>
 
                 <DxcFlex direction="column" gap="var(--spacing-gap-s)" alignItems="center" justifyContent="center" grow={1} basis="0">
-                  <DxcTypography fontSize="32px" fontWeight="font-weight-semibold" color="var(--color-fg-warning-medium)" textAlign="center">
+                  <DxcTypography fontSize="32px" fontWeight="font-weight-semibold" color="#000000" /* BLOOM: Data values must be black */ textAlign="center">
                     {metrics.quotesRequired}
                   </DxcTypography>
-                  <DxcTypography fontSize="font-scale-03" fontWeight="font-weight-semibold" color="var(--color-fg-neutral-stronger)" textAlign="center">
+                  <DxcTypography fontSize="font-scale-03" fontWeight="font-weight-semibold" color="#000000" /* BLOOM */ textAlign="center">
                     Quotes Required
                   </DxcTypography>
                 </DxcFlex>
@@ -158,33 +218,33 @@ const Dashboard = ({ onSubmissionSelect }) => {
 
                 <div className="metrics-sub-card" style={{ borderTopColor: 'var(--border-color-info-medium)' }}>
                   <div className="metrics-sub-inner">
-                    <DxcTypography fontSize="12px" fontWeight="font-weight-regular" color="var(--color-fg-neutral-stronger)" textAlign="center">WRITTEN PREMIUM YTD</DxcTypography>
-                    <DxcTypography fontSize="28px" fontWeight="font-weight-semibold" color="var(--color-fg-secondary-medium)" textAlign="center">${metrics.writtenPremiumYTD}M</DxcTypography>
-                    <DxcTypography fontSize="12px" color="var(--color-fg-secondary-medium)" textAlign="center">+18% vs last year</DxcTypography>
+                    <DxcTypography fontSize="12px" fontWeight="font-weight-regular" color="#000000" /* BLOOM */ textAlign="center">WRITTEN PREMIUM YTD</DxcTypography>
+                    <DxcTypography fontSize="28px" fontWeight="font-weight-semibold" color="#000000" /* BLOOM: Data values must be black */ textAlign="center">${metrics.writtenPremiumYTD}M</DxcTypography>
+                    <DxcTypography fontSize="12px" color="#000000" /* BLOOM */ textAlign="center">+18% vs last year</DxcTypography>
                   </div>
                 </div>
 
                 <div className="metrics-sub-card" style={{ borderTopColor: 'var(--color-semantic03-400)' }}>
                   <div className="metrics-sub-inner">
-                    <DxcTypography fontSize="12px" fontWeight="font-weight-regular" color="var(--color-fg-neutral-stronger)" textAlign="center">PENDING REVIEW</DxcTypography>
-                    <DxcTypography fontSize="28px" fontWeight="font-weight-semibold" color="var(--color-fg-warning-medium)" textAlign="center">{metrics.pendingReview}</DxcTypography>
-                    <DxcTypography fontSize="12px" color="var(--color-fg-warning-medium)" textAlign="center">3 closing today</DxcTypography>
+                    <DxcTypography fontSize="12px" fontWeight="font-weight-regular" color="#000000" /* BLOOM */ textAlign="center">PENDING REVIEW</DxcTypography>
+                    <DxcTypography fontSize="28px" fontWeight="font-weight-semibold" color="#000000" /* BLOOM: Data values must be black */ textAlign="center">{metrics.pendingReview}</DxcTypography>
+                    <DxcTypography fontSize="12px" color="#000000" /* BLOOM */ textAlign="center">3 closing today</DxcTypography>
                   </div>
                 </div>
 
                 <div className="metrics-sub-card" style={{ borderTopColor: 'var(--color-semantic02-500)' }}>
                   <div className="metrics-sub-inner">
-                    <DxcTypography fontSize="12px" fontWeight="font-weight-regular" color="var(--color-fg-neutral-stronger)" textAlign="center">APPROVED THIS MONTH</DxcTypography>
-                    <DxcTypography fontSize="28px" fontWeight="font-weight-semibold" color="var(--color-fg-success-medium)" textAlign="center">{metrics.approvedThisMonth}</DxcTypography>
-                    <DxcTypography fontSize="12px" color="var(--color-fg-success-medium)" textAlign="center">{metrics.approvalRate}% approval rate</DxcTypography>
+                    <DxcTypography fontSize="12px" fontWeight="font-weight-regular" color="#000000" /* BLOOM */ textAlign="center">APPROVED THIS MONTH</DxcTypography>
+                    <DxcTypography fontSize="28px" fontWeight="font-weight-semibold" color="#000000" /* BLOOM: Data values must be black */ textAlign="center">{metrics.approvedThisMonth}</DxcTypography>
+                    <DxcTypography fontSize="12px" color="#000000" /* BLOOM */ textAlign="center">{metrics.approvalRate}% approval rate</DxcTypography>
                   </div>
                 </div>
 
                 <div className="metrics-sub-card" style={{ borderTopColor: 'var(--color-semantic04-500)' }}>
                   <div className="metrics-sub-inner">
-                    <DxcTypography fontSize="12px" fontWeight="font-weight-regular" color="var(--color-fg-neutral-stronger)" textAlign="center">DECLINED THIS MONTH</DxcTypography>
-                    <DxcTypography fontSize="28px" fontWeight="font-weight-semibold" color="var(--color-fg-error-medium)" textAlign="center">{metrics.declinedThisMonth}</DxcTypography>
-                    <DxcTypography fontSize="12px" color="var(--color-fg-error-medium)" textAlign="center">{100 - metrics.approvalRate}% decline rate</DxcTypography>
+                    <DxcTypography fontSize="12px" fontWeight="font-weight-regular" color="#000000" /* BLOOM */ textAlign="center">DECLINED THIS MONTH</DxcTypography>
+                    <DxcTypography fontSize="28px" fontWeight="font-weight-semibold" color="#000000" /* BLOOM: Data values must be black */ textAlign="center">{metrics.declinedThisMonth}</DxcTypography>
+                    <DxcTypography fontSize="12px" color="#000000" /* BLOOM */ textAlign="center">{100 - metrics.approvalRate}% decline rate</DxcTypography>
                   </div>
                 </div>
 
@@ -204,9 +264,9 @@ const Dashboard = ({ onSubmissionSelect }) => {
 
               <div className="metrics-sub-card" style={{ borderTopColor: '#0095FF' }}>
                 <div className="metrics-sub-inner">
-                  <DxcTypography fontSize="12px" fontWeight="font-weight-regular" color="var(--color-fg-neutral-stronger)" textAlign="center">FAST-TRACK ELIGIBLE</DxcTypography>
-                  <DxcTypography fontSize="28px" fontWeight="font-weight-semibold" color="#0095FF" textAlign="center">{fastTrackCount}</DxcTypography>
-                  <DxcTypography fontSize="12px" color="#0095FF" textAlign="center">
+                  <DxcTypography fontSize="12px" fontWeight="font-weight-regular" color="#000000" /* BLOOM */ textAlign="center">FAST-TRACK ELIGIBLE</DxcTypography>
+                  <DxcTypography fontSize="28px" fontWeight="font-weight-semibold" color="#000000" /* BLOOM: Data values must be black */ textAlign="center">{fastTrackCount}</DxcTypography>
+                  <DxcTypography fontSize="12px" color="#000000" /* BLOOM */ textAlign="center">
                     {submissions.length > 0 ? Math.round((fastTrackCount / submissions.length) * 100) : 0}% of total
                   </DxcTypography>
                 </div>
@@ -214,26 +274,26 @@ const Dashboard = ({ onSubmissionSelect }) => {
 
               <div className="metrics-sub-card" style={{ borderTopColor: 'var(--color-semantic02-500)' }}>
                 <div className="metrics-sub-inner">
-                  <DxcTypography fontSize="12px" fontWeight="font-weight-regular" color="var(--color-fg-neutral-stronger)" textAlign="center">AVG DAYS TO DECISION</DxcTypography>
-                  <DxcTypography fontSize="28px" fontWeight="font-weight-semibold" color="var(--color-fg-success-medium)" textAlign="center">8</DxcTypography>
-                  <DxcTypography fontSize="12px" color="var(--color-fg-success-medium)" textAlign="center">Target: ≤10 days</DxcTypography>
+                  <DxcTypography fontSize="12px" fontWeight="font-weight-regular" color="#000000" /* BLOOM */ textAlign="center">AVG DAYS TO DECISION</DxcTypography>
+                  <DxcTypography fontSize="28px" fontWeight="font-weight-semibold" color="#000000" /* BLOOM: Data values must be black */ textAlign="center">8</DxcTypography>
+                  <DxcTypography fontSize="12px" color="#000000" /* BLOOM */ textAlign="center">Target: ≤10 days</DxcTypography>
                 </div>
               </div>
 
               <div className="metrics-sub-card" style={{ borderTopColor: 'var(--color-semantic03-400)' }}>
                 <div className="metrics-sub-inner">
-                  <DxcTypography fontSize="12px" fontWeight="font-weight-regular" color="var(--color-fg-neutral-stronger)" textAlign="center">APPROVAL RATE</DxcTypography>
+                  <DxcTypography fontSize="12px" fontWeight="font-weight-regular" color="#000000" /* BLOOM */ textAlign="center">APPROVAL RATE</DxcTypography>
                   <DxcTypography
                     fontSize="28px"
                     fontWeight="font-weight-semibold"
-                    color={metrics.approvalRate >= 80 ? 'var(--color-fg-success-medium)' : 'var(--color-fg-warning-medium)'}
+                    color="#000000" /* BLOOM: Data values must be black */
                     textAlign="center"
                   >
                     {metrics.approvalRate}%
                   </DxcTypography>
                   <DxcTypography
                     fontSize="12px"
-                    color={metrics.approvalRate >= 80 ? 'var(--color-fg-success-medium)' : 'var(--color-fg-warning-medium)'}
+                    color="#000000" /* BLOOM */
                     textAlign="center"
                   >
                     {metrics.approvalRate >= 80 ? 'Meeting goal' : 'Below target'}
@@ -266,7 +326,7 @@ const Dashboard = ({ onSubmissionSelect }) => {
                   <DxcTypography
                     fontSize="24px"
                     fontWeight="font-weight-semibold"
-                    color={group.count > 0 ? 'var(--color-fg-secondary-medium)' : 'var(--color-fg-neutral-dark)'}
+                    color="#000000" /* BLOOM: Data values must be black */
                     textAlign="center"
                   >
                     {group.count}
@@ -274,7 +334,7 @@ const Dashboard = ({ onSubmissionSelect }) => {
                   <DxcTypography
                     fontSize="12px"
                     fontWeight="font-weight-semibold"
-                    color="var(--color-fg-neutral-stronger)"
+                    color="#000000" /* BLOOM */
                     textAlign="center"
                   >
                     {group.label}
@@ -356,11 +416,31 @@ const Dashboard = ({ onSubmissionSelect }) => {
                     )}
                   </div>
                 )}
-                <DxcFlex gap="var(--spacing-gap-none)" alignItems="center">
-                  <DxcTypography fontSize="font-scale-03" color="var(--color-fg-secondary-strong)">Card</DxcTypography>
+                <div style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '12px',
+                  padding: '8px 16px',
+                  backgroundColor: 'var(--color-bg-neutral-lighter)',
+                  borderRadius: 'var(--border-radius-m)',
+                  border: '1px solid var(--border-color-neutral-lighter)'
+                }}>
+                  <DxcTypography
+                    fontSize="font-scale-03"
+                    fontWeight={!isGridView ? "font-weight-semibold" : "font-weight-regular"}
+                    color={!isGridView ? "#000000" : "#666666"}
+                  >
+                    Card View
+                  </DxcTypography>
                   <DxcSwitch checked={isGridView} onChange={(checked) => setIsGridView(checked)} />
-                  <DxcTypography fontSize="font-scale-03" color="var(--color-fg-secondary-strong)">Grid</DxcTypography>
-                </DxcFlex>
+                  <DxcTypography
+                    fontSize="font-scale-03"
+                    fontWeight={isGridView ? "font-weight-semibold" : "font-weight-regular"}
+                    color={isGridView ? "#000000" : "#666666"}
+                  >
+                    Grid View
+                  </DxcTypography>
+                </div>
               </div>
             </div>
 
@@ -390,13 +470,23 @@ const Dashboard = ({ onSubmissionSelect }) => {
                             <DxcTypography fontSize="font-scale-03">
                               {submission.applicantName}
                             </DxcTypography>
-                            <DxcBadge label={submission.status} mode="contextual" color={getStatusColor(submission.status)} size="small" />
-                            {submission.routing?.fastTrackEligible && (
-                              <DxcBadge label="Fast-Track" mode="contextual" color="success" size="small" />
-                            )}
-                            {submission.referral?.required && (
-                              <DxcBadge label="Referral" mode="contextual" color="warning" size="small" />
-                            )}
+
+                            {/* BLOOM: Chip container with proper spacing */}
+                            <div style={{
+                              display: 'flex',
+                              alignItems: 'center',
+                              gap: '8px', /* BLOOM: Consistent spacing between chips */
+                              flexWrap: 'wrap'
+                            }}>
+                              <DxcBadge label={submission.status} mode="contextual" color={getStatusColor(submission.status)} size="small" />
+                              {submission.routing?.fastTrackEligible && (
+                                <DxcBadge label="Fast-Track" mode="contextual" color="success" size="small" />
+                              )}
+                              {submission.referral?.required && (
+                                <DxcBadge label="Referral" mode="contextual" color="warning" size="small" />
+                              )}
+                            </div>
+
                             {submission.daysInQueue > 0 && (
                               <DxcTypography fontSize="11px" color="var(--color-fg-neutral-dark)">
                                 {submission.daysInQueue}d in queue
@@ -404,9 +494,28 @@ const Dashboard = ({ onSubmissionSelect }) => {
                             )}
                           </div>
                           <div className="submission-card-actions">
-                            <DxcButton icon="check" mode="tertiary" title="Approve" onClick={(e) => e.stopPropagation()} />
-                            <DxcButton icon="cancel" mode="tertiary" title="Decline" onClick={(e) => e.stopPropagation()} />
-                            <DxcButton icon="share" mode="tertiary" title="Share" onClick={(e) => e.stopPropagation()} />
+                            {/* BLOOM: Icon-only buttons with proper aria labels and small size */}
+                            <DxcButton
+                              icon="check"
+                              mode="tertiary"
+                              title="Approve"
+                              size="small"
+                              onClick={(e) => e.stopPropagation()}
+                            />
+                            <DxcButton
+                              icon="cancel"
+                              mode="tertiary"
+                              title="Decline"
+                              size="small"
+                              onClick={(e) => e.stopPropagation()}
+                            />
+                            <DxcButton
+                              icon="share"
+                              mode="tertiary"
+                              title="Share"
+                              size="small"
+                              onClick={(e) => e.stopPropagation()}
+                            />
                           </div>
                         </div>
 
@@ -414,11 +523,11 @@ const Dashboard = ({ onSubmissionSelect }) => {
                         {submission.routing && (
                           <div style={{
                             padding: '6px 12px',
-                            backgroundColor: submission.routing.fastTrackEligible ? 'var(--color-bg-success-lighter, #E8F5E9)' : 'var(--color-bg-warning-lighter, #FFF3E0)',
+                            backgroundColor: submission.routing.fastTrackEligible ? '#F0F8F0' : '#FFF8F0', /* BLOOM: Subtle toned-down backgrounds */
                             borderRadius: 'var(--border-radius-s)',
-                            borderLeft: submission.routing.fastTrackEligible ? '3px solid var(--color-fg-success-medium)' : '3px solid var(--color-fg-warning-medium)'
+                            borderLeft: submission.routing.fastTrackEligible ? '3px solid #37A526' : '3px solid #F6921E' /* BLOOM: Green/Orange accents */
                           }}>
-                            <DxcTypography fontSize="11px" color="var(--color-fg-neutral-stronger)" fontWeight="font-weight-medium">
+                            <DxcTypography fontSize="11px" color="#000000" /* BLOOM */ fontWeight="font-weight-medium">
                               🤖 {submission.routing.decision} — {submission.routing.reason}
                             </DxcTypography>
                           </div>
@@ -492,15 +601,28 @@ const Dashboard = ({ onSubmissionSelect }) => {
                         )}
                         <td>
                           <DxcFlex gap="var(--spacing-gap-xs)" alignItems="center">
-                            <button className="icon-btn-small" title="Approve" onClick={(e) => e.stopPropagation()}>
-                              <span className="material-icons">check</span>
-                            </button>
-                            <button className="icon-btn-small" title="Decline" onClick={(e) => e.stopPropagation()}>
-                              <span className="material-icons">cancel</span>
-                            </button>
-                            <button className="icon-btn-small" title="Share" onClick={(e) => e.stopPropagation()}>
-                              <span className="material-icons">share</span>
-                            </button>
+                            {/* BLOOM: Using DxcButton instead of native buttons for consistency */}
+                            <DxcButton
+                              icon="check"
+                              mode="tertiary"
+                              title="Approve"
+                              size="small"
+                              onClick={(e) => e.stopPropagation()}
+                            />
+                            <DxcButton
+                              icon="cancel"
+                              mode="tertiary"
+                              title="Decline"
+                              size="small"
+                              onClick={(e) => e.stopPropagation()}
+                            />
+                            <DxcButton
+                              icon="share"
+                              mode="tertiary"
+                              title="Share"
+                              size="small"
+                              onClick={(e) => e.stopPropagation()}
+                            />
                           </DxcFlex>
                         </td>
                       </tr>
