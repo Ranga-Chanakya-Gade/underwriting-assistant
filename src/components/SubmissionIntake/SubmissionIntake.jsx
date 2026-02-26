@@ -14,6 +14,7 @@ import {
 import { Document, Page, pdfjs } from 'react-pdf';
 import 'react-pdf/dist/Page/AnnotationLayer.css';
 import 'react-pdf/dist/Page/TextLayer.css';
+import DocumentUpload from '../shared/DocumentUpload';
 import './SubmissionIntake.css';
 
 // Configure PDF.js worker
@@ -23,7 +24,6 @@ const SubmissionIntake = () => {
   const [currentStep, setCurrentStep] = useState(1);
   const [uploadedForms, setUploadedForms] = useState([]);
   const [supportDocs, setSupportDocs] = useState([]);
-  const [isDragging, setIsDragging] = useState(false); // BLOOM: Track drag state for upload area
   const [extractedData, setExtractedData] = useState({
     namedInsured: 'ABC Moving Services, Inc.',
     mailingAddress: '33 Inner Belt Rd',
@@ -46,7 +46,9 @@ const SubmissionIntake = () => {
     claimsLast3Years: 'See attached loss runs',
     totalLossAmount: 'See attached loss runs',
   });
-  const [validationErrors, setValidationErrors] = useState({});
+  const [validationErrors, setValidationErrors] = useState({
+    numberOfEmployees: 'Value may be inconsistent - form shows 67 employees but driver list shows 51 drivers',
+  });
   const [lowConfidenceFields, setLowConfidenceFields] = useState(['businessDescription', 'totalLossAmount']);
   const [isProcessing, setIsProcessing] = useState(false);
   const [showProcessingBanner, setShowProcessingBanner] = useState(true);
@@ -69,7 +71,7 @@ const SubmissionIntake = () => {
   const steps = [
     { number: 1, label: 'Upload Insurance Forms', completed: currentStep > 1 },
     { number: 2, label: 'Upload Supporting Documents', completed: currentStep > 2 },
-    { number: 3, label: 'Review/Edit Extracted Data', completed: currentStep > 3 },
+    { number: 3, label: 'Review/Edit AI-Extracted Data', completed: currentStep > 3 },
     { number: 4, label: 'Submit', completed: false },
   ];
 
@@ -98,7 +100,7 @@ const SubmissionIntake = () => {
 
   const handleNextStep = () => {
     if (currentStep < 4) {
-      // Show Documents for Processing modal after Step 1 (ACORD forms are processed automatically)
+      // Show Documents for Processing modal after Step 1 (ACORD forms are processed by AI)
       if (currentStep === 1 && !dontShowDocProcessingAgain && uploadedForms.length > 0) {
         setShowDocProcessingModal(true);
       } else {
@@ -143,50 +145,32 @@ const SubmissionIntake = () => {
     }
   };
 
-  const handleStepClick = (stepNumber) => {
-    // Allow clicking on completed steps or current step, but not future steps
-    if (stepNumber <= currentStep || steps[stepNumber - 1].completed) {
-      setCurrentStep(stepNumber);
-    }
-  };
-
   const renderProgressStepper = () => (
     <div className="progress-stepper">
-      {steps.map((step, index) => {
-        const isClickable = step.number <= currentStep || step.completed;
-        return (
-          <div key={step.number} className="step-container">
-            <div
-              className={`step-indicator-wrapper ${isClickable ? 'clickable' : 'not-clickable'}`}
-              onClick={() => handleStepClick(step.number)}
-              style={{ cursor: isClickable ? 'pointer' : 'not-allowed' }}
-            >
-              <div className={`step-indicator ${
-                step.completed ? 'completed' :
-                step.number === currentStep ? 'active' : 'pending'
-              }`}>
-                {step.completed ? (
-                  <span className="material-icons" style={{ fontSize: '16px' }}>check</span>
-                ) : (
-                  <span>{step.number}</span>
-                )}
-              </div>
-              <DxcTypography
-                fontSize="font-scale-01"
-                fontWeight={step.number === currentStep ? 'font-weight-semibold' : 'font-weight-regular'}
-                color={step.number === currentStep ? '#1B75BB' : 'var(--color-fg-neutral-stronger)'}
-              >
-                {step.label}
-              </DxcTypography>
+      {steps.map((step, index) => (
+        <div key={step.number} className="step-container">
+          <div className="step-indicator-wrapper">
+            <div className={`step-indicator ${
+              step.completed ? 'completed' :
+              step.number === currentStep ? 'active' : 'pending'
+            }`}>
+              {step.completed ? (
+                <span className="material-icons" style={{ fontSize: '16px' }}>check</span>
+              ) : (
+                <span>{step.number}</span>
+              )}
             </div>
-            {index < steps.length - 1 && (
-              <div className={`step-connector ${
-                step.completed || currentStep > step.number ? 'completed' : 'pending'
-              }`} />
-            )}
+            <DxcTypography
+              fontSize="font-scale-01"
+              fontWeight={step.number === currentStep ? 'font-weight-semibold' : 'font-weight-regular'}
+              color={step.number === currentStep ? '#1B75BB' : 'var(--color-fg-neutral-stronger)'}
+            >
+              {step.label}
+            </DxcTypography>
           </div>
-        );
-      })}
+          {index < steps.length - 1 && <div className="step-connector" />}
+        </div>
+      ))}
     </div>
   );
 
@@ -210,35 +194,11 @@ const SubmissionIntake = () => {
           Upload Insurance Forms (ACORD)
         </DxcTypography>
 
-        <div
-          className={`upload-area ${isDragging ? 'dragging' : ''}`}
-          onDragEnter={(e) => { e.preventDefault(); setIsDragging(true); }}
-          onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
-          onDragLeave={(e) => { e.preventDefault(); setIsDragging(false); }}
-          onDrop={(e) => {
-            e.preventDefault();
-            setIsDragging(false);
-            handleFileUpload(e.dataTransfer.files);
-          }}
-        >
-          <input
-            type="file"
-            id="acord-upload"
-            multiple
-            accept=".pdf,.doc,.docx"
-            onChange={(e) => handleFileUpload(e.target.files)}
-            style={{ display: 'none' }}
-          />
-          <label htmlFor="acord-upload" className="upload-label">
-            <span className="material-icons" style={{ fontSize: '64px', color: '#1B75BB' }}>cloud_upload</span> {/* BLOOM: Increased from 48px */}
-            <DxcTypography fontSize="var(--font-scale-03, 1rem)" fontWeight="font-weight-semibold">
-              Drag and drop files here or click to browse
-            </DxcTypography>
-            <DxcTypography fontSize="var(--font-scale-02, 0.875rem)" color="var(--color-fg-neutral-stronger)">
-              Supported formats: PDF, DOC, DOCX
-            </DxcTypography>
-          </label>
-        </div>
+        <DocumentUpload
+          submissionId={submissionId}
+          onUploadComplete={(data) => handleFileUpload(data.files)}
+          onCancel={() => {}}
+        />
 
         {uploadedForms.length > 0 && (
           <DxcFlex direction="column" gap="var(--spacing-gap-m)">
@@ -265,14 +225,9 @@ const SubmissionIntake = () => {
                     <td>{file.size}</td>
                     <td>{file.uploadDate}</td>
                     <td>
-                      {/* BLOOM: Using DxcButton instead of native button */}
-                      <DxcButton
-                        icon="delete"
-                        mode="tertiary"
-                        size="small"
-                        title="Delete file"
-                        onClick={() => setUploadedForms(uploadedForms.filter(f => f.id !== file.id))}
-                      />
+                      <button className="icon-btn-small" onClick={() => setUploadedForms(uploadedForms.filter(f => f.id !== file.id))}>
+                        <span className="material-icons">delete</span>
+                      </button>
                     </td>
                   </tr>
                 ))}
@@ -303,51 +258,22 @@ const SubmissionIntake = () => {
                     ACORD forms are being processed
                   </DxcTypography>
                   <DxcTypography fontSize="var(--font-scale-02, 0.875rem)">
-                    Automated data extraction is running on your uploaded insurance forms. You can continue uploading supporting documents while processing completes.
+                    AI extraction is running on your uploaded insurance forms. You can continue uploading supporting documents while processing completes.
                   </DxcTypography>
                 </DxcFlex>
               </DxcFlex>
-              {/* BLOOM: Using DxcButton for close button */}
-              <DxcButton
-                icon="close"
-                mode="tertiary"
-                size="small"
-                title="Close banner"
-                onClick={() => setShowProcessingBanner(false)}
-              />
+              <button className="close-banner-btn" onClick={() => setShowProcessingBanner(false)} aria-label="Close banner">
+                <span className="material-icons">close</span>
+              </button>
             </DxcFlex>
           </div>
         )}
 
-        <div
-          className={`upload-area ${isDragging ? 'dragging' : ''}`}
-          onDragEnter={(e) => { e.preventDefault(); setIsDragging(true); }}
-          onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
-          onDragLeave={(e) => { e.preventDefault(); setIsDragging(false); }}
-          onDrop={(e) => {
-            e.preventDefault();
-            setIsDragging(false);
-            handleFileUpload(e.dataTransfer.files, true);
-          }}
-        >
-          <input
-            type="file"
-            id="support-upload"
-            multiple
-            accept=".pdf,.doc,.docx,.xls,.xlsx"
-            onChange={(e) => handleFileUpload(e.target.files, true)}
-            style={{ display: 'none' }}
-          />
-          <label htmlFor="support-upload" className="upload-label">
-            <span className="material-icons" style={{ fontSize: '64px', color: '#1B75BB' }}>cloud_upload</span> {/* BLOOM: Increased from 48px */}
-            <DxcTypography fontSize="var(--font-scale-03, 1rem)" fontWeight="font-weight-semibold">
-              Drag and drop files here or click to browse
-            </DxcTypography>
-            <DxcTypography fontSize="var(--font-scale-02, 0.875rem)" color="var(--color-fg-neutral-stronger)">
-              Loss Runs, MVRs, Financial Statements, etc.
-            </DxcTypography>
-          </label>
-        </div>
+        <DocumentUpload
+          submissionId={submissionId}
+          onUploadComplete={(data) => handleFileUpload(data.files, true)}
+          onCancel={() => {}}
+        />
 
         {supportDocs.length > 0 && (
           <DxcFlex direction="column" gap="var(--spacing-gap-m)">
@@ -387,14 +313,9 @@ const SubmissionIntake = () => {
                     <td>{file.size}</td>
                     <td>{file.uploadDate}</td>
                     <td>
-                      {/* BLOOM: Using DxcButton instead of native button */}
-                      <DxcButton
-                        icon="delete"
-                        mode="tertiary"
-                        size="small"
-                        title="Delete file"
-                        onClick={() => setSupportDocs(supportDocs.filter(f => f.id !== file.id))}
-                      />
+                      <button className="icon-btn-small" onClick={() => setSupportDocs(supportDocs.filter(f => f.id !== file.id))}>
+                        <span className="material-icons">delete</span>
+                      </button>
                     </td>
                   </tr>
                 ))}
@@ -415,7 +336,7 @@ const SubmissionIntake = () => {
         </DxcTypography>
 
         <DxcTypography fontSize="var(--font-scale-02, 0.875rem)" color="var(--color-fg-neutral-stronger)">
-          Review and modify the extracted data. Override suggested values and address validation issues before submission.
+          Review and modify the AI-extracted data. Override AI suggestions and address validation issues before submission.
         </DxcTypography>
 
         {/* Processing Banner */}
@@ -433,14 +354,9 @@ const SubmissionIntake = () => {
                   </DxcTypography>
                 </DxcFlex>
               </DxcFlex>
-              {/* BLOOM: Using DxcButton for close button */}
-              <DxcButton
-                icon="close"
-                mode="tertiary"
-                size="small"
-                title="Close banner"
-                onClick={() => setShowProcessingBanner(false)}
-              />
+              <button className="close-banner-btn" onClick={() => setShowProcessingBanner(false)} aria-label="Close banner">
+                <span className="material-icons">close</span>
+              </button>
             </DxcFlex>
           </div>
         )}
@@ -463,21 +379,22 @@ const SubmissionIntake = () => {
             <DxcFlex alignItems="center" gap="var(--spacing-gap-m)">
               <span className="material-icons" style={{ color: '#F6921E', fontSize: '22px' }}>warning_amber</span>
               <DxcTypography fontSize="var(--font-scale-02, 0.875rem)" fontWeight="font-weight-semibold" color="#F6921E">
-                {validationSummary.lowConfCount} Low Extraction Confidence — Fields where the extraction confidence is below threshold
+                {validationSummary.lowConfCount} Low AI Confidence — Fields where the AI extraction confidence is below threshold
               </DxcTypography>
             </DxcFlex>
           </div>
         )}
 
         <DxcFlex justifyContent="flex-end">
-          {/* BLOOM: Using DxcButton for View Source toggle */}
-          <DxcButton
-            label={showViewSource ? 'Hide Source' : 'View Source'}
-            icon="description"
-            mode={showViewSource ? 'primary' : 'secondary'}
-            size="small"
+          <button
+            className={`view-source-btn ${showViewSource ? 'active' : ''}`}
             onClick={() => setShowViewSource(!showViewSource)}
-          />
+          >
+            <DxcFlex alignItems="center" gap="var(--spacing-gap-xs)">
+              <span className="material-icons" style={{ fontSize: '18px' }}>description</span>
+              <span>{showViewSource ? 'Hide Source' : 'View Source'}</span>
+            </DxcFlex>
+          </button>
         </DxcFlex>
 
         {/* Side-by-side layout when View Source is active */}
@@ -559,7 +476,7 @@ const SubmissionIntake = () => {
                   <DxcFlex gap="var(--spacing-gap-m)">
                     <div style={{ position: 'relative', width: '100%' }}>
                       {lowConfidenceFields.includes('priorCarrier') && (
-                        <span className="field-indicator warning" title="Low Extraction Confidence">
+                        <span className="field-indicator warning" title="Low AI Confidence">
                           <span className="confidence-dot"></span>
                         </span>
                       )}
@@ -588,33 +505,18 @@ const SubmissionIntake = () => {
                     uploadedForms[0].fileType === 'application/pdf' ? (
                       <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-gap-s)', width: '100%' }}>
                         <DxcFlex alignItems="center" justifyContent="center" gap="var(--spacing-gap-s)" style={{ padding: 'var(--spacing-padding-xs)', backgroundColor: 'var(--color-bg-neutral-lighter)', borderRadius: 'var(--border-radius-s)' }}>
-                          {/* BLOOM: Using DxcButton for zoom controls */}
-                          <DxcButton
-                            icon="remove"
-                            mode="tertiary"
-                            size="small"
-                            title="Zoom Out"
-                            onClick={() => setScale(Math.max(0.5, scale - 0.25))}
-                            disabled={scale <= 0.5}
-                          />
+                          <button className="zoom-btn" onClick={() => setScale(Math.max(0.5, scale - 0.25))} disabled={scale <= 0.5} title="Zoom Out">
+                            <span className="material-icons" style={{ fontSize: '18px' }}>remove</span>
+                          </button>
                           <DxcTypography fontSize="font-scale-01" fontWeight="font-weight-semibold">
                             {Math.round(scale * 100)}%
                           </DxcTypography>
-                          <DxcButton
-                            icon="add"
-                            mode="tertiary"
-                            size="small"
-                            title="Zoom In"
-                            onClick={() => setScale(Math.min(2.0, scale + 0.25))}
-                            disabled={scale >= 2.0}
-                          />
-                          <DxcButton
-                            icon="refresh"
-                            mode="tertiary"
-                            size="small"
-                            title="Reset Zoom"
-                            onClick={() => setScale(1.0)}
-                          />
+                          <button className="zoom-btn" onClick={() => setScale(Math.min(2.0, scale + 0.25))} disabled={scale >= 2.0} title="Zoom In">
+                            <span className="material-icons" style={{ fontSize: '18px' }}>add</span>
+                          </button>
+                          <button className="zoom-btn" onClick={() => setScale(1.0)} title="Reset Zoom">
+                            <span className="material-icons" style={{ fontSize: '18px' }}>refresh</span>
+                          </button>
                         </DxcFlex>
                         <div style={{ overflowY: 'auto', maxHeight: '700px', display: 'flex', justifyContent: 'center' }}>
                           <Document
@@ -793,13 +695,7 @@ const SubmissionIntake = () => {
               <DxcButton label="Cancel" mode="tertiary" onClick={() => {}} />
               <DxcFlex gap="var(--spacing-gap-m)">
                 <DxcButton label="Save as Draft" mode="secondary" onClick={() => {}} />
-                {/* BLOOM: Disable Submit if validation errors exist or required fields missing */}
-                <DxcButton
-                  label="Submit"
-                  mode="primary"
-                  onClick={handleSubmit}
-                  disabled={hasErrors || !hasDocs || !allFieldsFilled}
-                />
+                <DxcButton label="Submit" mode="primary" onClick={handleSubmit} />
               </DxcFlex>
             </DxcFlex>
           </div>
@@ -840,13 +736,7 @@ const SubmissionIntake = () => {
                 <DxcButton label="Previous Step" mode="secondary" onClick={handlePreviousStep} />
               )}
             </div>
-            {/* BLOOM: Disable Next Step on Step 1 if no files uploaded */}
-            <DxcButton
-              label="Next Step"
-              mode="primary"
-              onClick={handleNextStep}
-              disabled={currentStep === 1 && uploadedForms.length === 0}
-            />
+            <DxcButton label="Next Step" mode="primary" onClick={handleNextStep} />
           </DxcFlex>
         )}
       </DxcFlex>
@@ -881,7 +771,7 @@ const SubmissionIntake = () => {
                     Documents for Processing
                   </DxcTypography>
                   <DxcTypography fontSize="var(--font-scale-02, 0.875rem)" color="var(--color-fg-neutral-stronger)">
-                    The ACORD forms you uploaded will now be processed by our automated extraction system. This typically takes 2-5 minutes depending on document complexity.
+                    The ACORD forms you uploaded will now be processed by our AI extraction engine. This typically takes 2-5 minutes depending on document complexity.
                   </DxcTypography>
                   <DxcTypography fontSize="var(--font-scale-02, 0.875rem)" color="var(--color-fg-neutral-stronger)" style={{ marginTop: 'var(--spacing-gap-s)' }}>
                     You can continue uploading supporting documents while processing runs. The extracted data will be available for review in Step 3.
