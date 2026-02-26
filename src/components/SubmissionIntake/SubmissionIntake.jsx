@@ -914,7 +914,7 @@ const SubmissionIntake = () => {
             New Submission
           </DxcTypography>
           <DxcTypography fontSize="var(--font-scale-02, 0.875rem)" color="var(--color-fg-neutral-stronger)">
-            {submissionId} | Commercial Auto
+            {submissionId}
           </DxcTypography>
         </DxcFlex>
 
