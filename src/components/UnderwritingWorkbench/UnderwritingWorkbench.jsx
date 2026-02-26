@@ -16,7 +16,7 @@ import GuidelinesPanel from '../shared/GuidelinesPanel';
 import LossRunsPanel from '../shared/LossRunsPanel';
 import ReportsPanel from '../shared/ReportsPanel';
 import DocumentUpload from '../shared/DocumentUpload';
-import { isConnected, fetchAllSubmissionData } from '../../services/servicenow';
+import { isConnected, fetchAllSubmissionData, SUBMISSION_TABLE } from '../../services/servicenow';
 import './UnderwritingWorkbench.css';
 
 const fmtDate = (v) => v ? String(v).split(' ')[0] : '';
@@ -994,142 +994,167 @@ const UnderwritingWorkbench = ({ submission }) => {
         return (
           <DxcInset>
             <DxcFlex direction="column" gap="var(--spacing-gap-l)">
-              <DxcFlex justifyContent="space-between" alignItems="center">
-                <DxcTypography fontSize="font-scale-03" fontWeight="font-weight-semibold" color="#333333">
-                  Upload Supporting Documents
-                </DxcTypography>
-                <button className="link-btn" onClick={() => {}}>
-                  <span className="material-icons-outlined" style={{ fontSize: '18px' }}>mail_outline</span>
-                  Request Documentation
-                </button>
-              </DxcFlex>
 
-              <DxcTypography fontSize="font-scale-02" color="#808285">
-                Supported formats include pdf, doc, docx, xls, xlsx, jpg, and png
-              </DxcTypography>
-
-              <DocumentUpload
-                submissionId={submission?.sys_id}
-                onUploadComplete={(data) => {
-                  console.log('IDP upload complete:', data);
-                }}
-                onCancel={() => {}}
-              />
-
-              {/* ACORD Forms Section */}
-              {submission.acordForms && submission.acordForms.length > 0 && (
-                <div style={{
-                  padding: 'var(--spacing-padding-l)',
-                  backgroundColor: '#E5F1FA',
-                  borderRadius: 'var(--border-radius-m)',
-                  borderLeft: '4px solid #1B75BB'
-                }}>
-                  <DxcFlex direction="column" gap="var(--spacing-gap-m)">
+              {/* ── Upload Card ─────────────────────────────────────── */}
+              <div className="detail-card">
+                <div className="detail-card-header">
+                  <DxcFlex justifyContent="space-between" alignItems="center">
                     <DxcFlex alignItems="center" gap="var(--spacing-gap-s)">
-                      <span className="material-icons" style={{ color: '#1B75BB', fontSize: '24px' }}>
-                        verified
-                      </span>
-                      <DxcTypography fontSize="font-scale-03" fontWeight="font-weight-semibold" color="#1B75BB">
-                        ACORD Forms - Auto-Extracted
+                      <span className="material-icons-outlined" style={{ color: '#1B75BB', fontSize: '20px' }}>cloud_upload</span>
+                      <DxcTypography fontSize="font-scale-03" fontWeight="font-weight-semibold" color="#333333">
+                        Upload Supporting Documents
                       </DxcTypography>
                     </DxcFlex>
-                    {submission.acordForms.map((form, index) => (
-                      <div key={index} style={{
-                        padding: 'var(--spacing-padding-m)',
-                        backgroundColor: '#FFFFFF',
-                        borderRadius: 'var(--border-radius-s)',
-                        border: '1px solid #1B75BB'
-                      }}>
-                        <DxcFlex direction="column" gap="var(--spacing-gap-s)">
-                          <DxcFlex justifyContent="space-between" alignItems="center">
-                            <DxcFlex alignItems="center" gap="var(--spacing-gap-s)">
-                              <DxcBadge
-                                label={form.type}
-                                mode="contextual"
-                                color="info"
-                              />
-                              <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold">
-                                {form.name}
-                              </DxcTypography>
-                            </DxcFlex>
-                            <DxcBadge
-                              label={`${form.confidenceScore}% confidence`}
-                              mode="contextual"
-                              color={form.confidenceScore >= 95 ? 'success' : form.confidenceScore >= 85 ? 'info' : 'warning'}
-                            />
-                          </DxcFlex>
-                          <DxcFlex gap="var(--spacing-gap-l)">
-                            <div>
-                              <DxcTypography fontSize="font-scale-01" color="#666666">
-                                Fields Extracted
-                              </DxcTypography>
-                              <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold" color="#37A526">
-                                {form.fieldsExtracted} / {form.totalFields}
-                              </DxcTypography>
-                            </div>
-                            <div>
-                              <DxcTypography fontSize="font-scale-01" color="#666666">
-                                Processing Time
-                              </DxcTypography>
-                              <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold">
-                                {form.extractionTime}
-                              </DxcTypography>
-                            </div>
-                          </DxcFlex>
-                          <div style={{
-                            padding: '8px 12px',
-                            backgroundColor: '#E8F5E9',
-                            borderRadius: '4px'
-                          }}>
-                            <DxcTypography fontSize="font-scale-01" color="#37A526">
-                              ✓ Auto-filled {form.fieldsExtracted} fields from this form - Manual entry time saved: ~{Math.floor(form.fieldsExtracted * 0.5)} min
-                            </DxcTypography>
-                          </div>
-                        </DxcFlex>
-                      </div>
-                    ))}
+                    <button className="link-btn" onClick={() => {}}>
+                      <span className="material-icons-outlined" style={{ fontSize: '18px' }}>mail_outline</span>
+                      Request Documentation
+                    </button>
                   </DxcFlex>
+                </div>
+                <div className="detail-card-body">
+                  <DocumentUpload
+                    submissionId={submission?.sys_id}
+                    tableName={SUBMISSION_TABLE}
+                    onUploadComplete={(data) => {
+                      console.log('Upload complete — IDP:', data.idpResults, 'SN:', data.snResults);
+                    }}
+                    onCancel={() => {}}
+                  />
+                </div>
+              </div>
+
+              {/* ── ACORD Forms Card ─────────────────────────────────── */}
+              {submission.acordForms && submission.acordForms.length > 0 && (
+                <div className="detail-card">
+                  <div className="detail-card-header">
+                    <DxcFlex alignItems="center" gap="var(--spacing-gap-s)">
+                      <span className="material-icons-outlined" style={{ color: '#37A526', fontSize: '20px' }}>verified</span>
+                      <DxcTypography fontSize="font-scale-03" fontWeight="font-weight-semibold" color="#333333">
+                        ACORD Forms — IDP Extracted
+                      </DxcTypography>
+                      <DxcBadge label={String(submission.acordForms.length)} mode="contextual" color="success" />
+                    </DxcFlex>
+                  </div>
+                  <div className="detail-card-body">
+                    <DxcFlex direction="column" gap="var(--spacing-gap-m)">
+                      {submission.acordForms.map((form, index) => (
+                        <div key={index} style={{
+                          padding: 'var(--spacing-padding-m)',
+                          backgroundColor: 'var(--color-bg-neutral-lighter)',
+                          borderRadius: 'var(--border-radius-s)',
+                          borderLeft: '3px solid #1B75BB'
+                        }}>
+                          <DxcFlex direction="column" gap="var(--spacing-gap-s)">
+                            <DxcFlex justifyContent="space-between" alignItems="center">
+                              <DxcFlex alignItems="center" gap="var(--spacing-gap-s)">
+                                <DxcBadge label={form.type} mode="contextual" color="info" />
+                                <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold">
+                                  {form.name}
+                                </DxcTypography>
+                              </DxcFlex>
+                              <DxcBadge
+                                label={`${form.confidenceScore}% confidence`}
+                                mode="contextual"
+                                color={form.confidenceScore >= 95 ? 'success' : form.confidenceScore >= 85 ? 'info' : 'warning'}
+                              />
+                            </DxcFlex>
+                            <DxcFlex gap="var(--spacing-gap-l)">
+                              <div>
+                                <DxcTypography fontSize="font-scale-01" color="#666666">Fields Extracted</DxcTypography>
+                                <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold" color="#37A526">
+                                  {form.fieldsExtracted} / {form.totalFields}
+                                </DxcTypography>
+                              </div>
+                              <div>
+                                <DxcTypography fontSize="font-scale-01" color="#666666">Processing Time</DxcTypography>
+                                <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold">
+                                  {form.extractionTime}
+                                </DxcTypography>
+                              </div>
+                            </DxcFlex>
+                            <div style={{ padding: '6px 10px', backgroundColor: '#E8F5E9', borderRadius: '4px' }}>
+                              <DxcTypography fontSize="font-scale-01" color="#37A526">
+                                ✓ Auto-filled {form.fieldsExtracted} fields — ~{Math.floor(form.fieldsExtracted * 0.5)} min saved
+                              </DxcTypography>
+                            </div>
+                          </DxcFlex>
+                        </div>
+                      ))}
+                    </DxcFlex>
+                  </div>
                 </div>
               )}
 
-              <div>
-                <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold" color="#333333" style={{ marginBottom: 'var(--spacing-gap-s)' }}>
-                  Other Documents
-                </DxcTypography>
-                <table className="data-table">
-                  <thead>
-                    <tr>
-                      <th>Document Name</th>
-                      <th>Description</th>
-                      <th>Doc Type</th>
-                      <th>Uploaded By</th>
-                      <th>Upload Date</th>
-                      <th>Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {uploadedDocs.map((doc) => (
-                      <tr key={doc.id}>
-                        <td>{doc.name}</td>
-                        <td>{doc.description}</td>
-                        <td>{doc.docType}</td>
-                        <td>{doc.uploadedBy}</td>
-                        <td>{doc.uploadDate}</td>
-                        <td>
-                          <DxcFlex gap="var(--spacing-gap-xs)">
-                            <button className="icon-btn-small">
-                              <span className="material-icons-outlined">download</span>
-                            </button>
-                            <button className="icon-btn-small">
-                              <span className="material-icons-outlined">visibility</span>
-                            </button>
-                          </DxcFlex>
-                        </td>
+              {/* ── Submission Documents Card ────────────────────────── */}
+              <div className="detail-card">
+                <div className="detail-card-header">
+                  <DxcFlex justifyContent="space-between" alignItems="center">
+                    <DxcFlex alignItems="center" gap="var(--spacing-gap-s)">
+                      <span className="material-icons-outlined" style={{ color: '#1B75BB', fontSize: '20px' }}>folder_open</span>
+                      <DxcTypography fontSize="font-scale-03" fontWeight="font-weight-semibold" color="#333333">
+                        Submission Documents
+                      </DxcTypography>
+                      <DxcBadge label={String(uploadedDocs.length)} mode="contextual" color="info" />
+                    </DxcFlex>
+                    <DxcTypography fontSize="font-scale-01" color={liveData ? '#37A526' : '#808285'}>
+                      {liveData ? '● Live from ServiceNow' : '○ Showing sample data'}
+                    </DxcTypography>
+                  </DxcFlex>
+                </div>
+                <div className="detail-card-body" style={{ padding: 0 }}>
+                  <table className="data-table">
+                    <thead>
+                      <tr>
+                        <th>Document Name</th>
+                        <th>Description</th>
+                        <th>Doc Type</th>
+                        <th>Uploaded By</th>
+                        <th>Upload Date</th>
+                        <th>Actions</th>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
+                    </thead>
+                    <tbody>
+                      {uploadedDocs.map((doc) => (
+                        <tr key={doc.id}>
+                          <td>
+                            <DxcFlex alignItems="center" gap="var(--spacing-gap-xs)">
+                              <span className="material-icons-outlined" style={{ fontSize: '16px', color: '#1B75BB' }}>description</span>
+                              {doc.name}
+                            </DxcFlex>
+                          </td>
+                          <td>{doc.description || '—'}</td>
+                          <td>
+                            {doc.docType && (
+                              <span style={{
+                                padding: '2px 8px',
+                                backgroundColor: '#E5F1FA',
+                                borderRadius: '12px',
+                                fontSize: '12px',
+                                color: '#1B75BB'
+                              }}>
+                                {doc.docType}
+                              </span>
+                            )}
+                          </td>
+                          <td>{doc.uploadedBy || '—'}</td>
+                          <td>{doc.uploadDate || '—'}</td>
+                          <td>
+                            <DxcFlex gap="var(--spacing-gap-xs)">
+                              <button className="icon-btn-small" title="Download">
+                                <span className="material-icons-outlined">download</span>
+                              </button>
+                              <button className="icon-btn-small" title="View">
+                                <span className="material-icons-outlined">visibility</span>
+                              </button>
+                            </DxcFlex>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
               </div>
+
             </DxcFlex>
           </DxcInset>
         );
