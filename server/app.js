@@ -1,11 +1,9 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import { fileURLToPath } from 'url';
-import { dirname, join } from 'path';
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
-dotenv.config({ path: join(__dirname, '..', '.env') });
+// Load .env for local dev — silently ignored in production (Vercel injects env vars)
+dotenv.config();
 
 const app = express();
 
@@ -88,7 +86,7 @@ app.all(
 // ServiceNow Attachment  →  /api/now/attachment/...
 // ================================================================
 app.all(
-  '/api/servicenow-attachment/*',
+  '/api/servicenow-attachment/*path',
   express.raw({ type: '*/*', limit: '100mb' }),
   async (req, res) => {
     const snPath = req.path.replace('/api/servicenow-attachment', '/api/now/attachment');
@@ -140,7 +138,7 @@ app.post(
 // Handles JSON, text/plain, and multipart/form-data (file uploads)
 // ================================================================
 app.all(
-  '/api/idp/*',
+  '/api/idp/*path',
   express.raw({ type: '*/*', limit: '100mb' }),
   async (req, res) => {
     if (!IDP_API_BASE) return res.status(500).json({ error: 'IDP_API_BASE_URL not configured' });
@@ -163,5 +161,12 @@ app.all(
     }
   },
 );
+
+// ── Global error handler ───────────────────────────────────────────
+// eslint-disable-next-line no-unused-vars
+app.use((err, _req, res, _next) => {
+  console.error('[proxy error]', err);
+  res.status(500).json({ error: err.message });
+});
 
 export default app;
