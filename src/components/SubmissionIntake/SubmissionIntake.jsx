@@ -26,6 +26,22 @@ const SubmissionIntake = () => {
   const [uploadedForms, setUploadedForms] = useState([]);
   const [supportDocs, setSupportDocs] = useState([]);
   const [extractedData, setExtractedData] = useState({
+    // Annuitant Information
+    annFirstName: 'Mia',
+    annMiddleName: 'Elizabeth',
+    annLastName: 'Robinson',
+    annDOB: '07/18/1982',
+    annSSN: '512-84-4391',
+    annGender: 'Female',
+    annRelationship: 'Self',
+    annAddress: '1427 Willow Creek Dr',
+    annCity: 'Charlotte',
+    annState: 'NC',
+    annZip: '28277',
+    annCountryCitizenship: 'USA',
+    annCountryResidency: 'USA',
+    annEmail: 'mia.robinson82@email.com',
+    annPhone: '',
     // Beneficiary 1 – Primary
     ben1FirstName: 'Daniel',
     ben1MiddleName: 'Thomas',
@@ -71,7 +87,7 @@ const SubmissionIntake = () => {
     allocationJPMorgan: '20',
   });
   const [validationErrors, setValidationErrors] = useState({});
-  const [lowConfidenceFields, setLowConfidenceFields] = useState(['ben1SSN', 'ben2SSN']);
+  const [lowConfidenceFields, setLowConfidenceFields] = useState(['annSSN', 'ben1SSN', 'ben2SSN']);
   const [isProcessing, setIsProcessing] = useState(false);
   const [showProcessingBanner, setShowProcessingBanner] = useState(true);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
@@ -469,6 +485,49 @@ const SubmissionIntake = () => {
         <div className={showViewSource ? 'extraction-container side-by-side' : 'extraction-container'}>
           <div className="extraction-fields">
 
+            {/* Annuitant Information */}
+            <div className="form-section">
+              <DxcTypography fontSize="var(--font-scale-03, 1rem)" fontWeight="font-weight-semibold" color="#333333">
+                Annuitant Information
+              </DxcTypography>
+              <div style={{ marginTop: 'var(--spacing-gap-m)' }}>
+                <DxcFlex direction="column" gap="var(--spacing-gap-m)">
+                  <DxcFlex gap="var(--spacing-gap-m)">
+                    <DxcTextInput label="First Name" value={extractedData.annFirstName} onChange={({ value }) => handleFieldChange('annFirstName', value)} size="fillParent" />
+                    <DxcTextInput label="Middle Name" value={extractedData.annMiddleName} onChange={({ value }) => handleFieldChange('annMiddleName', value)} size="fillParent" />
+                    <DxcTextInput label="Last Name" value={extractedData.annLastName} onChange={({ value }) => handleFieldChange('annLastName', value)} size="fillParent" />
+                  </DxcFlex>
+                  <DxcFlex gap="var(--spacing-gap-m)">
+                    <DxcTextInput label="Date of Birth" value={extractedData.annDOB} onChange={({ value }) => handleFieldChange('annDOB', value)} size="fillParent" />
+                    <div style={{ position: 'relative', width: '100%' }}>
+                      {lowConfidenceFields.includes('annSSN') && (
+                        <span className="field-indicator warning" title="Low AI Confidence">
+                          <span className="confidence-dot"></span>
+                        </span>
+                      )}
+                      <DxcTextInput label="Social Security Number" value={extractedData.annSSN} onChange={({ value }) => handleFieldChange('annSSN', value)} size="fillParent" />
+                    </div>
+                    <DxcTextInput label="Gender" value={extractedData.annGender} onChange={({ value }) => handleFieldChange('annGender', value)} size="fillParent" />
+                  </DxcFlex>
+                  <DxcFlex gap="var(--spacing-gap-m)">
+                    <DxcTextInput label="Relationship to Owner" value={extractedData.annRelationship} onChange={({ value }) => handleFieldChange('annRelationship', value)} size="fillParent" />
+                    <DxcTextInput label="Country of Citizenship" value={extractedData.annCountryCitizenship} onChange={({ value }) => handleFieldChange('annCountryCitizenship', value)} size="fillParent" />
+                    <DxcTextInput label="Country of Legal Residency" value={extractedData.annCountryResidency} onChange={({ value }) => handleFieldChange('annCountryResidency', value)} size="fillParent" />
+                  </DxcFlex>
+                  <DxcTextInput label="Street Address" value={extractedData.annAddress} onChange={({ value }) => handleFieldChange('annAddress', value)} size="fillParent" />
+                  <DxcFlex gap="var(--spacing-gap-m)">
+                    <DxcTextInput label="City" value={extractedData.annCity} onChange={({ value }) => handleFieldChange('annCity', value)} size="fillParent" />
+                    <DxcTextInput label="State" value={extractedData.annState} onChange={({ value }) => handleFieldChange('annState', value)} size="fillParent" />
+                    <DxcTextInput label="Zip" value={extractedData.annZip} onChange={({ value }) => handleFieldChange('annZip', value)} size="fillParent" />
+                  </DxcFlex>
+                  <DxcFlex gap="var(--spacing-gap-m)">
+                    <DxcTextInput label="Email Address" value={extractedData.annEmail} onChange={({ value }) => handleFieldChange('annEmail', value)} size="fillParent" />
+                    <DxcTextInput label="Phone Number" value={extractedData.annPhone} onChange={({ value }) => handleFieldChange('annPhone', value)} size="fillParent" placeholder="Not provided" />
+                  </DxcFlex>
+                </DxcFlex>
+              </div>
+            </div>
+
             {/* Beneficiary 1 */}
             <div className="form-section">
               <DxcTypography fontSize="var(--font-scale-03, 1rem)" fontWeight="font-weight-semibold" color="#333333">
@@ -713,6 +772,24 @@ const SubmissionIntake = () => {
                   <DxcTypography fontSize="var(--font-scale-02, 0.875rem)">No unresolved validation errors</DxcTypography>
                 </DxcFlex>
               </DxcFlex>
+            </div>
+          </div>
+
+          {/* Annuitant Information */}
+          <div className="review-card">
+            <div className="review-card-header">
+              <DxcTypography fontSize="var(--font-scale-03, 1rem)" fontWeight="font-weight-semibold" color="#333333">Annuitant Information</DxcTypography>
+            </div>
+            <div className="review-card-body">
+              <div className="review-row"><span className="review-label">Name</span><span className="review-value">{extractedData.annFirstName} {extractedData.annMiddleName} {extractedData.annLastName}</span></div>
+              <div className="review-row"><span className="review-label">Date of Birth</span><span className="review-value">{extractedData.annDOB}</span></div>
+              <div className="review-row"><span className="review-label">SSN</span><span className="review-value">{extractedData.annSSN}</span></div>
+              <div className="review-row"><span className="review-label">Gender</span><span className="review-value">{extractedData.annGender}</span></div>
+              <div className="review-row"><span className="review-label">Relationship to Owner</span><span className="review-value">{extractedData.annRelationship}</span></div>
+              <div className="review-row"><span className="review-label">Address</span><span className="review-value">{extractedData.annAddress}, {extractedData.annCity}, {extractedData.annState} {extractedData.annZip}</span></div>
+              <div className="review-row"><span className="review-label">Citizenship / Residency</span><span className="review-value">{extractedData.annCountryCitizenship} / {extractedData.annCountryResidency}</span></div>
+              <div className="review-row"><span className="review-label">Email</span><span className="review-value">{extractedData.annEmail}</span></div>
+              {extractedData.annPhone && <div className="review-row"><span className="review-label">Phone</span><span className="review-value">{extractedData.annPhone}</span></div>}
             </div>
           </div>
 
