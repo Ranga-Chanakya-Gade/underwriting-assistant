@@ -55,29 +55,32 @@ app.post(
 // ================================================================
 // ServiceNow Table API  →  /api/now/table/...
 // Path is passed as ?path= to preserve the full SN endpoint URL.
+// Uses raw body to avoid express.json() issues in Express 5.
 // ================================================================
 app.all(
   '/api/servicenow-api',
-  express.json(),
+  express.raw({ type: '*/*', limit: '10mb' }),
   async (req, res) => {
-    const path = req.query.path;
-    if (!path) return res.status(400).json({ error: 'Missing ?path= query param' });
+    const snPath = req.query.path;
+    if (!snPath) return res.status(400).json({ error: 'Missing ?path= query param' });
 
-    const hasBody = req.method !== 'GET' && req.method !== 'HEAD';
+    const hasBody = req.method !== 'GET' && req.method !== 'HEAD' && req.body?.length > 0;
     try {
-      const snRes = await fetch(`${SN_INSTANCE}${path}`, {
+      const snRes = await fetch(`${SN_INSTANCE}${snPath}`, {
         method:  req.method,
         headers: {
-          'Content-Type': 'application/json',
-          'Accept':       'application/json',
+          'Accept': 'application/json',
+          // Only include Content-Type when there is an actual body
+          ...(hasBody ? { 'Content-Type': 'application/json' } : {}),
           ...pickHeaders(req.headers, 'authorization'),
         },
-        ...(hasBody ? { body: JSON.stringify(req.body) } : {}),
+        ...(hasBody ? { body: req.body } : {}),
       });
       const text = await snRes.text();
       res.status(snRes.status).type('application/json').send(text);
     } catch (err) {
-      res.status(500).json({ error: err.message });
+      console.error('[servicenow-api]', err.message, err.cause?.message);
+      res.status(500).json({ error: err.message, cause: err.cause?.message });
     }
   },
 );
