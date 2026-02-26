@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import {
   DxcHeading,
   DxcFlex,
@@ -15,6 +15,7 @@ import { Document, Page, pdfjs } from 'react-pdf';
 import 'react-pdf/dist/Page/AnnotationLayer.css';
 import 'react-pdf/dist/Page/TextLayer.css';
 import DocumentUpload from '../shared/DocumentUpload';
+import { createSubmission, updateSubmission, SUBMISSION_TABLE, isConnected } from '../../services/servicenow';
 import './SubmissionIntake.css';
 
 // Configure PDF.js worker
@@ -60,7 +61,26 @@ const SubmissionIntake = () => {
   const [pageNumber, setPageNumber] = useState(1);
   const [scale, setScale] = useState(1.0);
 
-  const submissionId = 'ABCMOVI-01';
+  // ServiceNow sys_id of the draft submission record (created on mount)
+  const [snSysId, setSnSysId] = useState(null);
+  const [snSubmitting, setSnSubmitting] = useState(false);
+
+  // Display number for breadcrumb / UI (falls back to draft label)
+  const submissionId = snSysId ? snSysId : 'New Submission';
+
+  // Create a draft submission record in ServiceNow as soon as the component mounts
+  useEffect(() => {
+    if (!isConnected()) return;
+    createSubmission({
+      applicant_name: 'Draft',
+      status: 'new_submission',
+    })
+      .then(res => {
+        const id = res?.result?.sys_id;
+        if (id) setSnSysId(id);
+      })
+      .catch(err => console.error('[SubmissionIntake] draft creation failed:', err));
+  }, []);
 
   const validationSummary = useMemo(() => {
     const errorCount = Object.keys(validationErrors).length;
@@ -129,7 +149,41 @@ const SubmissionIntake = () => {
     }
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
+    setSnSubmitting(true);
+    try {
+      // Map form fields to actual ServiceNow table field names
+      const snPayload = {
+        applicant_name:       extractedData.namedInsured,
+        line_of_business:     extractedData.businessType,
+        years_in_business:    parseInt(extractedData.yearsInBusiness) || null,
+        coverage_type:        extractedData.coverageType,
+        effective_date:       extractedData.effectiveDate,
+        expiration_date:      extractedData.expirationDate,
+        fleet_size:           parseInt(extractedData.fleetSize) || null,
+        drivers_count:        parseInt(extractedData.driversCount) || null,
+        radius_of_operation:  extractedData.radiusOfOperation,
+        cargo_type:           extractedData.cargoType,
+        prior_carrier:        extractedData.priorCarrier,
+        prior_policy_number:  extractedData.priorPolicyNumber,
+        primary_state:        extractedData.state,
+        status:               'pending_review',
+      };
+
+      if (snSysId && isConnected()) {
+        // Update the draft record created on mount
+        await updateSubmission(snSysId, snPayload);
+      } else if (isConnected()) {
+        // Fallback: create new if draft was never created
+        const res = await createSubmission(snPayload);
+        const id = res?.result?.sys_id;
+        if (id) setSnSysId(id);
+      }
+    } catch (err) {
+      console.error('[SubmissionIntake] submit failed:', err);
+    } finally {
+      setSnSubmitting(false);
+    }
     setShowSuccessModal(true);
   };
 
@@ -195,7 +249,8 @@ const SubmissionIntake = () => {
         </DxcTypography>
 
         <DocumentUpload
-          submissionId={submissionId}
+          tableName={SUBMISSION_TABLE}
+          submissionId={snSysId}
           onUploadComplete={(data) => handleFileUpload(data.files)}
           onCancel={() => {}}
         />
@@ -270,7 +325,8 @@ const SubmissionIntake = () => {
         )}
 
         <DocumentUpload
-          submissionId={submissionId}
+          tableName={SUBMISSION_TABLE}
+          submissionId={snSysId}
           onUploadComplete={(data) => handleFileUpload(data.files, true)}
           onCancel={() => {}}
         />
