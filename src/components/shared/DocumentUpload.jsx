@@ -18,6 +18,7 @@ const DocumentUpload = ({ submissionId, tableName, onUploadComplete, onCancel })
   const [uploadSuccess, setUploadSuccess] = useState(false);
   const [uploadError, setUploadError] = useState('');
   const [progress, setProgress] = useState({ current: 0, total: 0 });
+  const [uploadPhase, setUploadPhase] = useState('');  // 'sn' | 'idp' | ''
   const fileInputRef = useRef(null);
 
   const documentTypeOptions = Object.entries(documentTypes).map(([key, value]) => ({
@@ -37,24 +38,14 @@ const DocumentUpload = ({ submissionId, tableName, onUploadComplete, onCancel })
 
     setUploading(true);
     setUploadError('');
+    setUploadPhase('');
     setProgress({ current: 0, total: selectedFiles.length });
 
     try {
-      // Step 1: IDP — upload & trigger extraction
-      const idpResults = await idpService.uploadAndProcessBatch(
-        selectedFiles,
-        submissionId,
-        (current, total) => setProgress({ current, total })
-      );
-
-      const idpFailures = idpResults.filter(r => !r.success);
-      if (idpFailures.length > 0) {
-        setUploadError(`IDP processing failed for: ${idpFailures.map(f => f.fileName).join(', ')}`);
-      }
-
-      // Step 2: ServiceNow Attachment API — attach files to the submission record
+      // Step 1: ServiceNow Attachment API — attach files to the submission record first
       let snResults = [];
       if (tableName && submissionId && isConnected()) {
+        setUploadPhase('sn');
         snResults = await Promise.all(
           selectedFiles.map(file =>
             uploadAttachment(file, tableName, submissionId)
@@ -66,11 +57,26 @@ const DocumentUpload = ({ submissionId, tableName, onUploadComplete, onCancel })
         const snFailures = snResults.filter(r => !r.success);
         if (snFailures.length > 0) {
           const msg = `ServiceNow attachment failed for: ${snFailures.map(f => f.fileName).join(', ')}`;
-          setUploadError(prev => prev ? `${prev}. ${msg}` : msg);
+          setUploadError(msg);
         }
       }
 
+      // Step 2: IDP — upload & trigger extraction
+      setUploadPhase('idp');
+      const idpResults = await idpService.uploadAndProcessBatch(
+        selectedFiles,
+        submissionId,
+        (current, total) => setProgress({ current, total })
+      );
+
+      const idpFailures = idpResults.filter(r => !r.success);
+      if (idpFailures.length > 0) {
+        const msg = `IDP processing failed for: ${idpFailures.map(f => f.fileName).join(', ')}`;
+        setUploadError(prev => prev ? `${prev}. ${msg}` : msg);
+      }
+
       setUploadSuccess(true);
+      setUploadPhase('');
 
       setTimeout(() => {
         if (onUploadComplete) {
@@ -89,6 +95,7 @@ const DocumentUpload = ({ submissionId, tableName, onUploadComplete, onCancel })
       }, 2000);
     } catch (error) {
       setUploadError(error.message);
+      setUploadPhase('');
     } finally {
       setUploading(false);
     }
@@ -138,13 +145,17 @@ const DocumentUpload = ({ submissionId, tableName, onUploadComplete, onCancel })
           />
         )}
 
-        {uploading && progress.total > 0 && (
+        {uploading && (
           <DxcFlex alignItems="center" gap="var(--spacing-gap-s)">
             <span className="material-icons" style={{ fontSize: '18px', color: '#0095FF', animation: 'spin 1s linear infinite' }}>
               sync
             </span>
             <DxcTypography fontSize="font-scale-02" color="#0095FF">
-              Processing {progress.current} of {progress.total} file(s)...
+              {uploadPhase === 'sn'
+                ? `Saving to ServiceNow (${selectedFiles.length} file${selectedFiles.length > 1 ? 's' : ''})...`
+                : uploadPhase === 'idp'
+                  ? `Sending to IDP for extraction (${progress.current} of ${progress.total})...`
+                  : 'Uploading...'}
             </DxcTypography>
           </DxcFlex>
         )}
