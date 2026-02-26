@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import {
   DxcFlex,
   DxcTypography,
@@ -18,6 +18,7 @@ const DocumentUpload = ({ submissionId, tableName, onUploadComplete, onCancel })
   const [uploadSuccess, setUploadSuccess] = useState(false);
   const [uploadError, setUploadError] = useState('');
   const [progress, setProgress] = useState({ current: 0, total: 0 });
+  const fileInputRef = useRef(null);
 
   const documentTypeOptions = Object.entries(documentTypes).map(([key, value]) => ({
     label: value,
@@ -161,10 +162,10 @@ const DocumentUpload = ({ submissionId, tableName, onUploadComplete, onCancel })
             cursor: 'pointer',
             transition: 'all 0.2s ease'
           }}
-          onClick={() => document.getElementById('file-input').click()}
+          onClick={() => fileInputRef.current?.click()}
         >
           <input
-            id="file-input"
+            ref={fileInputRef}
             type="file"
             multiple
             accept=".pdf,.doc,.docx,.xls,.xlsx,.jpg,.jpeg,.png"
@@ -259,13 +260,23 @@ const DocumentUpload = ({ submissionId, tableName, onUploadComplete, onCancel })
             disabled={uploading}
           />
           <DxcButton
-            label={uploading
-              ? (progress.total > 1 ? `Uploading ${progress.current}/${progress.total}...` : 'Uploading...')
-              : "Upload Documents"
+            label={
+              uploading
+                ? (progress.total > 1 ? `Uploading ${progress.current}/${progress.total}...` : 'Uploading...')
+                : selectedFiles.length === 0
+                  ? 'Select Files'
+                  : 'Upload Documents'
             }
-            icon={uploading ? "sync" : "cloud_upload"}
-            onClick={handleUpload}
-            disabled={selectedFiles.length === 0 || !documentType || uploading}
+            icon={uploading ? "sync" : selectedFiles.length === 0 ? "folder_open" : "cloud_upload"}
+            onClick={() => {
+              if (uploading) return;
+              if (selectedFiles.length === 0) {
+                fileInputRef.current?.click();
+              } else {
+                handleUpload();
+              }
+            }}
+            disabled={uploading}
           />
         </DxcFlex>
 
