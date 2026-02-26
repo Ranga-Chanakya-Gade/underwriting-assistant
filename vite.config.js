@@ -21,6 +21,12 @@ export default defineConfig({
           return url.searchParams.get('path') || '/';
         },
       },
+      // ServiceNow Attachment API proxy
+      '/api/servicenow-attachment': {
+        target: 'https://nextgenbpmnp1.service-now.com',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api\/servicenow-attachment/, '/api/now/attachment'),
+      },
       // IDP API proxy - avoids CORS in dev
       '/idp-api': {
         target: 'https://api.dev-1.hub-1.sai-dev.assure.dxc.com',
