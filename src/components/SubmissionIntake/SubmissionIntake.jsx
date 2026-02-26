@@ -100,6 +100,8 @@ const SubmissionIntake = () => {
 
   // ServiceNow sys_id of the draft submission record (created on mount)
   const [snSysId, setSnSysId] = useState(null);
+  // True while the SN draft record is still being created — blocks upload until ready
+  const [snCreating, setSnCreating] = useState(isConnected());
   const [snSubmitting, setSnSubmitting] = useState(false);
 
   // Display number for breadcrumb / UI (falls back to draft label)
@@ -116,7 +118,8 @@ const SubmissionIntake = () => {
         const id = res?.result?.sys_id;
         if (id) setSnSysId(id);
       })
-      .catch(err => console.error('[SubmissionIntake] draft creation failed:', err));
+      .catch(err => console.error('[SubmissionIntake] draft creation failed:', err))
+      .finally(() => setSnCreating(false));
   }, []);
 
   const validationSummary = useMemo(() => {
@@ -279,6 +282,7 @@ const SubmissionIntake = () => {
         <DocumentUpload
           tableName={SUBMISSION_TABLE}
           submissionId={snSysId}
+          awaitingRecord={snCreating}
           onUploadComplete={(data) => handleFileUpload(data.files)}
           onCancel={() => {}}
         />
@@ -355,6 +359,7 @@ const SubmissionIntake = () => {
         <DocumentUpload
           tableName={SUBMISSION_TABLE}
           submissionId={snSysId}
+          awaitingRecord={snCreating}
           onUploadComplete={(data) => handleFileUpload(data.files, true)}
           onCancel={() => {}}
         />
