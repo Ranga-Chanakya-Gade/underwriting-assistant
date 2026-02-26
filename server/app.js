@@ -61,8 +61,8 @@ app.all(
   '/api/servicenow-api',
   express.raw({ type: '*/*', limit: '10mb' }),
   async (req, res) => {
-    const snPath = req.query.path;
-    if (!snPath) return res.status(400).json({ error: 'Missing ?path= query param' });
+    const snPath = req.query.snpath;
+    if (!snPath) return res.status(400).json({ error: 'Missing ?snpath= query param' });
 
     const hasBody = req.method !== 'GET' && req.method !== 'HEAD' && req.body?.length > 0;
     try {

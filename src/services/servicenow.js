@@ -147,7 +147,7 @@ async function snFetch(path, options = {}) {
   let token = getStoredToken();
   if (!token) throw new Error('Not connected to ServiceNow');
 
-  const url = `/api/servicenow-api?path=${encodeURIComponent(path)}`;
+  const url = `/api/servicenow-api?snpath=${encodeURIComponent(path)}`;
 
   const res = await fetch(url, {
     ...options,
