@@ -8,6 +8,7 @@ import {
   DxcCheckbox,
   DxcInset,
 } from '@dxc-technology/halstack-react';
+import { loginWithPassword, fetchCurrentUser } from '../../services/servicenow';
 import './Login.css';
 
 const Login = ({ onLogin }) => {
@@ -17,44 +18,60 @@ const Login = ({ onLogin }) => {
     rememberMe: false,
   });
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const handleInputChange = (field, value) => {
     setFormData(prev => ({
       ...prev,
       [field]: value
     }));
-    setError(''); // Clear error when user starts typing
+    setError('');
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Basic validation
     if (!formData.userId || !formData.password) {
       setError('Please enter both User ID and Password');
       return;
     }
 
-    // Mock authentication - in real app, this would call ServiceNow API
-    // For demo, accept any credentials
-    const mockUser = {
-      userId: formData.userId,
-      name: 'Sarah Johnson',
-      email: 's.johnson@insurance.com',
-      domain: 'Commercial Lines', // Domain from ServiceNow domain separation
-      role: 'Underwriter',
-    };
+    setLoading(true);
+    setError('');
 
-    onLogin(mockUser);
+    try {
+      // Authenticate against ServiceNow using OAuth password grant
+      await loginWithPassword(formData.userId, formData.password);
+
+      // Fetch the user's profile from ServiceNow
+      let snUser = null;
+      try {
+        snUser = await fetchCurrentUser(formData.userId);
+      } catch {
+        // Non-fatal: fall back to username if profile fetch fails
+      }
+
+      const userData = {
+        userId: formData.userId,
+        name: snUser?.name || formData.userId,
+        email: snUser?.email || '',
+        role: snUser?.title || 'Underwriter',
+        domain: snUser?.department || 'Commercial Lines',
+      };
+
+      onLogin(userData);
+    } catch (err) {
+      setError(err.message || 'Login failed. Please check your credentials.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleForgotPassword = () => {
-    // In real app, this would navigate to password reset
     alert('Password reset functionality would be implemented here');
   };
 
   const handleCreateAccount = () => {
-    // In real app, this would navigate to account creation
     alert('Account creation would be handled by ServiceNow admin');
   };
 
@@ -88,10 +105,11 @@ const Login = ({ onLogin }) => {
             <DxcFlex direction="column" gap="var(--spacing-gap-m)">
               <DxcTextInput
                 label="User ID"
-                placeholder="Enter your User ID"
+                placeholder="Enter your ServiceNow User ID"
                 value={formData.userId}
                 onChange={({ value }) => handleInputChange('userId', value)}
                 size="fillParent"
+                disabled={loading}
               />
 
               <DxcTextInput
@@ -101,6 +119,7 @@ const Login = ({ onLogin }) => {
                 value={formData.password}
                 onChange={({ value }) => handleInputChange('password', value)}
                 size="fillParent"
+                disabled={loading}
               />
 
               {/* Remember Me and Forgot Password */}
@@ -109,11 +128,13 @@ const Login = ({ onLogin }) => {
                   label="Remember Me"
                   checked={formData.rememberMe}
                   onChange={(checked) => handleInputChange('rememberMe', checked)}
+                  disabled={loading}
                 />
                 <button
                   type="button"
                   onClick={handleForgotPassword}
                   className="forgot-password-link"
+                  disabled={loading}
                 >
                   Forgot Password?
                 </button>
@@ -121,10 +142,11 @@ const Login = ({ onLogin }) => {
 
               {/* Sign In Button */}
               <DxcButton
-                label="Sign In"
+                label={loading ? 'Signing in...' : 'Sign In'}
                 mode="primary"
                 type="submit"
                 size="fillParent"
+                disabled={loading}
               />
 
               {/* Create Account Button */}
@@ -133,6 +155,7 @@ const Login = ({ onLogin }) => {
                 mode="secondary"
                 onClick={handleCreateAccount}
                 size="fillParent"
+                disabled={loading}
               />
             </DxcFlex>
           </form>

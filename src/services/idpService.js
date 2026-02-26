@@ -75,7 +75,7 @@ class IDPService {
 
   async _fetchNewToken() {
     try {
-      const response = await fetch(`${this.authURL}?grant_type=client_credentials`, {
+      const response = await fetch(`/api/idp-auth?grant_type=client_credentials`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
@@ -114,7 +114,7 @@ class IDPService {
       const formData = new FormData();
       formData.append('file', file);
 
-      const response = await fetch(`${this.apiBaseURL}/idp/core/v1/ingestion/data`, {
+      const response = await fetch(`/api/idp/core/v1/ingestion/data`, {
         method: 'POST',
         headers: {
           'Accept': 'application/json',
@@ -173,7 +173,7 @@ class IDPService {
         },
       };
 
-      const response = await fetch(`${this.apiBaseURL}/idp/core/v1/ingestion/process`, {
+      const response = await fetch(`/api/idp/core/v1/ingestion/process`, {
         method: 'POST',
         headers: {
           'Content-Type': 'text/plain',
