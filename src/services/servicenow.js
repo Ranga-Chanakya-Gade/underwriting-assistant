@@ -199,6 +199,37 @@ export async function createDriverCode(payload) {
   return snFetch(tableURL('driver_code'), { method: 'POST', body: JSON.stringify(payload) });
 }
 
+// Attachment API
+export const SUBMISSION_TABLE = `${APP_PREFIX}_submission`;
+
+export async function uploadAttachment(file, tableName, tableSysId) {
+  const token = getStoredToken();
+  if (!token) throw new Error('Not connected to ServiceNow');
+
+  const params = new URLSearchParams({
+    table_name:   tableName,
+    table_sys_id: tableSysId,
+    file_name:    file.name,
+  });
+
+  const res = await fetch(`/api/servicenow-attachment/file?${params.toString()}`, {
+    method:  'POST',
+    headers: {
+      'Content-Type':  file.type || 'application/octet-stream',
+      'Accept':        'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+    body: file,
+  });
+
+  if (!res.ok) {
+    const body = await res.text();
+    throw new Error(`Attachment upload failed (${res.status}): ${body}`);
+  }
+
+  return res.json();
+}
+
 // 5. Documents
 export async function fetchDocuments(submissionSysId) {
   return snFetch(bySubmission('document', submissionSysId));
