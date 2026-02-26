@@ -4,21 +4,39 @@ import Dashboard from './components/Dashboard/Dashboard';
 import UnderwritingWorkbench from './components/UnderwritingWorkbench/UnderwritingWorkbench';
 import SubmissionIntake from './components/SubmissionIntake/SubmissionIntake';
 import Login from './components/Login/Login';
+import { isConnected, clearToken } from './services/servicenow';
 import './App.css';
 
+const USER_KEY = 'sn_user_profile';
+
+function restoreUser() {
+  try {
+    const raw = sessionStorage.getItem(USER_KEY);
+    return raw ? JSON.parse(raw) : null;
+  } catch { return null; }
+}
+
 function App() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [user, setUser] = useState(null);
+  // Restore session on mount — if SN token is still valid and user profile is cached,
+  // skip the login screen entirely.
+  const [isAuthenticated, setIsAuthenticated] = useState(() => {
+    if (!isConnected()) return false;
+    return !!restoreUser();
+  });
+  const [user, setUser] = useState(() => (isConnected() ? restoreUser() : null));
   const [currentView, setCurrentView] = useState('dashboard');
   const [selectedSubmission, setSelectedSubmission] = useState(null);
   const [sidenavExpanded, setSidenavExpanded] = useState(true);
 
   const handleLogin = (userData) => {
+    sessionStorage.setItem(USER_KEY, JSON.stringify(userData));
     setUser(userData);
     setIsAuthenticated(true);
   };
 
   const _handleLogout = () => {
+    sessionStorage.removeItem(USER_KEY);
+    clearToken();
     setUser(null);
     setIsAuthenticated(false);
     setCurrentView('dashboard');
