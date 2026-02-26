@@ -8,12 +8,15 @@ import {
   DxcInset,
 } from '@dxc-technology/halstack-react';
 import { documentTypes } from '../../data/mockDocuments';
+import idpService from '../../services/idpService';
 
 const DocumentUpload = ({ submissionId, onUploadComplete, onCancel }) => {
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [documentType, setDocumentType] = useState('');
   const [uploading, setUploading] = useState(false);
   const [uploadSuccess, setUploadSuccess] = useState(false);
+  const [uploadError, setUploadError] = useState('');
+  const [progress, setProgress] = useState({ current: 0, total: 0 });
 
   const documentTypeOptions = Object.entries(documentTypes).map(([key, value]) => ({
     label: value,
@@ -25,16 +28,29 @@ const DocumentUpload = ({ submissionId, onUploadComplete, onCancel }) => {
     setSelectedFiles(files);
   };
 
-  const handleUpload = () => {
+  const handleUpload = async () => {
     if (selectedFiles.length === 0 || !documentType) {
       return;
     }
 
     setUploading(true);
+    setUploadError('');
+    setProgress({ current: 0, total: selectedFiles.length });
 
-    // Simulate upload
-    setTimeout(() => {
-      setUploading(false);
+    try {
+      const results = await idpService.uploadAndProcessBatch(
+        selectedFiles,
+        submissionId,
+        (current, total) => setProgress({ current, total })
+      );
+
+      const failures = results.filter(r => !r.success);
+
+      if (failures.length > 0) {
+        const names = failures.map(f => f.fileName).join(', ');
+        setUploadError(`Failed to process: ${names}`);
+      }
+
       setUploadSuccess(true);
 
       setTimeout(() => {
@@ -42,14 +58,20 @@ const DocumentUpload = ({ submissionId, onUploadComplete, onCancel }) => {
           onUploadComplete({
             files: selectedFiles,
             documentType: documentTypes[documentType],
-            submissionId
+            submissionId,
+            idpResults: results,
           });
         }
         setUploadSuccess(false);
         setSelectedFiles([]);
         setDocumentType('');
+        setProgress({ current: 0, total: 0 });
       }, 2000);
-    }, 2000);
+    } catch (error) {
+      setUploadError(error.message);
+    } finally {
+      setUploading(false);
+    }
   };
 
   const formatFileSize = (bytes) => {
@@ -77,11 +99,34 @@ const DocumentUpload = ({ submissionId, onUploadComplete, onCancel }) => {
             children={
               <DxcInset space="var(--spacing-padding-s)">
                 <DxcTypography fontSize="font-scale-03">
-                  Document(s) uploaded successfully! Processing will begin automatically.
+                  Document(s) uploaded successfully! IDP processing has been triggered.
                 </DxcTypography>
               </DxcInset>
             }
           />
+        )}
+
+        {uploadError && (
+          <DxcAlert
+            type="error"
+            mode="inline"
+            children={
+              <DxcInset space="var(--spacing-padding-s)">
+                <DxcTypography fontSize="font-scale-03">{uploadError}</DxcTypography>
+              </DxcInset>
+            }
+          />
+        )}
+
+        {uploading && progress.total > 0 && (
+          <DxcFlex alignItems="center" gap="var(--spacing-gap-s)">
+            <span className="material-icons" style={{ fontSize: '18px', color: '#0095FF', animation: 'spin 1s linear infinite' }}>
+              sync
+            </span>
+            <DxcTypography fontSize="font-scale-02" color="#0095FF">
+              Processing {progress.current} of {progress.total} file(s)...
+            </DxcTypography>
+          </DxcFlex>
         )}
 
         {/* Upload Area */}
@@ -195,7 +240,10 @@ const DocumentUpload = ({ submissionId, onUploadComplete, onCancel }) => {
             disabled={uploading}
           />
           <DxcButton
-            label={uploading ? "Uploading..." : "Upload Documents"}
+            label={uploading
+              ? (progress.total > 1 ? `Uploading ${progress.current}/${progress.total}...` : 'Uploading...')
+              : "Upload Documents"
+            }
             icon={uploading ? "sync" : "cloud_upload"}
             onClick={handleUpload}
             disabled={selectedFiles.length === 0 || !documentType || uploading}
