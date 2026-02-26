@@ -9,19 +9,20 @@ dotenv.config({ path: join(__dirname, '..', '.env') });
 
 const app = express();
 
-const SN_INSTANCE  = process.env.VITE_SN_INSTANCE    || 'https://nextgenbpmnp1.service-now.com';
-const IDP_AUTH_URL = process.env.VITE_IDP_AUTH_URL;
-const IDP_API_BASE = process.env.VITE_IDP_API_BASE_URL;
+const SN_INSTANCE    = process.env.VITE_SN_INSTANCE    || 'https://nextgenbpmnp1.service-now.com';
+const IDP_AUTH_URL   = process.env.VITE_IDP_AUTH_URL;
+const IDP_API_BASE   = process.env.VITE_IDP_API_BASE_URL;
+// Derive production origin from VITE_SN_REDIRECT_URI (strip trailing slash)
+const PROD_ORIGIN    = process.env.VITE_SN_REDIRECT_URI?.replace(/\/$/, '');
 
 // ── CORS ───────────────────────────────────────────────────────────
-app.use(cors({
-  origin: [
-    'http://localhost:5173',
-    'http://localhost:4173',
-    'https://underwriting-assistant-chi.vercel.app',
-  ],
-  credentials: true,
-}));
+const allowedOrigins = [
+  'http://localhost:5173',
+  'http://localhost:4173',
+  PROD_ORIGIN,
+].filter(Boolean);
+
+app.use(cors({ origin: allowedOrigins, credentials: true }));
 
 // ── Helper: forward only safe headers upstream ─────────────────────
 function pickHeaders(reqHeaders, ...keys) {
