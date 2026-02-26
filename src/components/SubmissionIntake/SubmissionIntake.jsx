@@ -26,31 +26,52 @@ const SubmissionIntake = () => {
   const [uploadedForms, setUploadedForms] = useState([]);
   const [supportDocs, setSupportDocs] = useState([]);
   const [extractedData, setExtractedData] = useState({
-    namedInsured: 'ABC Moving Services, Inc.',
-    mailingAddress: '33 Inner Belt Rd',
-    city: 'Somerville',
-    state: 'MA',
-    zipCode: '02143',
-    businessType: 'Moving & Storage',
-    yearsInBusiness: '46',
-    coverageType: 'Business Auto',
-    effectiveDate: '2026-01-01',
-    expirationDate: '2027-01-01',
-    limitsOfLiability: '$1,000,000 Combined Single Limit',
-    fleetSize: '26',
-    vehicleTypes: 'Vans (20), Trucks (6)',
-    driversCount: '51',
-    radiusOfOperation: 'Mostly Local',
-    cargoType: 'Moving - Computer firms, hospitals, professional offices',
-    priorCarrier: 'MAPFRE Insurance Group',
-    priorPolicyNumber: 'Renewal',
-    claimsLast3Years: 'See attached loss runs',
-    totalLossAmount: 'See attached loss runs',
+    // Beneficiary 1 – Primary
+    ben1FirstName: 'Daniel',
+    ben1MiddleName: 'Thomas',
+    ben1LastName: 'Robinson',
+    ben1BenType: 'Primary',
+    ben1Percentage: '100',
+    ben1SSN: '611-73-9042',
+    ben1DOB: '03/11/1980',
+    ben1Address: '1427 Willow Creek Dr',
+    ben1City: 'Charlotte',
+    ben1State: 'NC',
+    ben1Zip: '28277',
+    ben1Relationship: 'Spouse',
+    ben1Phone: '704.555.2811',
+    // Beneficiary 2 – Contingent
+    ben2FirstName: 'Olivia',
+    ben2MiddleName: 'Grace',
+    ben2LastName: 'Robinson',
+    ben2BenType: 'Contingent',
+    ben2Percentage: '100',
+    ben2SSN: '623-92-1184',
+    ben2DOB: '04/02/2010',
+    ben2Address: '1427 Willow Creek Dr',
+    ben2City: 'Charlotte',
+    ben2State: 'NC',
+    ben2Zip: '28277',
+    ben2Relationship: 'Daughter',
+    ben2Phone: '704.555.2811',
+    // Plan Type
+    planType: 'Non-Qualified',
+    // Replacements
+    hasExistingPolicies: 'No',
+    willReplacePolicy: 'No',
+    // Initial Purchase Payment
+    initialPurchaseAmount: '$75,000',
+    paymentType: 'Payment/Contribution',
+    // Benefit Riders
+    livingBenefitRider: 'FlexChoice Access Level (GLWB)',
+    deathBenefitRider: '',
+    // Purchase Payment Allocation
+    allocationBloomAA60: '50',
+    allocationBlackRockGlobal: '30',
+    allocationJPMorgan: '20',
   });
-  const [validationErrors, setValidationErrors] = useState({
-    numberOfEmployees: 'Value may be inconsistent - form shows 67 employees but driver list shows 51 drivers',
-  });
-  const [lowConfidenceFields, setLowConfidenceFields] = useState(['businessDescription', 'totalLossAmount']);
+  const [validationErrors, setValidationErrors] = useState({});
+  const [lowConfidenceFields, setLowConfidenceFields] = useState(['ben1SSN', 'ben2SSN']);
   const [isProcessing, setIsProcessing] = useState(false);
   const [showProcessingBanner, setShowProcessingBanner] = useState(true);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
@@ -154,20 +175,11 @@ const SubmissionIntake = () => {
     try {
       // Map form fields to actual ServiceNow table field names
       const snPayload = {
-        applicant_name:       extractedData.namedInsured,
-        line_of_business:     extractedData.businessType,
-        years_in_business:    parseInt(extractedData.yearsInBusiness) || null,
-        coverage_type:        extractedData.coverageType,
-        effective_date:       extractedData.effectiveDate,
-        expiration_date:      extractedData.expirationDate,
-        fleet_size:           parseInt(extractedData.fleetSize) || null,
-        drivers_count:        parseInt(extractedData.driversCount) || null,
-        radius_of_operation:  extractedData.radiusOfOperation,
-        cargo_type:           extractedData.cargoType,
-        prior_carrier:        extractedData.priorCarrier,
-        prior_policy_number:  extractedData.priorPolicyNumber,
-        primary_state:        extractedData.state,
-        status:               'pending_review',
+        applicant_name:   `${extractedData.ben1FirstName} ${extractedData.ben1LastName}`,
+        line_of_business: extractedData.planType,
+        coverage_type:    extractedData.paymentType,
+        primary_state:    extractedData.ben1State,
+        status:           'pending_review',
       };
 
       if (snSysId && isConnected()) {
@@ -456,97 +468,137 @@ const SubmissionIntake = () => {
         {/* Side-by-side layout when View Source is active */}
         <div className={showViewSource ? 'extraction-container side-by-side' : 'extraction-container'}>
           <div className="extraction-fields">
-            {/* Named Insured Information */}
-            <div className="form-section">
-              <DxcTypography fontSize="var(--font-scale-03, 1rem)" fontWeight="font-weight-semibold" color="#333333">
-                Named Insured Information
-              </DxcTypography>
-              <div style={{ marginTop: 'var(--spacing-gap-m)' }}>
-                <DxcFlex direction="column" gap="var(--spacing-gap-m)">
-                  <DxcTextInput label="Named Insured" value={extractedData.namedInsured} onChange={({ value }) => handleFieldChange('namedInsured', value)} size="fillParent" />
-                  <DxcTextInput label="Mailing Address" value={extractedData.mailingAddress} onChange={({ value }) => handleFieldChange('mailingAddress', value)} size="fillParent" />
-                  <DxcFlex gap="var(--spacing-gap-m)">
-                    <DxcTextInput label="City" value={extractedData.city} onChange={({ value }) => handleFieldChange('city', value)} size="fillParent" />
-                    <DxcTextInput label="State" value={extractedData.state} onChange={({ value }) => handleFieldChange('state', value)} size="fillParent" />
-                    <div style={{ position: 'relative', width: '100%' }}>
-                      {validationErrors.zipCode && (
-                        <span className="field-indicator error" title="Invalid Zip Code">
-                          <span className="material-icons" style={{ fontSize: '16px' }}>error</span>
-                        </span>
-                      )}
-                      <DxcTextInput label="Zip Code" value={extractedData.zipCode} onChange={({ value }) => handleFieldChange('zipCode', value)} size="fillParent" error={validationErrors.zipCode} />
-                    </div>
-                  </DxcFlex>
-                  <DxcFlex gap="var(--spacing-gap-m)">
-                    <DxcTextInput label="Business Type" value={extractedData.businessType} onChange={({ value }) => handleFieldChange('businessType', value)} size="fillParent" />
-                    <DxcTextInput label="Years in Business" value={extractedData.yearsInBusiness} onChange={({ value }) => handleFieldChange('yearsInBusiness', value)} size="fillParent" />
-                  </DxcFlex>
-                </DxcFlex>
-              </div>
-            </div>
 
-            {/* Coverage Information */}
+            {/* Beneficiary 1 */}
             <div className="form-section">
               <DxcTypography fontSize="var(--font-scale-03, 1rem)" fontWeight="font-weight-semibold" color="#333333">
-                Coverage Information
-              </DxcTypography>
-              <div style={{ marginTop: 'var(--spacing-gap-m)' }}>
-                <DxcFlex direction="column" gap="var(--spacing-gap-m)">
-                  <DxcTextInput label="Coverage Type" value={extractedData.coverageType} onChange={({ value }) => handleFieldChange('coverageType', value)} size="fillParent" />
-                  <DxcFlex gap="var(--spacing-gap-m)">
-                    <DxcTextInput label="Effective Date" type="date" value={extractedData.effectiveDate} onChange={({ value }) => handleFieldChange('effectiveDate', value)} size="fillParent" />
-                    <DxcTextInput label="Expiration Date" type="date" value={extractedData.expirationDate} onChange={({ value }) => handleFieldChange('expirationDate', value)} size="fillParent" />
-                  </DxcFlex>
-                  <DxcTextInput label="Limits of Liability" value={extractedData.limitsOfLiability} onChange={({ value }) => handleFieldChange('limitsOfLiability', value)} size="fillParent" />
-                </DxcFlex>
-              </div>
-            </div>
-
-            {/* Fleet Information */}
-            <div className="form-section">
-              <DxcTypography fontSize="var(--font-scale-03, 1rem)" fontWeight="font-weight-semibold" color="#333333">
-                Fleet Information
+                Beneficiary 1 — Primary &nbsp;
+                <span style={{ fontWeight: 'normal', color: 'var(--color-fg-neutral-medium)' }}>{extractedData.ben1Percentage}%</span>
               </DxcTypography>
               <div style={{ marginTop: 'var(--spacing-gap-m)' }}>
                 <DxcFlex direction="column" gap="var(--spacing-gap-m)">
                   <DxcFlex gap="var(--spacing-gap-m)">
-                    <DxcTextInput label="Fleet Size" value={extractedData.fleetSize} onChange={({ value }) => handleFieldChange('fleetSize', value)} size="fillParent" />
-                    <DxcTextInput label="Number of Drivers" value={extractedData.driversCount} onChange={({ value }) => handleFieldChange('driversCount', value)} size="fillParent" />
+                    <DxcTextInput label="First Name" value={extractedData.ben1FirstName} onChange={({ value }) => handleFieldChange('ben1FirstName', value)} size="fillParent" />
+                    <DxcTextInput label="Middle Name" value={extractedData.ben1MiddleName} onChange={({ value }) => handleFieldChange('ben1MiddleName', value)} size="fillParent" />
+                    <DxcTextInput label="Last Name" value={extractedData.ben1LastName} onChange={({ value }) => handleFieldChange('ben1LastName', value)} size="fillParent" />
                   </DxcFlex>
-                  <DxcTextInput label="Vehicle Types" value={extractedData.vehicleTypes} onChange={({ value }) => handleFieldChange('vehicleTypes', value)} size="fillParent" />
-                  <DxcFlex gap="var(--spacing-gap-m)">
-                    <DxcTextInput label="Radius of Operation" value={extractedData.radiusOfOperation} onChange={({ value }) => handleFieldChange('radiusOfOperation', value)} size="fillParent" />
-                    <DxcTextInput label="Cargo Type" value={extractedData.cargoType} onChange={({ value }) => handleFieldChange('cargoType', value)} size="fillParent" />
-                  </DxcFlex>
-                </DxcFlex>
-              </div>
-            </div>
-
-            {/* Loss History */}
-            <div className="form-section">
-              <DxcTypography fontSize="var(--font-scale-03, 1rem)" fontWeight="font-weight-semibold" color="#333333">
-                Loss History
-              </DxcTypography>
-              <div style={{ marginTop: 'var(--spacing-gap-m)' }}>
-                <DxcFlex direction="column" gap="var(--spacing-gap-m)">
                   <DxcFlex gap="var(--spacing-gap-m)">
                     <div style={{ position: 'relative', width: '100%' }}>
-                      {lowConfidenceFields.includes('priorCarrier') && (
+                      {lowConfidenceFields.includes('ben1SSN') && (
                         <span className="field-indicator warning" title="Low AI Confidence">
                           <span className="confidence-dot"></span>
                         </span>
                       )}
-                      <DxcTextInput label="Prior Carrier" value={extractedData.priorCarrier} onChange={({ value }) => handleFieldChange('priorCarrier', value)} size="fillParent" />
+                      <DxcTextInput label="SSN/TIN" value={extractedData.ben1SSN} onChange={({ value }) => handleFieldChange('ben1SSN', value)} size="fillParent" />
                     </div>
-                    <DxcTextInput label="Prior Policy Number" value={extractedData.priorPolicyNumber} onChange={({ value }) => handleFieldChange('priorPolicyNumber', value)} size="fillParent" />
+                    <DxcTextInput label="Date of Birth" value={extractedData.ben1DOB} onChange={({ value }) => handleFieldChange('ben1DOB', value)} size="fillParent" />
+                    <DxcTextInput label="Relationship to Owner" value={extractedData.ben1Relationship} onChange={({ value }) => handleFieldChange('ben1Relationship', value)} size="fillParent" />
                   </DxcFlex>
+                  <DxcTextInput label="Street Address" value={extractedData.ben1Address} onChange={({ value }) => handleFieldChange('ben1Address', value)} size="fillParent" />
                   <DxcFlex gap="var(--spacing-gap-m)">
-                    <DxcTextInput label="Claims in Last 3 Years" value={extractedData.claimsLast3Years} onChange={({ value }) => handleFieldChange('claimsLast3Years', value)} size="fillParent" />
-                    <DxcTextInput label="Total Loss Amount" value={extractedData.totalLossAmount} onChange={({ value }) => handleFieldChange('totalLossAmount', value)} size="fillParent" />
+                    <DxcTextInput label="City" value={extractedData.ben1City} onChange={({ value }) => handleFieldChange('ben1City', value)} size="fillParent" />
+                    <DxcTextInput label="State" value={extractedData.ben1State} onChange={({ value }) => handleFieldChange('ben1State', value)} size="fillParent" />
+                    <DxcTextInput label="Zip" value={extractedData.ben1Zip} onChange={({ value }) => handleFieldChange('ben1Zip', value)} size="fillParent" />
+                    <DxcTextInput label="Phone" value={extractedData.ben1Phone} onChange={({ value }) => handleFieldChange('ben1Phone', value)} size="fillParent" />
                   </DxcFlex>
                 </DxcFlex>
               </div>
             </div>
+
+            {/* Beneficiary 2 */}
+            <div className="form-section">
+              <DxcTypography fontSize="var(--font-scale-03, 1rem)" fontWeight="font-weight-semibold" color="#333333">
+                Beneficiary 2 — Contingent &nbsp;
+                <span style={{ fontWeight: 'normal', color: 'var(--color-fg-neutral-medium)' }}>{extractedData.ben2Percentage}%</span>
+              </DxcTypography>
+              <div style={{ marginTop: 'var(--spacing-gap-m)' }}>
+                <DxcFlex direction="column" gap="var(--spacing-gap-m)">
+                  <DxcFlex gap="var(--spacing-gap-m)">
+                    <DxcTextInput label="First Name" value={extractedData.ben2FirstName} onChange={({ value }) => handleFieldChange('ben2FirstName', value)} size="fillParent" />
+                    <DxcTextInput label="Middle Name" value={extractedData.ben2MiddleName} onChange={({ value }) => handleFieldChange('ben2MiddleName', value)} size="fillParent" />
+                    <DxcTextInput label="Last Name" value={extractedData.ben2LastName} onChange={({ value }) => handleFieldChange('ben2LastName', value)} size="fillParent" />
+                  </DxcFlex>
+                  <DxcFlex gap="var(--spacing-gap-m)">
+                    <div style={{ position: 'relative', width: '100%' }}>
+                      {lowConfidenceFields.includes('ben2SSN') && (
+                        <span className="field-indicator warning" title="Low AI Confidence">
+                          <span className="confidence-dot"></span>
+                        </span>
+                      )}
+                      <DxcTextInput label="SSN/TIN" value={extractedData.ben2SSN} onChange={({ value }) => handleFieldChange('ben2SSN', value)} size="fillParent" />
+                    </div>
+                    <DxcTextInput label="Date of Birth" value={extractedData.ben2DOB} onChange={({ value }) => handleFieldChange('ben2DOB', value)} size="fillParent" />
+                    <DxcTextInput label="Relationship to Owner" value={extractedData.ben2Relationship} onChange={({ value }) => handleFieldChange('ben2Relationship', value)} size="fillParent" />
+                  </DxcFlex>
+                  <DxcTextInput label="Street Address" value={extractedData.ben2Address} onChange={({ value }) => handleFieldChange('ben2Address', value)} size="fillParent" />
+                  <DxcFlex gap="var(--spacing-gap-m)">
+                    <DxcTextInput label="City" value={extractedData.ben2City} onChange={({ value }) => handleFieldChange('ben2City', value)} size="fillParent" />
+                    <DxcTextInput label="State" value={extractedData.ben2State} onChange={({ value }) => handleFieldChange('ben2State', value)} size="fillParent" />
+                    <DxcTextInput label="Zip" value={extractedData.ben2Zip} onChange={({ value }) => handleFieldChange('ben2Zip', value)} size="fillParent" />
+                    <DxcTextInput label="Phone" value={extractedData.ben2Phone} onChange={({ value }) => handleFieldChange('ben2Phone', value)} size="fillParent" />
+                  </DxcFlex>
+                </DxcFlex>
+              </div>
+            </div>
+
+            {/* Plan Type & Replacements */}
+            <div className="form-section">
+              <DxcTypography fontSize="var(--font-scale-03, 1rem)" fontWeight="font-weight-semibold" color="#333333">
+                Plan Type &amp; Replacements
+              </DxcTypography>
+              <div style={{ marginTop: 'var(--spacing-gap-m)' }}>
+                <DxcFlex direction="column" gap="var(--spacing-gap-m)">
+                  <DxcTextInput label="Plan Type" value={extractedData.planType} onChange={({ value }) => handleFieldChange('planType', value)} size="fillParent" />
+                  <DxcFlex gap="var(--spacing-gap-m)">
+                    <DxcTextInput label="Existing life insurance / annuity contracts?" value={extractedData.hasExistingPolicies} onChange={({ value }) => handleFieldChange('hasExistingPolicies', value)} size="fillParent" />
+                    <DxcTextInput label="Will annuity replace existing policy?" value={extractedData.willReplacePolicy} onChange={({ value }) => handleFieldChange('willReplacePolicy', value)} size="fillParent" />
+                  </DxcFlex>
+                </DxcFlex>
+              </div>
+            </div>
+
+            {/* Initial Purchase Payment */}
+            <div className="form-section">
+              <DxcTypography fontSize="var(--font-scale-03, 1rem)" fontWeight="font-weight-semibold" color="#333333">
+                Initial Purchase Payment
+              </DxcTypography>
+              <div style={{ marginTop: 'var(--spacing-gap-m)' }}>
+                <DxcFlex gap="var(--spacing-gap-m)">
+                  <DxcTextInput label="Amount" value={extractedData.initialPurchaseAmount} onChange={({ value }) => handleFieldChange('initialPurchaseAmount', value)} size="fillParent" />
+                  <DxcTextInput label="Payment Type" value={extractedData.paymentType} onChange={({ value }) => handleFieldChange('paymentType', value)} size="fillParent" />
+                </DxcFlex>
+              </div>
+            </div>
+
+            {/* Benefit Riders */}
+            <div className="form-section">
+              <DxcTypography fontSize="var(--font-scale-03, 1rem)" fontWeight="font-weight-semibold" color="#333333">
+                Benefit Riders
+              </DxcTypography>
+              <div style={{ marginTop: 'var(--spacing-gap-m)' }}>
+                <DxcFlex direction="column" gap="var(--spacing-gap-m)">
+                  <DxcTextInput label="Living Benefit Rider (GLWB)" value={extractedData.livingBenefitRider} onChange={({ value }) => handleFieldChange('livingBenefitRider', value)} size="fillParent" />
+                  <DxcTextInput label="Death Benefit Rider" value={extractedData.deathBenefitRider} onChange={({ value }) => handleFieldChange('deathBenefitRider', value)} size="fillParent" placeholder="None selected" />
+                </DxcFlex>
+              </div>
+            </div>
+
+            {/* Purchase Payment Allocation */}
+            <div className="form-section">
+              <DxcTypography fontSize="var(--font-scale-03, 1rem)" fontWeight="font-weight-semibold" color="#333333">
+                Purchase Payment Allocation
+              </DxcTypography>
+              <div style={{ marginTop: 'var(--spacing-gap-m)' }}>
+                <DxcFlex direction="column" gap="var(--spacing-gap-m)">
+                  <DxcFlex gap="var(--spacing-gap-m)" alignItems="center">
+                    <DxcTextInput label="Bloom Asset Allocation 60 Portfolio (%)" value={extractedData.allocationBloomAA60} onChange={({ value }) => handleFieldChange('allocationBloomAA60', value)} size="fillParent" />
+                    <DxcTextInput label="BlackRock Global Allocation V.I. Fund (%)" value={extractedData.allocationBlackRockGlobal} onChange={({ value }) => handleFieldChange('allocationBlackRockGlobal', value)} size="fillParent" />
+                    <DxcTextInput label="JPMorgan Global Active Allocation (%)" value={extractedData.allocationJPMorgan} onChange={({ value }) => handleFieldChange('allocationJPMorgan', value)} size="fillParent" />
+                  </DxcFlex>
+                </DxcFlex>
+              </div>
+            </div>
+
           </div>
 
           {/* Document Viewer - shown when View Source is active */}
@@ -622,7 +674,7 @@ const SubmissionIntake = () => {
   const renderStep4 = () => {
     const hasErrors = validationSummary.errorCount > 0;
     const hasDocs = uploadedForms.length > 0;
-    const allFieldsFilled = extractedData.namedInsured && extractedData.effectiveDate && extractedData.coverageType;
+    const allFieldsFilled = extractedData.ben1FirstName && extractedData.ben1LastName && extractedData.planType;
 
     return (
       <div className="step-content-container">
@@ -664,56 +716,70 @@ const SubmissionIntake = () => {
             </div>
           </div>
 
-          {/* Named Insured Information */}
+          {/* Beneficiary 1 */}
           <div className="review-card">
             <div className="review-card-header">
-              <DxcTypography fontSize="var(--font-scale-03, 1rem)" fontWeight="font-weight-semibold" color="#333333">Named Insured Information</DxcTypography>
+              <DxcTypography fontSize="var(--font-scale-03, 1rem)" fontWeight="font-weight-semibold" color="#333333">Beneficiary 1 — Primary ({extractedData.ben1Percentage}%)</DxcTypography>
             </div>
             <div className="review-card-body">
-              <div className="review-row"><span className="review-label">Named Insured</span><span className="review-value">{extractedData.namedInsured}</span></div>
-              <div className="review-row"><span className="review-label">Address</span><span className="review-value">{extractedData.mailingAddress}, {extractedData.city}, {extractedData.state} {extractedData.zipCode}</span></div>
-              <div className="review-row"><span className="review-label">Business Type</span><span className="review-value">{extractedData.businessType}</span></div>
-              <div className="review-row"><span className="review-label">Years in Business</span><span className="review-value">{extractedData.yearsInBusiness}</span></div>
+              <div className="review-row"><span className="review-label">Name</span><span className="review-value">{extractedData.ben1FirstName} {extractedData.ben1MiddleName} {extractedData.ben1LastName}</span></div>
+              <div className="review-row"><span className="review-label">SSN/TIN</span><span className="review-value">{extractedData.ben1SSN}</span></div>
+              <div className="review-row"><span className="review-label">Date of Birth</span><span className="review-value">{extractedData.ben1DOB}</span></div>
+              <div className="review-row"><span className="review-label">Relationship</span><span className="review-value">{extractedData.ben1Relationship}</span></div>
+              <div className="review-row"><span className="review-label">Address</span><span className="review-value">{extractedData.ben1Address}, {extractedData.ben1City}, {extractedData.ben1State} {extractedData.ben1Zip}</span></div>
+              <div className="review-row"><span className="review-label">Phone</span><span className="review-value">{extractedData.ben1Phone}</span></div>
             </div>
           </div>
 
-          {/* Coverage Information */}
+          {/* Beneficiary 2 */}
           <div className="review-card">
             <div className="review-card-header">
-              <DxcTypography fontSize="var(--font-scale-03, 1rem)" fontWeight="font-weight-semibold" color="#333333">Coverage Information</DxcTypography>
+              <DxcTypography fontSize="var(--font-scale-03, 1rem)" fontWeight="font-weight-semibold" color="#333333">Beneficiary 2 — Contingent ({extractedData.ben2Percentage}%)</DxcTypography>
             </div>
             <div className="review-card-body">
-              <div className="review-row"><span className="review-label">Coverage Type</span><span className="review-value">{extractedData.coverageType}</span></div>
-              <div className="review-row"><span className="review-label">Effective Date</span><span className="review-value">{extractedData.effectiveDate}</span></div>
-              <div className="review-row"><span className="review-label">Expiration Date</span><span className="review-value">{extractedData.expirationDate}</span></div>
-              <div className="review-row"><span className="review-label">Limits of Liability</span><span className="review-value">{extractedData.limitsOfLiability}</span></div>
+              <div className="review-row"><span className="review-label">Name</span><span className="review-value">{extractedData.ben2FirstName} {extractedData.ben2MiddleName} {extractedData.ben2LastName}</span></div>
+              <div className="review-row"><span className="review-label">SSN/TIN</span><span className="review-value">{extractedData.ben2SSN}</span></div>
+              <div className="review-row"><span className="review-label">Date of Birth</span><span className="review-value">{extractedData.ben2DOB}</span></div>
+              <div className="review-row"><span className="review-label">Relationship</span><span className="review-value">{extractedData.ben2Relationship}</span></div>
+              <div className="review-row"><span className="review-label">Address</span><span className="review-value">{extractedData.ben2Address}, {extractedData.ben2City}, {extractedData.ben2State} {extractedData.ben2Zip}</span></div>
+              <div className="review-row"><span className="review-label">Phone</span><span className="review-value">{extractedData.ben2Phone}</span></div>
             </div>
           </div>
 
-          {/* Fleet Information */}
+          {/* Plan Type & Replacements */}
           <div className="review-card">
             <div className="review-card-header">
-              <DxcTypography fontSize="var(--font-scale-03, 1rem)" fontWeight="font-weight-semibold" color="#333333">Fleet Information</DxcTypography>
+              <DxcTypography fontSize="var(--font-scale-03, 1rem)" fontWeight="font-weight-semibold" color="#333333">Plan Type &amp; Replacements</DxcTypography>
             </div>
             <div className="review-card-body">
-              <div className="review-row"><span className="review-label">Fleet Size</span><span className="review-value">{extractedData.fleetSize}</span></div>
-              <div className="review-row"><span className="review-label">Number of Drivers</span><span className="review-value">{extractedData.driversCount}</span></div>
-              <div className="review-row"><span className="review-label">Vehicle Types</span><span className="review-value">{extractedData.vehicleTypes}</span></div>
-              <div className="review-row"><span className="review-label">Radius of Operation</span><span className="review-value">{extractedData.radiusOfOperation}</span></div>
-              <div className="review-row"><span className="review-label">Cargo Type</span><span className="review-value">{extractedData.cargoType}</span></div>
+              <div className="review-row"><span className="review-label">Plan Type</span><span className="review-value">{extractedData.planType}</span></div>
+              <div className="review-row"><span className="review-label">Existing policies/annuities?</span><span className="review-value">{extractedData.hasExistingPolicies}</span></div>
+              <div className="review-row"><span className="review-label">Will replace existing policy?</span><span className="review-value">{extractedData.willReplacePolicy}</span></div>
             </div>
           </div>
 
-          {/* Loss History */}
+          {/* Initial Purchase Payment */}
           <div className="review-card">
             <div className="review-card-header">
-              <DxcTypography fontSize="var(--font-scale-03, 1rem)" fontWeight="font-weight-semibold" color="#333333">Loss History</DxcTypography>
+              <DxcTypography fontSize="var(--font-scale-03, 1rem)" fontWeight="font-weight-semibold" color="#333333">Initial Purchase Payment</DxcTypography>
             </div>
             <div className="review-card-body">
-              <div className="review-row"><span className="review-label">Prior Carrier</span><span className="review-value">{extractedData.priorCarrier}</span></div>
-              <div className="review-row"><span className="review-label">Prior Policy Number</span><span className="review-value">{extractedData.priorPolicyNumber}</span></div>
-              <div className="review-row"><span className="review-label">Claims in Last 3 Years</span><span className="review-value">{extractedData.claimsLast3Years}</span></div>
-              <div className="review-row"><span className="review-label">Total Loss Amount</span><span className="review-value">{extractedData.totalLossAmount}</span></div>
+              <div className="review-row"><span className="review-label">Amount</span><span className="review-value">{extractedData.initialPurchaseAmount}</span></div>
+              <div className="review-row"><span className="review-label">Payment Type</span><span className="review-value">{extractedData.paymentType}</span></div>
+            </div>
+          </div>
+
+          {/* Benefit Riders & Allocation */}
+          <div className="review-card">
+            <div className="review-card-header">
+              <DxcTypography fontSize="var(--font-scale-03, 1rem)" fontWeight="font-weight-semibold" color="#333333">Benefit Riders &amp; Allocation</DxcTypography>
+            </div>
+            <div className="review-card-body">
+              <div className="review-row"><span className="review-label">Living Benefit Rider</span><span className="review-value">{extractedData.livingBenefitRider}</span></div>
+              {extractedData.deathBenefitRider && <div className="review-row"><span className="review-label">Death Benefit Rider</span><span className="review-value">{extractedData.deathBenefitRider}</span></div>}
+              <div className="review-row"><span className="review-label">Bloom Asset Allocation 60</span><span className="review-value">{extractedData.allocationBloomAA60}%</span></div>
+              <div className="review-row"><span className="review-label">BlackRock Global Allocation V.I.</span><span className="review-value">{extractedData.allocationBlackRockGlobal}%</span></div>
+              <div className="review-row"><span className="review-label">JPMorgan Global Active Allocation</span><span className="review-value">{extractedData.allocationJPMorgan}%</span></div>
             </div>
           </div>
 
