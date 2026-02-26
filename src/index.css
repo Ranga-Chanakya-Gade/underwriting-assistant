@@ -1,63 +1,122 @@
-/* Global Styles for Underwriting Assistant */
+/* ============================================================================
+   BLOOM INSURANCE — GLOBAL BASE STYLES
+   NOTE: CSS design tokens are defined in src/theme/bloom-theme.css
+   which is imported before this file in main.jsx.
+   ============================================================================ */
 
-* {
+/* CSS Reset & Normalization */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
+  min-width: 0; /* prevent flex/grid children from overflowing */
 }
 
-/* ===================================
-   BLUE THEME OVERRIDES (NO PURPLE)
-   Overrides Halstack's default purple theme with Bloom Insurance blue
-   =================================== */
 :root {
-  /* Primary Colors - Blue instead of Purple */
-  --color-fg-primary-base: #1B75BB !important;
-  --color-fg-primary-lightest: #E5F1FA !important;
-  --color-fg-primary-lighter: #B3D9F0 !important;
-  --color-fg-primary-light: #66AED9 !important;
-  --color-fg-primary-medium: #1B75BB !important;
-  --color-fg-primary-strong: #155E96 !important;
-  --color-fg-primary-stronger: #104771 !important;
-  --color-fg-primary-strongest: #0A2F4C !important;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
 
-  --color-bg-primary-base: #1B75BB !important;
-  --color-bg-primary-lightest: #E5F1FA !important;
-  --color-bg-primary-lighter: #B3D9F0 !important;
-  --color-bg-primary-light: #66AED9 !important;
-  --color-bg-primary-medium: #1B75BB !important;
-  --color-bg-primary-strong: #155E96 !important;
-  --color-bg-primary-stronger: #104771 !important;
-  --color-bg-primary-strongest: #0A2F4C !important;
-
-  --color-border-primary-base: #1B75BB !important;
-  --color-border-primary-lightest: #E5F1FA !important;
-  --color-border-primary-lighter: #B3D9F0 !important;
-  --color-border-primary-light: #66AED9 !important;
-  --color-border-primary-medium: #1B75BB !important;
-  --color-border-primary-strong: #155E96 !important;
-  --color-border-primary-stronger: #104771 !important;
-  --color-border-primary-strongest: #0A2F4C !important;
-
-  /* Info Colors - Bright Blue */
-  --color-fg-info-base: #00ADEE !important;
-  --color-bg-info-base: #00ADEE !important;
-  --color-border-info-base: #00ADEE !important;
-
-  /* Accent Colors - Keep existing */
-  --color-fg-success-base: #37A526 !important;
-  --color-fg-warning-base: #FFA500 !important;
-  --color-fg-error-base: #D02E2E !important;
+html {
+  height: 100%;
+  scroll-behavior: smooth;
 }
 
 body {
-  font-family: 'Open Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 1.5;
+  color: #2C2C2C;
+  background-color: #F8F9FA;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  margin: 0;
-  padding: 0;
-  background-color: var(--color-bg-secondary-lightest);
+}
+
+#root {
+  width: 100%;
+  min-height: 100vh;
+}
+
+/* Typography — Roboto Slab for all headings */
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Roboto Slab', serif;
+  font-weight: 700;
+  line-height: 1.25;
+  color: #2C2C2C;
+}
+
+p {
+  margin-bottom: 1rem;
+}
+
+a {
+  color: #1B75BB;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+a:hover {
+  color: #00ADEE;
+  text-decoration: underline;
+}
+
+a:focus-visible {
+  outline: 2px solid #1B75BB;
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Buttons base */
+button {
+  font-family: 'Roboto', sans-serif;
+  font-weight: 500;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+button:focus-visible {
+  outline: 2px solid #1B75BB;
+  outline-offset: 2px;
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Form elements */
+input,
+textarea,
+select {
+  font-family: 'Roboto', sans-serif;
+  font-size: 16px;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  outline: 2px solid #1B75BB;
+  outline-offset: 0;
+}
+
+ul, ol {
+  list-style: none;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
 }
 
 code {
@@ -81,20 +140,63 @@ code {
   -webkit-font-smoothing: antialiased;
 }
 
-/* Override any unwanted defaults */
-#root {
-  width: 100%;
-  min-height: 100vh;
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
 }
 
-/* Force blue on any Halstack components that might use purple */
-button[mode="primary"],
-.dxc-button-primary,
-[class*="primary"] {
-  --color-primary: #1B75BB !important;
+::-webkit-scrollbar-track {
+  background: #F8F9FA;
 }
 
-/* Override any purple hex codes if they exist */
+::-webkit-scrollbar-thumb {
+  background: #C4C4C4;
+  border-radius: 6px;
+  border: 3px solid #F8F9FA;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #808285;
+}
+
+/* Text selection */
+::selection {
+  background-color: #1B75BB;
+  color: #FFFFFF;
+}
+
+::-moz-selection {
+  background-color: #1B75BB;
+  color: #FFFFFF;
+}
+
+/* Accessibility */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* Focus visible for keyboard navigation */
+*:focus-visible {
+  outline: 2px solid #1B75BB;
+  outline-offset: 2px;
+}
+
+/* ===================================
+   HALSTACK PURPLE → BLOOM BLUE OVERRIDE
+   --color-primary-50 through -900 are what Halstack v16 actually reads.
+   bloom-theme.css sets these in :root. The lines below catch any
+   remaining hardcoded purple that might slip through inline styles.
+   =================================== */
+
 *[style*="#6F2C91"],
 *[style*="#5F249F"],
 *[style*="rgb(111, 44, 145)"],
@@ -102,4 +204,35 @@ button[mode="primary"],
   color: #1B75BB !important;
   background-color: #1B75BB !important;
   border-color: #1B75BB !important;
+}
+
+/* Print styles */
+@media print {
+  body { background: #FFFFFF; }
+  a[href]::after { content: " (" attr(href) ")"; }
+}
+
+/* Responsive typography */
+@media (max-width: 768px) {
+  body { font-size: 14px; }
+  h1   { font-size: 1.875rem; }
+  h2   { font-size: 1.5rem; }
+  h3   { font-size: 1.25rem; }
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+  button, a { outline: 2px solid currentColor; }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

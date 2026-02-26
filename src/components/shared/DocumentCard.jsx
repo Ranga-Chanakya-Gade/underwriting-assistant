@@ -27,7 +27,7 @@ const DocumentCard = ({ document, onView, onDownload, compact = false }) => {
         <DxcFlex justifyContent="space-between" alignItems="flex-start">
           <DxcFlex direction="column" gap="var(--spacing-gap-xs)" grow={1}>
             <DxcFlex gap="var(--spacing-gap-s)" alignItems="center">
-              <span className="material-icons" style={{ color: '#0095FF', fontSize: '20px' }}>
+              <span className="material-icons" style={{ color: '#1B75BB', fontSize: '20px' }}>
                 description
               </span>
               <DxcTypography fontSize="font-scale-03" fontWeight="font-weight-semibold">
@@ -135,7 +135,7 @@ const DocumentCard = ({ document, onView, onDownload, compact = false }) => {
           >
             <DxcFlex gap="var(--spacing-gap-l)" alignItems="center">
               <DxcFlex gap="var(--spacing-gap-xs)" alignItems="center">
-                <span className="material-icons" style={{ fontSize: '16px', color: '#24A148' }}>
+                <span className="material-icons" style={{ fontSize: '16px', color: '#37A526' }}>
                   check_circle
                 </span>
                 <DxcTypography fontSize="12px" color="var(--color-fg-neutral-dark)">
@@ -143,7 +143,7 @@ const DocumentCard = ({ document, onView, onDownload, compact = false }) => {
                 </DxcTypography>
               </DxcFlex>
               <DxcFlex gap="var(--spacing-gap-xs)" alignItems="center">
-                <span className="material-icons" style={{ fontSize: '16px', color: '#24A148' }}>
+                <span className="material-icons" style={{ fontSize: '16px', color: '#37A526' }}>
                   verified
                 </span>
                 <DxcTypography fontSize="12px" color="var(--color-fg-neutral-dark)">
@@ -152,10 +152,10 @@ const DocumentCard = ({ document, onView, onDownload, compact = false }) => {
               </DxcFlex>
               {document.extractionResults.flaggedFields > 0 && (
                 <DxcFlex gap="var(--spacing-gap-xs)" alignItems="center">
-                  <span className="material-icons" style={{ fontSize: '16px', color: '#FF6B00' }}>
+                  <span className="material-icons" style={{ fontSize: '16px', color: '#F6921E' }}>
                     flag
                   </span>
-                  <DxcTypography fontSize="12px" color="#FF6B00">
+                  <DxcTypography fontSize="12px" color="#F6921E">
                     {document.extractionResults.flaggedFields} flagged for review
                   </DxcTypography>
                 </DxcFlex>

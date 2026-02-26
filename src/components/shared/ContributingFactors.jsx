@@ -13,15 +13,15 @@ const ContributingFactors = ({ factors }) => {
   const getImpactColor = (impact) => {
     switch (impact) {
       case 'Very High':
-        return '#D0021B';
+        return '#D02E2E';
       case 'High':
-        return '#FF6B00';
+        return '#F6921E';
       case 'Moderate':
-        return '#FF6B00';
+        return '#F6921E';
       case 'Low':
-        return '#0095FF';
+        return '#1B75BB';
       case 'Very Low':
-        return '#24A148';
+        return '#37A526';
       default:
         return 'var(--color-fg-neutral-dark)';
     }
@@ -108,7 +108,7 @@ const ContributingFactors = ({ factors }) => {
                     <DxcTypography
                       fontSize="font-scale-04"
                       fontWeight="font-weight-semibold"
-                      color={getImpactColor(factor.impact)}
+                      color="#000000"
                     >
                       {factor.impactValue > 0 ? '+' : ''}{factor.impactValue}
                     </DxcTypography>
@@ -146,7 +146,7 @@ const ContributingFactors = ({ factors }) => {
 
                   {factor.recommendation && (
                     <DxcFlex gap="var(--spacing-gap-xs)" alignItems="flex-start">
-                      <span className="material-icons" style={{ fontSize: '16px', color: '#0095FF' }}>
+                      <span className="material-icons" style={{ fontSize: '16px', color: '#1B75BB' }}>
                         lightbulb
                       </span>
                       <DxcTypography fontSize="12px" color="var(--color-fg-neutral-dark)">
@@ -167,7 +167,7 @@ const ContributingFactors = ({ factors }) => {
           padding: 'var(--spacing-padding-m)',
           backgroundColor: 'var(--color-bg-info-lightest)',
           borderRadius: 'var(--border-radius-s)',
-          borderLeft: '3px solid #0095FF'
+          borderLeft: '3px solid #1B75BB'
         }}
       >
         <DxcFlex gap="var(--spacing-gap-l)" wrap="wrap">
@@ -175,7 +175,7 @@ const ContributingFactors = ({ factors }) => {
             <DxcTypography fontSize="12px" color="var(--color-fg-neutral-stronger)">
               Total Factors Analyzed
             </DxcTypography>
-            <DxcTypography fontSize="font-scale-04" fontWeight="font-weight-semibold" color="#0095FF">
+            <DxcTypography fontSize="font-scale-04" fontWeight="font-weight-semibold" color="#000000">
               {factors.length}
             </DxcTypography>
           </DxcFlex>
@@ -183,7 +183,7 @@ const ContributingFactors = ({ factors }) => {
             <DxcTypography fontSize="12px" color="var(--color-fg-neutral-stronger)">
               Positive Factors
             </DxcTypography>
-            <DxcTypography fontSize="font-scale-04" fontWeight="font-weight-semibold" color="#24A148">
+            <DxcTypography fontSize="font-scale-04" fontWeight="font-weight-semibold" color="#000000">
               {factors.filter(f => f.impactValue > 0).length}
             </DxcTypography>
           </DxcFlex>
@@ -191,7 +191,7 @@ const ContributingFactors = ({ factors }) => {
             <DxcTypography fontSize="12px" color="var(--color-fg-neutral-stronger)">
               Negative Factors
             </DxcTypography>
-            <DxcTypography fontSize="font-scale-04" fontWeight="font-weight-semibold" color="#D0021B">
+            <DxcTypography fontSize="font-scale-04" fontWeight="font-weight-semibold" color="#000000">
               {factors.filter(f => f.impactValue < 0).length}
             </DxcTypography>
           </DxcFlex>
@@ -202,7 +202,7 @@ const ContributingFactors = ({ factors }) => {
             <DxcTypography
               fontSize="font-scale-04"
               fontWeight="font-weight-semibold"
-              color={factors.reduce((sum, f) => sum + f.impactValue, 0) >= 0 ? '#24A148' : '#D0021B'}
+              color="#000000"
             >
               {factors.reduce((sum, f) => sum + f.impactValue, 0) > 0 ? '+' : ''}
               {factors.reduce((sum, f) => sum + f.impactValue, 0)}

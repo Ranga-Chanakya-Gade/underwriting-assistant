@@ -63,7 +63,7 @@ const TaskList = ({ tasks, showCompleted = true, compact = false }) => {
         <>
           <DxcFlex justifyContent="space-between" alignItems="center">
             <DxcHeading level={4} text="Tasks" />
-            <DxcTypography fontSize="font-scale-03" color="#0095FF">
+            <DxcTypography fontSize="font-scale-03" color="#000000">
               {taskStats.completed} of {taskStats.total} Complete
             </DxcTypography>
           </DxcFlex>
@@ -88,7 +88,7 @@ const TaskList = ({ tasks, showCompleted = true, compact = false }) => {
               }}
             >
               <DxcFlex direction="column" gap="var(--spacing-gap-xs)" alignItems="center">
-                <DxcTypography fontSize="font-scale-04" fontWeight="font-weight-semibold" color="#0095FF">
+                <DxcTypography fontSize="font-scale-04" fontWeight="font-weight-semibold" color="#000000">
                   {taskStats.inProgress}
                 </DxcTypography>
                 <DxcTypography fontSize="12px" color="var(--color-fg-neutral-dark)">
@@ -125,10 +125,10 @@ const TaskList = ({ tasks, showCompleted = true, compact = false }) => {
                 }}
               >
                 <DxcFlex direction="column" gap="var(--spacing-gap-xs)" alignItems="center">
-                  <DxcTypography fontSize="font-scale-04" fontWeight="font-weight-semibold" color="#D0021B">
+                  <DxcTypography fontSize="font-scale-04" fontWeight="font-weight-semibold" color="#000000">
                     {taskStats.overdue}
                   </DxcTypography>
-                  <DxcTypography fontSize="12px" color="#D0021B">
+                  <DxcTypography fontSize="12px" color="#D02E2E">
                     Overdue
                   </DxcTypography>
                 </DxcFlex>
@@ -168,7 +168,7 @@ const TaskList = ({ tasks, showCompleted = true, compact = false }) => {
                   )}
                   <DxcFlex direction="column" gap="var(--spacing-gap-xs)" grow={1}>
                     <DxcFlex gap="var(--spacing-gap-s)" alignItems="center" wrap="wrap">
-                      <span className="material-icons" style={{ fontSize: '20px', color: '#0095FF' }}>
+                      <span className="material-icons" style={{ fontSize: '20px', color: '#1B75BB' }}>
                         {getCategoryIcon(task.category)}
                       </span>
                       <DxcTypography
@@ -234,10 +234,10 @@ const TaskList = ({ tasks, showCompleted = true, compact = false }) => {
                   )}
                   {task.completedDate && (
                     <DxcFlex gap="var(--spacing-gap-xs)" alignItems="center">
-                      <span className="material-icons" style={{ fontSize: '16px', color: '#24A148' }}>
+                      <span className="material-icons" style={{ fontSize: '16px', color: '#37A526' }}>
                         check_circle
                       </span>
-                      <DxcTypography fontSize="12px" color="#24A148">
+                      <DxcTypography fontSize="12px" color="#000000">
                         Completed: {task.completedDate}
                       </DxcTypography>
                     </DxcFlex>

@@ -262,11 +262,11 @@ const UnderwritingWorkbench = ({ submission }) => {
                       <DxcFlex gap="var(--spacing-gap-m)">
                         <div style={{ flex:1, padding:'12px', background:'#F5F5F5', borderRadius:'6px', textAlign:'center' }}>
                           <DxcTypography fontSize="font-scale-01" color="#808285">Manual Rate</DxcTypography>
-                          <DxcTypography fontSize="font-scale-04" fontWeight="font-weight-bold" color="#333">${Number(val(aiRec.manual_rate)||0).toLocaleString()}</DxcTypography>
+                          <DxcTypography fontSize="font-scale-04" fontWeight="font-weight-bold" color="#000000">${Number(val(aiRec.manual_rate)||0).toLocaleString()}</DxcTypography>
                         </div>
                         <div style={{ flex:1, padding:'12px', background:'#E5F1FA', borderRadius:'6px', textAlign:'center' }}>
                           <DxcTypography fontSize="font-scale-01" color="#1B75BB">AI Suggested Rate</DxcTypography>
-                          <DxcTypography fontSize="font-scale-04" fontWeight="font-weight-bold" color="#1B75BB">${Number(val(aiRec.ai_suggested_rate)||0).toLocaleString()}</DxcTypography>
+                          <DxcTypography fontSize="font-scale-04" fontWeight="font-weight-bold" color="#000000">${Number(val(aiRec.ai_suggested_rate)||0).toLocaleString()}</DxcTypography>
                         </div>
                       </DxcFlex>
                     )}
@@ -383,15 +383,15 @@ const UnderwritingWorkbench = ({ submission }) => {
 
                     {/* Referral */}
                     {referral && (bool(referral.required) || referral.required===true) && (
-                      <div style={{ padding:'var(--spacing-padding-m)', backgroundColor:'#FFF3E0', borderRadius:'var(--border-radius-s)', borderLeft:'4px solid #FFA500' }}>
+                      <div style={{ padding:'var(--spacing-padding-m)', backgroundColor:'#FFE8CC', borderRadius:'var(--border-radius-s)', borderLeft:'4px solid #F6921E' }}>
                         <DxcFlex gap="var(--spacing-gap-s)" alignItems="flex-start">
-                          <span className="material-icons" style={{ color:'#FFA500', fontSize:'20px' }}>forward_to_inbox</span>
+                          <span className="material-icons" style={{ color:'#F6921E', fontSize:'20px' }}>forward_to_inbox</span>
                           <div style={{ flex:1 }}>
-                            <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold" color="#FFA500">Referral Required</DxcTypography>
+                            <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold" color="#F6921E">Referral Required</DxcTypography>
                             <div style={{ marginTop:'8px', display:'grid', gridTemplateColumns:'repeat(auto-fit, minmax(150px, 1fr))', gap:'var(--spacing-gap-m)' }}>
-                              <div><DxcTypography fontSize="font-scale-01" color="#666666">Refer To</DxcTypography><DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold" color="#333">{val(referral.refer_to)||referral.referTo||'—'}</DxcTypography></div>
-                              <div><DxcTypography fontSize="font-scale-01" color="#666666">Reason</DxcTypography><DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold" color="#333">{val(referral.reason)||'—'}</DxcTypography></div>
-                              <div><DxcTypography fontSize="font-scale-01" color="#666666">Guideline Ref</DxcTypography><DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold" color="#333">{val(referral.guideline_reference)||referral.guidelineReference||'—'}</DxcTypography></div>
+                              <div><DxcTypography fontSize="font-scale-01" color="#666666">Refer To</DxcTypography><DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold" color="#000000">{val(referral.refer_to)||referral.referTo||'—'}</DxcTypography></div>
+                              <div><DxcTypography fontSize="font-scale-01" color="#666666">Reason</DxcTypography><DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold" color="#000000">{val(referral.reason)||'—'}</DxcTypography></div>
+                              <div><DxcTypography fontSize="font-scale-01" color="#666666">Guideline Ref</DxcTypography><DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold" color="#000000">{val(referral.guideline_reference)||referral.guidelineReference||'—'}</DxcTypography></div>
                             </div>
                           </div>
                         </DxcFlex>
@@ -1179,7 +1179,7 @@ const UnderwritingWorkbench = ({ submission }) => {
                       <DxcTypography fontSize="font-scale-03" fontWeight="font-weight-semibold" color="#333333">
                         Total Annual Premium
                       </DxcTypography>
-                      <DxcTypography fontSize="font-scale-04" fontWeight="font-weight-bold" color="#1B75BB">
+                      <DxcTypography fontSize="font-scale-04" fontWeight="font-weight-bold" color="#000000">
                         $11,145.00
                       </DxcTypography>
                     </DxcFlex>
@@ -1597,7 +1597,7 @@ const UnderwritingWorkbench = ({ submission }) => {
         <DxcDialog onCloseClick={() => setShowValidationModal(false)}>
           <div style={{ padding: 'var(--spacing-padding-l)', minWidth: '500px' }}>
             <DxcFlex direction="column" gap="var(--spacing-gap-m)">
-              <DxcTypography fontSize="font-scale-04" fontWeight="font-weight-bold" color="#D0021B">
+              <DxcTypography fontSize="font-scale-04" fontWeight="font-weight-bold" color="#D02E2E">
                 Submission Failed
               </DxcTypography>
               <DxcTypography fontSize="font-scale-02" color="#333333">
@@ -1606,7 +1606,7 @@ const UnderwritingWorkbench = ({ submission }) => {
               <DxcFlex direction="column" gap="var(--spacing-gap-s)">
                 {validationErrors.map((error, index) => (
                   <DxcFlex key={index} alignItems="center" gap="var(--spacing-gap-s)">
-                    <span className="material-icons-outlined" style={{ color: '#D0021B', fontSize: '20px' }}>error_outline</span>
+                    <span className="material-icons-outlined" style={{ color: '#D02E2E', fontSize: '20px' }}>error_outline</span>
                     <DxcTypography fontSize="font-scale-02" color="#333333">{error}</DxcTypography>
                   </DxcFlex>
                 ))}

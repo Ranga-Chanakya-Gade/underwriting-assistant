@@ -2,7 +2,7 @@
 .dashboard-wrapper {
   padding: 24px;
   width: 100%;
-  background-color: #f5f5f5;
+  background-color: #F8F9FA;
   box-sizing: border-box;
   min-width: 0; /* prevent flex children from overflowing */
 }
@@ -442,7 +442,7 @@
   transform: translateY(-3px) translateX(2px) !important;
   box-shadow: 0 8px 16px rgba(27, 117, 187, 0.2) !important;
   border-left-color: #155A93 !important; /* BLOOM: Darker blue on hover */
-  background: linear-gradient(to right, #FFFFFF 0%, #F8FCFF 100%) !important;
+  background: #FFFFFF !important;
 }
 
 /* Active/Click effect */
@@ -451,30 +451,9 @@
   box-shadow: 0 4px 8px rgba(27, 117, 187, 0.15) !important;
 }
 
-/* Add subtle gradient shimmer effect */
-[class*="DxcContainer"]::before {
-  content: '' !important;
-  position: absolute !important;
-  top: 0 !important;
-  left: 0 !important;
-  right: 0 !important;
-  bottom: 0 !important;
-  background: linear-gradient(45deg, transparent 30%, rgba(27, 117, 187, 0.03) 50%, transparent 70%) !important;
-  border-radius: 8px !important;
-  pointer-events: none !important;
-  opacity: 0 !important;
-  transition: opacity 0.5s ease !important;
-  z-index: 1 !important;
-}
-
-[class*="DxcContainer"]:hover::before {
-  opacity: 1 !important;
-}
-
-/* Ensure content is above the shimmer effect */
+/* Ensure content is above pseudo-element layer */
 [class*="DxcContainer"] > * {
   position: relative !important;
-  z-index: 2 !important;
 }
 
 /* Submission ID links - Make them stand out like clickable links */

@@ -196,7 +196,7 @@
 
 .icon-btn-small:hover {
   background-color: var(--color-bg-neutral-light);
-  color: #D0021B;
+  color: #D02E2E;
 }
 
 .icon-btn-small .material-icons {
@@ -231,7 +231,7 @@
 .alert-error {
   background-color: #FFF8F8; /* BLOOM: More subtle pink - toned down from #FFF0F0 */
   border: 1px solid #F5C6CB; /* BLOOM: Softer border color */
-  border-left: 3px solid #D0021B; /* BLOOM: Reduced from 4px to 3px */
+  border-left: 3px solid #D02E2E; /* BLOOM: Reduced from 4px to 3px */
   border-radius: var(--border-radius-m);
   padding: var(--spacing-padding-m);
   transition: all 0.2s ease; /* BLOOM: Smooth transition */
@@ -279,7 +279,7 @@
 }
 
 .field-indicator.error {
-  color: #D0021B;
+  color: #D02E2E;
 }
 
 .field-indicator.warning {
@@ -359,8 +359,8 @@
 
 /* ─── Step 4: Submission Checklist ──────────────────────────────────────── */
 .submission-checklist {
-  background: linear-gradient(135deg, #F0F8FF 0%, #F8F9FA 100%); /* BLOOM: Subtle gradient */
-  border: 2px solid #1B75BB; /* BLOOM: Thicker border */
+  background-color: #F8F9FA;
+  border: 2px solid #1B75BB;
   border-radius: var(--border-radius-m);
   padding: var(--spacing-padding-l);
   position: relative;
@@ -369,17 +369,7 @@
   box-shadow: 0 4px 16px rgba(27, 117, 187, 0.15); /* BLOOM: Blue shadow */
 }
 
-/* BLOOM: Decorative corner accent */
-.submission-checklist::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  right: 0;
-  width: 100px;
-  height: 100px;
-  background: linear-gradient(135deg, transparent 50%, rgba(27, 117, 187, 0.08) 50%);
-  pointer-events: none;
-}
+/* Decorative corner accent removed — gradients prohibited */
 
 /* BLOOM: Checklist item hover effect with enhanced interactivity */
 .submission-checklist [class*="DxcFlex"]:hover {
@@ -391,9 +381,9 @@
   transform: translateX(8px); /* BLOOM: Slide right on hover */
 }
 
-/* BLOOM: Success state - all items complete */
+/* Success state - all items complete */
 .submission-checklist.all-complete {
-  background: linear-gradient(135deg, #E8F5E9 0%, #F0F8FF 100%);
+  background-color: #37A52608;
   border-color: #37A526;
   box-shadow: 0 4px 20px rgba(55, 165, 38, 0.2);
 }
@@ -426,7 +416,7 @@
 }
 
 .review-card-header {
-  background: linear-gradient(135deg, #1B75BB 0%, #155A93 100%); /* BLOOM: Blue gradient */
+  background-color: #1B75BB;
   padding: var(--spacing-padding-m) var(--spacing-padding-l);
   border-bottom: none;
   position: relative;
@@ -440,7 +430,7 @@
 
 .review-card-body {
   padding: var(--spacing-padding-l);
-  background: linear-gradient(to bottom, #FFFFFF 0%, #FAFBFC 100%); /* BLOOM: Subtle gradient */
+  background-color: #FFFFFF;
 }
 
 .review-row {
@@ -479,8 +469,8 @@
 
 /* ─── Step 4: Action Bar ────────────────────────────────────────────────── */
 .action-bar {
-  background: linear-gradient(135deg, #F0F8FF 0%, #FFFFFF 50%, #F8F9FA 100%); /* BLOOM: Enhanced gradient */
-  border: 3px solid #1B75BB; /* BLOOM: Thicker border */
+  background-color: #FFFFFF;
+  border: 2px solid #1B75BB;
   border-radius: var(--border-radius-m);
   padding: var(--spacing-padding-l) var(--spacing-padding-xl);
   box-shadow: 0 -4px 20px rgba(27, 117, 187, 0.2), 0 4px 16px rgba(27, 117, 187, 0.1); /* BLOOM: Double shadow for depth */
@@ -488,23 +478,7 @@
   animation: fadeInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) 0.7s both; /* BLOOM: Delayed entrance */
 }
 
-/* BLOOM: Accent glow effect */
-.action-bar::before {
-  content: '';
-  position: absolute;
-  top: -3px;
-  left: 0;
-  right: 0;
-  height: 3px;
-  background: linear-gradient(90deg, #1B75BB 0%, #37A526 50%, #1B75BB 100%);
-  animation: glowPulse 3s ease-in-out infinite;
-}
-
-/* BLOOM: Glow pulse animation */
-@keyframes glowPulse {
-  0%, 100% { opacity: 0.5; }
-  50% { opacity: 1; }
-}
+/* Gradient accent removed — gradients prohibited */
 
 /* ─── Zoom Controls ─────────────────────────────────────────────────────── */
 .zoom-btn {
@@ -563,7 +537,7 @@
   width: 80px;
   height: 80px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #37A526 0%, #2E8B1F 100%);
+  background-color: #37A526;
   color: white;
   font-size: 24px;
   font-weight: bold;

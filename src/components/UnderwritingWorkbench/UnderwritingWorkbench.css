@@ -60,7 +60,7 @@
 }
 
 .risk-row-error {
-  border-left-color: #D0021B;
+  border-left-color: #D02E2E;
   background-color: #FFF0F0;
 }
 
@@ -92,27 +92,27 @@
 }
 
 .risk-severity-high {
-  background-color: #FFF8E1;
-  color: #F6921E;
-  border: 1px solid #F6921E;
+  background-color: #F6921E20;
+  color: #000000;
+  border: 1px solid #F6921E4D;
 }
 
 .risk-severity-critical {
-  background-color: #FFF0F0;
-  color: #D0021B;
-  border: 1px solid #D0021B;
+  background-color: #D02E2E20;
+  color: #000000;
+  border: 1px solid #D02E2E4D;
 }
 
 .risk-severity-medium {
-  background-color: #E8F4FD;
-  color: #1B75BB;
-  border: 1px solid #1B75BB;
+  background-color: #1B75BB20;
+  color: #000000;
+  border: 1px solid #1B75BB4D;
 }
 
 .risk-severity-low {
-  background-color: #E8F5E9;
-  color: #37A526;
-  border: 1px solid #37A526;
+  background-color: #37A52620;
+  color: #000000;
+  border: 1px solid #37A5264D;
 }
 
 /* ─── Data Tables ───────────────────────────────────────────────────────── */
@@ -182,28 +182,28 @@
 }
 
 .status-pill.status-available {
-  background-color: #E8F5E9;
-  color: #37A526;
-  border: 1px solid #37A526;
+  background-color: #37A52620;
+  color: #000000;
+  border: 1px solid #37A5264D;
 }
 
 .status-pill.status-processing {
-  background-color: #FFF8E1;
-  color: #F6921E;
-  border: 1px solid #F6921E;
+  background-color: #E8DE2320;
+  color: #000000;
+  border: 1px solid #E8DE234D;
 }
 
 .status-pill.status-order {
-  background-color: #E8F4FD;
-  color: #1B75BB;
-  border: 1px solid #1B75BB;
+  background-color: #1B75BB20;
+  color: #000000;
+  border: 1px solid #1B75BB4D;
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
 .status-pill.status-order:hover {
   background-color: #1B75BB;
-  color: white;
+  color: #ffffff;
 }
 
 /* ─── Upload Section ───────────────────────────────────────────────────── */
