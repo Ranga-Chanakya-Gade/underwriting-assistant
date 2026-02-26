@@ -88,7 +88,7 @@ app.all(
 // ServiceNow Attachment  →  /api/now/attachment/...
 // ================================================================
 app.all(
-  '/api/servicenow-attachment/*',
+  '/api/servicenow-attachment/*path',
   express.raw({ type: '*/*', limit: '100mb' }),
   async (req, res) => {
     const snPath = req.path.replace('/api/servicenow-attachment', '/api/now/attachment');
@@ -140,7 +140,7 @@ app.post(
 // Handles JSON, text/plain, and multipart/form-data (file uploads)
 // ================================================================
 app.all(
-  '/api/idp/*',
+  '/api/idp/*path',
   express.raw({ type: '*/*', limit: '100mb' }),
   async (req, res) => {
     if (!IDP_API_BASE) return res.status(500).json({ error: 'IDP_API_BASE_URL not configured' });
