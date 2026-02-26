@@ -32,17 +32,17 @@ const DocumentUpload = ({ submissionId, tableName, onUploadComplete, onCancel })
   };
 
   const handleUpload = async () => {
-    if (selectedFiles.length === 0 || !documentType) {
-      return;
-    }
+    if (selectedFiles.length === 0) return;
 
     setUploading(true);
     setUploadError('');
     setUploadPhase('');
     setProgress({ current: 0, total: selectedFiles.length });
 
+    const errors = [];
+
     try {
-      // Step 1: ServiceNow Attachment API — attach files to the submission record first
+      // Step 1: ServiceNow Attachment API — save file to the submission record first
       let snResults = [];
       if (tableName && submissionId && isConnected()) {
         setUploadPhase('sn');
@@ -53,12 +53,12 @@ const DocumentUpload = ({ submissionId, tableName, onUploadComplete, onCancel })
               .catch(err => ({ success: false, fileName: file.name, error: err.message }))
           )
         );
-
         const snFailures = snResults.filter(r => !r.success);
         if (snFailures.length > 0) {
-          const msg = `ServiceNow attachment failed for: ${snFailures.map(f => f.fileName).join(', ')}`;
-          setUploadError(msg);
+          errors.push(`ServiceNow upload failed for: ${snFailures.map(f => f.fileName).join(', ')}`);
         }
+      } else if (tableName && !submissionId) {
+        errors.push('Document saved to IDP only — ServiceNow submission record not ready yet.');
       }
 
       // Step 2: IDP — upload & trigger extraction
@@ -68,13 +68,12 @@ const DocumentUpload = ({ submissionId, tableName, onUploadComplete, onCancel })
         submissionId,
         (current, total) => setProgress({ current, total })
       );
-
       const idpFailures = idpResults.filter(r => !r.success);
       if (idpFailures.length > 0) {
-        const msg = `IDP processing failed for: ${idpFailures.map(f => f.fileName).join(', ')}`;
-        setUploadError(prev => prev ? `${prev}. ${msg}` : msg);
+        errors.push(`IDP processing failed for: ${idpFailures.map(f => f.fileName).join(', ')}`);
       }
 
+      if (errors.length > 0) setUploadError(errors.join(' | '));
       setUploadSuccess(true);
       setUploadPhase('');
 
@@ -82,7 +81,7 @@ const DocumentUpload = ({ submissionId, tableName, onUploadComplete, onCancel })
         if (onUploadComplete) {
           onUploadComplete({
             files: selectedFiles,
-            documentType: documentTypes[documentType],
+            documentType: documentType ? documentTypes[documentType] : '',
             submissionId,
             idpResults,
             snResults,
@@ -251,10 +250,10 @@ const DocumentUpload = ({ submissionId, tableName, onUploadComplete, onCancel })
           </div>
         )}
 
-        {/* Document Type Selection */}
+        {/* Document Type Selection (optional) */}
         {selectedFiles.length > 0 && (
           <DxcSelect
-            label="Document Type"
+            label="Document Type (optional)"
             placeholder="Select document type"
             options={documentTypeOptions}
             value={documentType}
@@ -273,7 +272,7 @@ const DocumentUpload = ({ submissionId, tableName, onUploadComplete, onCancel })
           <DxcButton
             label={
               uploading
-                ? (progress.total > 1 ? `Uploading ${progress.current}/${progress.total}...` : 'Uploading...')
+                ? (uploadPhase === 'sn' ? 'Saving to ServiceNow...' : uploadPhase === 'idp' ? 'Sending to IDP...' : 'Uploading...')
                 : selectedFiles.length === 0
                   ? 'Select Files'
                   : 'Upload Documents'
