@@ -94,7 +94,7 @@ const Login = ({ onLogin }) => {
           {/* Error Message */}
           {error && (
             <div className="login-error">
-              <DxcTypography fontSize="font-scale-02" color="#D0021B">
+              <DxcTypography fontSize="font-scale-02" color="#D02E2E">
                 {error}
               </DxcTypography>
             </div>

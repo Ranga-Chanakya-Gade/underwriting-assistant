@@ -35,7 +35,7 @@ const IDPResults = ({ document, onEdit, onValidate }) => {
             ? 'var(--color-bg-warning-lightest)'
             : 'var(--color-bg-neutral-lightest)',
           borderRadius: 'var(--border-radius-s)',
-          borderLeft: flagged ? '3px solid #FF6B00' : '3px solid #0095FF'
+          borderLeft: flagged ? '3px solid #F6921E' : '3px solid #1B75BB'
         }}
       >
         <DxcFlex justifyContent="space-between" alignItems="center">
@@ -49,7 +49,7 @@ const IDPResults = ({ document, onEdit, onValidate }) => {
           </DxcFlex>
           {flagged && (
             <DxcFlex gap="var(--spacing-gap-s)" alignItems="center">
-              <span className="material-icons" style={{ fontSize: '18px', color: '#FF6B00' }}>
+              <span className="material-icons" style={{ fontSize: '18px', color: '#F6921E' }}>
                 flag
               </span>
               <DxcButton
@@ -72,7 +72,7 @@ const IDPResults = ({ document, onEdit, onValidate }) => {
       <div>
         <DxcFlex gap="var(--spacing-gap-s)" alignItems="center" style={{ marginBottom: 'var(--spacing-gap-s)' }}>
           {icon && (
-            <span className="material-icons" style={{ fontSize: '20px', color: '#0095FF' }}>
+            <span className="material-icons" style={{ fontSize: '20px', color: '#1B75BB' }}>
               {icon}
             </span>
           )}
@@ -130,7 +130,7 @@ const IDPResults = ({ document, onEdit, onValidate }) => {
               <DxcTypography
                 fontSize="32px"
                 fontWeight="font-weight-semibold"
-                color={idpConfidenceColor(document.confidence)}
+                color="#000000"
               >
                 {document.confidence}%
               </DxcTypography>
@@ -139,7 +139,7 @@ const IDPResults = ({ document, onEdit, onValidate }) => {
               <DxcTypography fontSize="12px" color="var(--color-fg-neutral-stronger)">
                 FIELDS EXTRACTED
               </DxcTypography>
-              <DxcTypography fontSize="32px" fontWeight="font-weight-semibold" color="#0095FF">
+              <DxcTypography fontSize="32px" fontWeight="font-weight-semibold" color="#000000">
                 {extractionResults.extractedFields}
               </DxcTypography>
             </div>
@@ -147,7 +147,7 @@ const IDPResults = ({ document, onEdit, onValidate }) => {
               <DxcTypography fontSize="12px" color="var(--color-fg-neutral-stronger)">
                 VALIDATION RATE
               </DxcTypography>
-              <DxcTypography fontSize="32px" fontWeight="font-weight-semibold" color="#24A148">
+              <DxcTypography fontSize="32px" fontWeight="font-weight-semibold" color="#000000">
                 {validationRate}%
               </DxcTypography>
             </div>
@@ -156,7 +156,7 @@ const IDPResults = ({ document, onEdit, onValidate }) => {
                 <DxcTypography fontSize="12px" color="var(--color-fg-neutral-stronger)">
                   FLAGGED FOR REVIEW
                 </DxcTypography>
-                <DxcTypography fontSize="32px" fontWeight="font-weight-semibold" color="#FF6B00">
+                <DxcTypography fontSize="32px" fontWeight="font-weight-semibold" color="#000000">
                   {extractionResults.flaggedFields}
                 </DxcTypography>
               </div>
@@ -229,12 +229,12 @@ const IDPResults = ({ document, onEdit, onValidate }) => {
             padding: 'var(--spacing-padding-m)',
             backgroundColor: 'var(--color-bg-warning-lightest)',
             borderRadius: 'var(--border-radius-m)',
-            borderLeft: '4px solid #FF6B00'
+            borderLeft: '4px solid #F6921E'
           }}
         >
           <DxcFlex direction="column" gap="var(--spacing-gap-s)">
             <DxcFlex gap="var(--spacing-gap-s)" alignItems="center">
-              <span className="material-icons" style={{ fontSize: '24px', color: '#FF6B00' }}>
+              <span className="material-icons" style={{ fontSize: '24px', color: '#F6921E' }}>
                 flag
               </span>
               <DxcHeading level={5} text="Fields Requiring Review" />

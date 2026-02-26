@@ -171,10 +171,10 @@ export const getDocumentStatusColor = (status) => {
 };
 
 export const idpConfidenceColor = (confidence) => {
-  if (confidence >= 95) return '#24A148'; // Green
-  if (confidence >= 85) return '#0095FF'; // Blue
-  if (confidence >= 75) return '#FF6B00'; // Orange
-  return '#D0021B'; // Red
+  if (confidence >= 95) return '#37A526'; // Green
+  if (confidence >= 85) return '#1B75BB'; // Blue
+  if (confidence >= 75) return '#F6921E'; // Orange
+  return '#D02E2E'; // Red
 };
 
 // Document classification rules

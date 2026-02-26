@@ -85,101 +85,109 @@
 
 /* ══════════════════════════════════════════════════════════════════════════════
    BLOOM: SIDEBAR NAVIGATION STYLING
-   Enhanced styling for DxcApplicationLayout.Sidenav
-   Works in both collapsed and expanded states
+   Polished navigation — ported from Claims Assistant reference
+   Dual selectors: label-based (dev) + Emotion targets (prod)
+     e1tkggtb0 = NavigationTreeContainer
+     e1jlmjs87 = IconContainer
    ══════════════════════════════════════════════════════════════════════════════ */
 
-/* Make navigation icon spans visible with Bloom blue color */
+/* Icons: Bloom blue, always visible */
 [class*="NavigationTreeContainer"] span[role="img"],
+[class*="e1tkggtb0"] span[role="img"],
 [class*="NavigationTreeContainer"] span[aria-hidden="true"],
-[class*="NavigationTreeContainer"] [class*="IconContainer"] span {
-  color: #1B75BB !important; /* BLOOM: Blue for navigation icons */
+[class*="e1tkggtb0"] span[aria-hidden="true"],
+[class*="NavigationTreeContainer"] [class*="IconContainer"] span,
+[class*="e1tkggtb0"] [class*="e1jlmjs87"] span {
+  color: #1B75BB !important;
   opacity: 1 !important;
   visibility: visible !important;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
-  font-size: 24px !important; /* BLOOM: Larger icons for better visibility */
 }
 
-/* Navigation button base styling */
-[class*="NavigationTreeContainer"] button {
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+/* Navigation buttons — smooth transitions */
+[class*="NavigationTreeContainer"] button,
+[class*="e1tkggtb0"] button {
+  transition: all 0.2s ease !important;
   border-radius: 8px !important;
-  margin: 4px 8px !important; /* BLOOM: Spacing between highlight and container edges */
-  padding: 10px !important; /* BLOOM: Internal padding for better spacing */
+  position: relative !important;
+  overflow: hidden !important;
 }
 
-/* Hover effect - subtle background with smooth transition */
-[class*="NavigationTreeContainer"] button:hover {
-  background: linear-gradient(90deg, rgba(27, 117, 187, 0.08) 0%, rgba(27, 117, 187, 0.12) 100%) !important;
+/* Hover: subtle flat background */
+[class*="NavigationTreeContainer"] button:hover,
+[class*="e1tkggtb0"] button:hover {
+  background: rgba(27, 117, 187, 0.08) !important;
   transform: translateX(2px) !important;
   box-shadow: 0 2px 8px rgba(27, 117, 187, 0.15) !important;
 }
 
-/* Hover effect for icons - make them darker blue */
+/* Hover: icon scale + darken */
 [class*="NavigationTreeContainer"] button:hover span[role="img"],
-[class*="NavigationTreeContainer"] button:hover span[aria-hidden="true"] {
-  color: #155A93 !important; /* BLOOM: Darker blue on hover */
+[class*="e1tkggtb0"] button:hover span[role="img"],
+[class*="NavigationTreeContainer"] button:hover [class*="IconContainer"] span,
+[class*="e1tkggtb0"] button:hover [class*="e1jlmjs87"] span {
+  transform: scale(1.15) !important;
+  color: #155A93 !important;
 }
 
-/* Active/Selected state */
-[class*="NavigationTreeContainer"] button[aria-current="page"] {
-  background: rgba(27, 117, 187, 0.15) !important;
-  border-left: 4px solid #1B75BB !important; /* BLOOM: Blue accent bar */
+/* Selected/Active state — flat Bloom light blue (no gradient) */
+[class*="NavigationTreeContainer"] button[aria-pressed="true"],
+[class*="e1tkggtb0"] button[aria-pressed="true"],
+[class*="NavigationTreeContainer"] button[data-selected="true"],
+[class*="e1tkggtb0"] button[data-selected="true"] {
+  background: #D6E9F7 !important;
+  box-shadow: inset 3px 0 0 #1B75BB, 0 2px 6px rgba(27, 117, 187, 0.2) !important;
+  font-weight: 700 !important;
 }
 
-/* Active state icons - keep Bloom blue */
-[class*="NavigationTreeContainer"] button[aria-current="page"] span[role="img"],
-[class*="NavigationTreeContainer"] button[aria-current="page"] span[aria-hidden="true"] {
+/* Selected: icon + label Bloom blue */
+[class*="NavigationTreeContainer"] button[aria-pressed="true"] span,
+[class*="e1tkggtb0"] button[aria-pressed="true"] span,
+[class*="NavigationTreeContainer"] button[data-selected="true"] span,
+[class*="e1tkggtb0"] button[data-selected="true"] span {
   color: #1B75BB !important;
+  font-weight: 700 !important;
+}
+
+/* Active click: subtle press */
+[class*="NavigationTreeContainer"] button:active,
+[class*="e1tkggtb0"] button:active {
+  transform: scale(0.98) !important;
+  transition: transform 0.1s ease !important;
 }
 
 /* Spacing between nav items */
-[class*="NavigationTreeContainer"] ul {
-  gap: 16px !important; /* BLOOM: Proper spacing between items */
+[class*="NavigationTreeContainer"] ul,
+[class*="e1tkggtb0"] ul {
+  gap: 16px !important;
   padding: 12px 0 !important;
-  display: flex !important;
-  flex-direction: column !important;
 }
 
-/* Override for NavigationTreeContainer buttons specifically */
-[class*="NavigationTreeContainer"] button:not([disabled]):not([class*="icon-only"]):not(.collapse-toggle):not(.nav-item):not(.footer-item) {
-  padding: 0 !important;
-  min-height: auto !important;
+/* Ripple effect on click */
+[class*="NavigationTreeContainer"] button::before,
+[class*="e1tkggtb0"] button::before {
+  content: '' !important;
+  position: absolute !important;
+  top: 50% !important;
+  left: 50% !important;
+  width: 0 !important;
+  height: 0 !important;
+  border-radius: 50% !important;
+  background: rgba(27, 117, 187, 0.3) !important;
+  transform: translate(-50%, -50%) !important;
+  transition: width 0.6s, height 0.6s !important;
 }
 
-/* Collapsed state - ensure icons are centered and visible */
-[class*="NavigationTreeContainer"][class*="collapsed"] button {
-  justify-content: center !important;
-  align-items: center !important;
+[class*="NavigationTreeContainer"] button:active::before,
+[class*="e1tkggtb0"] button:active::before {
+  width: 300px !important;
+  height: 300px !important;
 }
 
-/* Icon container in collapsed state */
-[class*="NavigationTreeContainer"][class*="collapsed"] [class*="IconContainer"] {
-  margin: 0 auto !important;
-  display: flex !important;
-  justify-content: center !important;
-  align-items: center !important;
-}
-
-/* Expanded state - ensure proper layout */
-[class*="NavigationTreeContainer"]:not([class*="collapsed"]) button {
-  display: flex !important;
-  align-items: center !important;
-  gap: 12px !important;
-  padding: 12px 16px !important;
-  margin: 4px 8px !important; /* BLOOM: Consistent spacing in expanded state */
-}
-
-/* Label text color in expanded state */
-[class*="NavigationTreeContainer"] button span:not([role="img"]):not([aria-hidden="true"]) {
-  color: #333333 !important; /* BLOOM: Dark gray for text */
-  font-weight: 500 !important;
-}
-
-/* Active state label - make it bolder */
-[class*="NavigationTreeContainer"] button[aria-current="page"] span:not([role="img"]):not([aria-hidden="true"]) {
-  color: #1B75BB !important; /* BLOOM: Blue for active label */
-  font-weight: 600 !important;
+/* Label text: dark grey */
+[class*="NavigationTreeContainer"] button span:not([role="img"]):not([aria-hidden="true"]),
+[class*="e1tkggtb0"] button span:not([role="img"]):not([aria-hidden="true"]) {
+  color: #333333 !important;
 }
 
 /* ══════════════════════════════════════════════════════════════════════════════

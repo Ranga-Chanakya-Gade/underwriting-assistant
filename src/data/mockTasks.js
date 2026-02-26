@@ -285,11 +285,11 @@ export const getPriorityColor = (priority) => {
 export const getSLAStatusColor = (status) => {
   switch (status) {
     case slaStatus.ON_TIME:
-      return '#24A148';
+      return '#37A526';
     case slaStatus.AT_RISK:
-      return '#FF6B00';
+      return '#F6921E';
     case slaStatus.BREACHED:
-      return '#D0021B';
+      return '#D02E2E';
     default:
       return 'var(--color-fg-neutral-dark)';
   }

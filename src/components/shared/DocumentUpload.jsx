@@ -11,7 +11,7 @@ import { documentTypes } from '../../data/mockDocuments';
 import idpService from '../../services/idpService';
 import { uploadAttachment, isConnected } from '../../services/servicenow';
 
-const DocumentUpload = ({ submissionId, tableName, onUploadComplete, onCancel }) => {
+const DocumentUpload = ({ submissionId, tableName, onUploadComplete, onCancel, awaitingRecord = false }) => {
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [documentType, setDocumentType] = useState('');
   const [uploading, setUploading] = useState(false);
@@ -32,6 +32,7 @@ const DocumentUpload = ({ submissionId, tableName, onUploadComplete, onCancel })
   };
 
   const handleUpload = async () => {
+    if (awaitingRecord) return;
     if (selectedFiles.length === 0) return;
 
     setUploading(true);
@@ -144,12 +145,23 @@ const DocumentUpload = ({ submissionId, tableName, onUploadComplete, onCancel })
           />
         )}
 
-        {uploading && (
+        {awaitingRecord && (
           <DxcFlex alignItems="center" gap="var(--spacing-gap-s)">
-            <span className="material-icons" style={{ fontSize: '18px', color: '#0095FF', animation: 'spin 1s linear infinite' }}>
+            <span className="material-icons" style={{ fontSize: '18px', color: '#1B75BB', animation: 'spin 1s linear infinite' }}>
               sync
             </span>
-            <DxcTypography fontSize="font-scale-02" color="#0095FF">
+            <DxcTypography fontSize="font-scale-02" color="#1B75BB">
+              Preparing submission record...
+            </DxcTypography>
+          </DxcFlex>
+        )}
+
+        {uploading && (
+          <DxcFlex alignItems="center" gap="var(--spacing-gap-s)">
+            <span className="material-icons" style={{ fontSize: '18px', color: '#1B75BB', animation: 'spin 1s linear infinite' }}>
+              sync
+            </span>
+            <DxcTypography fontSize="font-scale-02" color="#1B75BB">
               {uploadPhase === 'sn'
                 ? `Saving to ServiceNow (${selectedFiles.length} file${selectedFiles.length > 1 ? 's' : ''})...`
                 : uploadPhase === 'idp'
@@ -184,7 +196,7 @@ const DocumentUpload = ({ submissionId, tableName, onUploadComplete, onCancel })
           />
 
           <DxcFlex direction="column" gap="var(--spacing-gap-m)" alignItems="center">
-            <span className="material-icons" style={{ fontSize: '48px', color: '#0095FF' }}>
+            <span className="material-icons" style={{ fontSize: '48px', color: '#1B75BB' }}>
               cloud_upload
             </span>
             <div>
@@ -196,7 +208,7 @@ const DocumentUpload = ({ submissionId, tableName, onUploadComplete, onCancel })
               </DxcTypography>
             </div>
             {selectedFiles.length > 0 && (
-              <DxcTypography fontSize="font-scale-03" color="#0095FF">
+              <DxcTypography fontSize="font-scale-03" color="#1B75BB">
                 {selectedFiles.length} file(s) selected
               </DxcTypography>
             )}
@@ -217,12 +229,12 @@ const DocumentUpload = ({ submissionId, tableName, onUploadComplete, onCancel })
                     padding: 'var(--spacing-padding-s)',
                     backgroundColor: 'var(--color-bg-neutral-lighter)',
                     borderRadius: 'var(--border-radius-s)',
-                    borderLeft: '3px solid #0095FF'
+                    borderLeft: '3px solid #1B75BB'
                   }}
                 >
                   <DxcFlex justifyContent="space-between" alignItems="center">
                     <DxcFlex gap="var(--spacing-gap-s)" alignItems="center">
-                      <span className="material-icons" style={{ color: '#0095FF' }}>
+                      <span className="material-icons" style={{ color: '#1B75BB' }}>
                         description
                       </span>
                       <DxcFlex direction="column" gap="var(--spacing-gap-xxs)">
@@ -271,22 +283,24 @@ const DocumentUpload = ({ submissionId, tableName, onUploadComplete, onCancel })
           />
           <DxcButton
             label={
-              uploading
-                ? (uploadPhase === 'sn' ? 'Saving to ServiceNow...' : uploadPhase === 'idp' ? 'Sending to IDP...' : 'Uploading...')
-                : selectedFiles.length === 0
-                  ? 'Select Files'
-                  : 'Upload Documents'
+              awaitingRecord
+                ? 'Preparing Record...'
+                : uploading
+                  ? (uploadPhase === 'sn' ? 'Saving to ServiceNow...' : uploadPhase === 'idp' ? 'Sending to IDP...' : 'Uploading...')
+                  : selectedFiles.length === 0
+                    ? 'Select Files'
+                    : 'Upload Documents'
             }
-            icon={uploading ? "sync" : selectedFiles.length === 0 ? "folder_open" : "cloud_upload"}
+            icon={awaitingRecord ? "sync" : uploading ? "sync" : selectedFiles.length === 0 ? "folder_open" : "cloud_upload"}
             onClick={() => {
-              if (uploading) return;
+              if (awaitingRecord || uploading) return;
               if (selectedFiles.length === 0) {
                 fileInputRef.current?.click();
               } else {
                 handleUpload();
               }
             }}
-            disabled={uploading}
+            disabled={awaitingRecord || uploading}
           />
         </DxcFlex>
 
@@ -296,11 +310,11 @@ const DocumentUpload = ({ submissionId, tableName, onUploadComplete, onCancel })
             padding: 'var(--spacing-padding-m)',
             backgroundColor: 'var(--color-bg-info-lightest)',
             borderRadius: 'var(--border-radius-s)',
-            borderLeft: '3px solid #0095FF'
+            borderLeft: '3px solid #1B75BB'
           }}
         >
           <DxcFlex gap="var(--spacing-gap-s)">
-            <span className="material-icons" style={{ fontSize: '20px', color: '#0095FF' }}>
+            <span className="material-icons" style={{ fontSize: '20px', color: '#1B75BB' }}>
               info
             </span>
             <DxcFlex direction="column" gap="var(--spacing-gap-xs)">
