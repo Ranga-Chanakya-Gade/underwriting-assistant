@@ -59,19 +59,13 @@ export async function loginWithPassword(username, password) {
     body:    params.toString(),
   });
 
+  const text = await res.text();
+  const data = (() => { try { return JSON.parse(text); } catch { return null; } })();
+
   if (!res.ok) {
-    let msg = `Authentication failed (${res.status})`;
-    try {
-      const err = await res.json();
-      msg = err.error_description || err.error || msg;
-    } catch {
-      const text = await res.text();
-      if (text) msg = text;
-    }
+    const msg = data?.error_description || data?.error || text || `Authentication failed (${res.status})`;
     throw new Error(msg);
   }
-
-  const data = await res.json();
 
   if (!data.access_token) {
     throw new Error(data.error_description || data.error || 'No access token returned');
