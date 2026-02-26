@@ -17,8 +17,8 @@ const STATE_KEY    = 'sn_oauth_state';
 // ── Token Management ──────────────────────────────────────────────
 
 export function getStoredToken() {
-  const token   = sessionStorage.getItem(TOKEN_KEY);
-  const expires = sessionStorage.getItem(TOKEN_EXP_KEY);
+  const token   = localStorage.getItem(TOKEN_KEY);
+  const expires = localStorage.getItem(TOKEN_EXP_KEY);
   if (!token || !expires) return null;
   if (Date.now() >= parseInt(expires, 10)) {
     clearToken();
@@ -28,13 +28,13 @@ export function getStoredToken() {
 }
 
 function storeToken(token, expiresIn) {
-  sessionStorage.setItem(TOKEN_KEY, token);
-  sessionStorage.setItem(TOKEN_EXP_KEY, Date.now() + (expiresIn - 30) * 1000);
+  localStorage.setItem(TOKEN_KEY, token);
+  localStorage.setItem(TOKEN_EXP_KEY, Date.now() + (expiresIn - 30) * 1000);
 }
 
 export function clearToken() {
-  sessionStorage.removeItem(TOKEN_KEY);
-  sessionStorage.removeItem(TOKEN_EXP_KEY);
+  localStorage.removeItem(TOKEN_KEY);
+  localStorage.removeItem(TOKEN_EXP_KEY);
 }
 
 export function isConnected() {

@@ -11,7 +11,7 @@ const USER_KEY = 'sn_user_profile';
 
 function restoreUser() {
   try {
-    const raw = sessionStorage.getItem(USER_KEY);
+    const raw = localStorage.getItem(USER_KEY);
     return raw ? JSON.parse(raw) : null;
   } catch { return null; }
 }
@@ -29,13 +29,13 @@ function App() {
   const [sidenavExpanded, setSidenavExpanded] = useState(true);
 
   const handleLogin = (userData) => {
-    sessionStorage.setItem(USER_KEY, JSON.stringify(userData));
+    localStorage.setItem(USER_KEY, JSON.stringify(userData));
     setUser(userData);
     setIsAuthenticated(true);
   };
 
   const _handleLogout = () => {
-    sessionStorage.removeItem(USER_KEY);
+    localStorage.removeItem(USER_KEY);
     clearToken();
     setUser(null);
     setIsAuthenticated(false);

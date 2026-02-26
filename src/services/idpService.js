@@ -33,15 +33,15 @@ class IDPService {
 
   _saveToken() {
     if (this.accessToken) {
-      sessionStorage.setItem('idp_access_token', this.accessToken);
-      sessionStorage.setItem('idp_token_expiry', String(this.tokenExpiry));
-      console.log('[IDP Service] Token saved to sessionStorage');
+      localStorage.setItem('idp_access_token', this.accessToken);
+      localStorage.setItem('idp_token_expiry', String(this.tokenExpiry));
+      console.log('[IDP Service] Token saved to localStorage');
     }
   }
 
   _restoreToken() {
-    const token = sessionStorage.getItem('idp_access_token');
-    const expiry = sessionStorage.getItem('idp_token_expiry');
+    const token = localStorage.getItem('idp_access_token');
+    const expiry = localStorage.getItem('idp_token_expiry');
 
     if (token && expiry && Date.now() < Number(expiry)) {
       this.accessToken = token;
@@ -291,9 +291,9 @@ class IDPService {
     this.accessToken = null;
     this.tokenExpiry = null;
     this.tokenPromise = null;
-    sessionStorage.removeItem('idp_access_token');
-    sessionStorage.removeItem('idp_token_expiry');
-    console.log('[IDP Service] Token cleared from memory and sessionStorage');
+    localStorage.removeItem('idp_access_token');
+    localStorage.removeItem('idp_token_expiry');
+    console.log('[IDP Service] Token cleared from memory and localStorage');
   }
 }
 
