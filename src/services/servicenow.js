@@ -41,6 +41,54 @@ export function isConnected() {
   return !!getStoredToken();
 }
 
+// ── OAuth 2.0 - Resource Owner Password Grant ─────────────────────
+
+// Exchange username/password for an access token directly
+export async function loginWithPassword(username, password) {
+  const params = new URLSearchParams({
+    grant_type:    'password',
+    client_id:     CLIENT_ID,
+    client_secret: CLIENT_SECRET,
+    username,
+    password,
+  });
+
+  const res = await fetch('/api/servicenow-oauth', {
+    method:  'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body:    params.toString(),
+  });
+
+  if (!res.ok) {
+    let msg = `Authentication failed (${res.status})`;
+    try {
+      const err = await res.json();
+      msg = err.error_description || err.error || msg;
+    } catch {
+      const text = await res.text();
+      if (text) msg = text;
+    }
+    throw new Error(msg);
+  }
+
+  const data = await res.json();
+
+  if (!data.access_token) {
+    throw new Error(data.error_description || data.error || 'No access token returned');
+  }
+
+  storeToken(data.access_token, data.expires_in || 1800);
+  return data.access_token;
+}
+
+// Fetch current user's profile from ServiceNow sys_user table
+export async function fetchCurrentUser(username) {
+  const data = await snFetch(
+    `/api/now/table/sys_user?sysparm_query=user_name=${encodeURIComponent(username)}&sysparm_fields=name,email,department,title,user_name&sysparm_limit=1&sysparm_display_value=true`
+  );
+  return data.result?.[0] || null;
+}
+
 // ── OAuth 2.0 - Authorization Code Flow ──────────────────────────
 
 // Step 1: Redirect browser to ServiceNow authorization page
