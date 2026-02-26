@@ -9,8 +9,9 @@ import {
 } from '@dxc-technology/halstack-react';
 import { documentTypes } from '../../data/mockDocuments';
 import idpService from '../../services/idpService';
+import { uploadAttachment, isConnected } from '../../services/servicenow';
 
-const DocumentUpload = ({ submissionId, onUploadComplete, onCancel }) => {
+const DocumentUpload = ({ submissionId, tableName, onUploadComplete, onCancel }) => {
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [documentType, setDocumentType] = useState('');
   const [uploading, setUploading] = useState(false);
@@ -38,17 +39,34 @@ const DocumentUpload = ({ submissionId, onUploadComplete, onCancel }) => {
     setProgress({ current: 0, total: selectedFiles.length });
 
     try {
-      const results = await idpService.uploadAndProcessBatch(
+      // Step 1: IDP — upload & trigger extraction
+      const idpResults = await idpService.uploadAndProcessBatch(
         selectedFiles,
         submissionId,
         (current, total) => setProgress({ current, total })
       );
 
-      const failures = results.filter(r => !r.success);
+      const idpFailures = idpResults.filter(r => !r.success);
+      if (idpFailures.length > 0) {
+        setUploadError(`IDP processing failed for: ${idpFailures.map(f => f.fileName).join(', ')}`);
+      }
 
-      if (failures.length > 0) {
-        const names = failures.map(f => f.fileName).join(', ');
-        setUploadError(`Failed to process: ${names}`);
+      // Step 2: ServiceNow Attachment API — attach files to the submission record
+      let snResults = [];
+      if (tableName && submissionId && isConnected()) {
+        snResults = await Promise.all(
+          selectedFiles.map(file =>
+            uploadAttachment(file, tableName, submissionId)
+              .then(res => ({ success: true, fileName: file.name, result: res }))
+              .catch(err => ({ success: false, fileName: file.name, error: err.message }))
+          )
+        );
+
+        const snFailures = snResults.filter(r => !r.success);
+        if (snFailures.length > 0) {
+          const msg = `ServiceNow attachment failed for: ${snFailures.map(f => f.fileName).join(', ')}`;
+          setUploadError(prev => prev ? `${prev}. ${msg}` : msg);
+        }
       }
 
       setUploadSuccess(true);
@@ -59,7 +77,8 @@ const DocumentUpload = ({ submissionId, onUploadComplete, onCancel }) => {
             files: selectedFiles,
             documentType: documentTypes[documentType],
             submissionId,
-            idpResults: results,
+            idpResults,
+            snResults,
           });
         }
         setUploadSuccess(false);
