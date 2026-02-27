@@ -30,7 +30,8 @@ function App() {
   const [selectedSubmission, setSelectedSubmission] = useState(null);
   const [sidenavExpanded, setSidenavExpanded] = useState(true);
 
-  // ── SN Connect dialog ──────────────────────────────────────────
+  // ── Actions dropdown + SN Connect dialog ────────────────────────
+  const [showActionsMenu, setShowActionsMenu]   = useState(false);
   const [showSnDialog, setShowSnDialog]         = useState(false);
   const [snForm, setSnForm]                     = useState({ userId: '', password: '' });
   const [snConnectError, setSnConnectError]     = useState('');
@@ -177,28 +178,63 @@ function App() {
           </DxcFlex>
 
           <DxcFlex gap="var(--spacing-gap-m)" alignItems="center">
-            {/* Connect with ServiceNow — visible only in demo mode */}
+            {/* Actions dropdown — visible only in demo mode */}
             {!snConnected && (
-              <button
-                onClick={() => { setShowSnDialog(true); setSnConnectError(''); }}
-                className="header-icon-btn"
-                title="Connect with ServiceNow"
-                style={{
-                  display: 'flex', alignItems: 'center', gap: '6px',
-                  padding: '5px 12px',
-                  border: '1px solid #1B75BB',
-                  borderRadius: '6px',
-                  backgroundColor: 'transparent',
-                  cursor: 'pointer',
-                  color: '#1B75BB',
-                  fontSize: '13px',
-                  fontWeight: '600',
-                  whiteSpace: 'nowrap',
-                }}
-              >
-                <span className="material-icons" style={{ fontSize: '16px' }}>link</span>
-                Connect to ServiceNow
-              </button>
+              <div style={{ position: 'relative' }}>
+                <button
+                  onClick={() => setShowActionsMenu(v => !v)}
+                  style={{
+                    display: 'flex', alignItems: 'center', gap: '6px',
+                    padding: '7px 16px',
+                    border: 'none',
+                    borderRadius: '6px',
+                    backgroundColor: '#1B75BB',
+                    cursor: 'pointer',
+                    color: '#fff',
+                    fontSize: '14px',
+                    fontWeight: '600',
+                    whiteSpace: 'nowrap',
+                  }}
+                >
+                  Actions
+                  <span className="material-icons" style={{ fontSize: '18px' }}>
+                    {showActionsMenu ? 'expand_less' : 'expand_more'}
+                  </span>
+                </button>
+
+                {showActionsMenu && (
+                  <div
+                    style={{
+                      position: 'absolute', top: 'calc(100% + 6px)', right: 0,
+                      backgroundColor: '#fff',
+                      border: '1px solid #e0e0e0',
+                      borderRadius: '8px',
+                      boxShadow: '0 4px 16px rgba(0,0,0,0.12)',
+                      minWidth: '220px',
+                      zIndex: 500,
+                      padding: '8px 0',
+                    }}
+                  >
+                    <button
+                      onClick={() => {
+                        setShowActionsMenu(false);
+                        setShowSnDialog(true);
+                        setSnConnectError('');
+                      }}
+                      style={{
+                        display: 'flex', alignItems: 'center', gap: '10px',
+                        width: '100%', padding: '10px 16px',
+                        background: 'none', border: 'none', cursor: 'pointer',
+                        fontSize: '14px', color: '#1B75BB', fontWeight: '500',
+                        textAlign: 'left',
+                      }}
+                    >
+                      <span className="material-icons" style={{ fontSize: '18px' }}>link</span>
+                      Connect to ServiceNow
+                    </button>
+                  </div>
+                )}
+              </div>
             )}
 
             {/* Search Icon */}
