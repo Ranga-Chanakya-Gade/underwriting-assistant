@@ -6,9 +6,7 @@ import {
   DxcButton,
   DxcTextInput,
   DxcCheckbox,
-  DxcInset,
 } from '@dxc-technology/halstack-react';
-import { loginWithPassword, fetchCurrentUser } from '../../services/servicenow';
 import './Login.css';
 
 const DEMO_USER = {
@@ -26,54 +24,19 @@ const Login = ({ onLogin }) => {
     password: '',
     rememberMe: false,
   });
-  const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
 
   const handleInputChange = (field, value) => {
-    setFormData(prev => ({
-      ...prev,
-      [field]: value
-    }));
-    setError('');
+    setFormData(prev => ({ ...prev, [field]: value }));
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-
-    if (!formData.userId || !formData.password) {
-      setError('Please enter both User ID and Password');
-      return;
-    }
-
-    setLoading(true);
-    setError('');
-
-    try {
-      // Authenticate against ServiceNow using OAuth password grant
-      await loginWithPassword(formData.userId, formData.password);
-
-      // Fetch the user's profile from ServiceNow
-      let snUser = null;
-      try {
-        snUser = await fetchCurrentUser(formData.userId);
-      } catch {
-        // Non-fatal: fall back to username if profile fetch fails
-      }
-
-      const userData = {
-        userId: formData.userId,
-        name: snUser?.name || formData.userId,
-        email: snUser?.email || '',
-        role: snUser?.title || 'Underwriter',
-        domain: snUser?.department || 'Commercial Lines',
-      };
-
-      onLogin(userData);
-    } catch (err) {
-      setError(err.message || 'Login failed. Please check your credentials.');
-    } finally {
-      setLoading(false);
-    }
+    // Sign in as demo — no ServiceNow auth required
+    onLogin({
+      ...DEMO_USER,
+      userId: formData.userId || 'demo',
+      name: formData.userId || 'Demo User',
+    });
   };
 
   const handleForgotPassword = () => {
@@ -100,25 +63,15 @@ const Login = ({ onLogin }) => {
           {/* Title */}
           <DxcHeading level={2} text="Sign in" />
 
-          {/* Error Message */}
-          {error && (
-            <div className="login-error">
-              <DxcTypography fontSize="font-scale-02" color="#D02E2E">
-                {error}
-              </DxcTypography>
-            </div>
-          )}
-
           {/* Login Form */}
           <form onSubmit={handleSubmit} className="login-form">
             <DxcFlex direction="column" gap="var(--spacing-gap-m)">
               <DxcTextInput
                 label="User ID"
-                placeholder="Enter your ServiceNow User ID"
+                placeholder="Enter your User ID"
                 value={formData.userId}
                 onChange={({ value }) => handleInputChange('userId', value)}
                 size="fillParent"
-                disabled={loading}
               />
 
               <DxcTextInput
@@ -128,34 +81,23 @@ const Login = ({ onLogin }) => {
                 value={formData.password}
                 onChange={({ value }) => handleInputChange('password', value)}
                 size="fillParent"
-                disabled={loading}
               />
 
-              {/* Remember Me and Forgot Password */}
-              <DxcFlex justifyContent="space-between" alignItems="center">
+              {/* Remember Me */}
+              <DxcFlex justifyContent="flex-start" alignItems="center">
                 <DxcCheckbox
                   label="Remember Me"
                   checked={formData.rememberMe}
                   onChange={(checked) => handleInputChange('rememberMe', checked)}
-                  disabled={loading}
                 />
-                <button
-                  type="button"
-                  onClick={handleForgotPassword}
-                  className="forgot-password-link"
-                  disabled={loading}
-                >
-                  Forgot Password?
-                </button>
               </DxcFlex>
 
               {/* Sign In Button */}
               <DxcButton
-                label={loading ? 'Signing in...' : 'Sign In'}
+                label="Sign In"
                 mode="primary"
                 type="submit"
                 size="fillParent"
-                disabled={loading}
               />
 
               {/* Divider */}
@@ -171,7 +113,6 @@ const Login = ({ onLogin }) => {
                 mode="secondary"
                 onClick={() => onLogin(DEMO_USER)}
                 size="fillParent"
-                disabled={loading}
               />
             </DxcFlex>
           </form>
