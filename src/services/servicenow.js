@@ -37,6 +37,10 @@ export function clearToken() {
   localStorage.removeItem(TOKEN_EXP_KEY);
 }
 
+export function setToken(token, expiresIn) {
+  storeToken(token, expiresIn);
+}
+
 export function isConnected() {
   return !!getStoredToken();
 }

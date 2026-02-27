@@ -8,6 +8,10 @@ dotenv.config();
 const app = express();
 
 const SN_INSTANCE    = process.env.VITE_SN_INSTANCE    || 'https://nextgenbpmnp1.service-now.com';
+const SN_CLIENT_ID   = process.env.VITE_SN_CLIENT_ID;
+const SN_CLIENT_SEC  = process.env.VITE_SN_CLIENT_SECRET;
+const SN_USERNAME    = process.env.VITE_SN_USERNAME;
+const SN_PASSWORD    = process.env.VITE_SN_PASSWORD;
 const IDP_AUTH_URL   = process.env.VITE_IDP_AUTH_URL;
 const IDP_API_BASE   = process.env.VITE_IDP_API_BASE_URL;
 // Derive production origin from VITE_SN_REDIRECT_URI (strip trailing slash)
@@ -51,6 +55,33 @@ app.post(
     }
   },
 );
+
+// ================================================================
+// ServiceNow Auto-Connect  →  POST /api/sn-auto-connect
+// Uses server-side credentials (never exposed to the client bundle)
+// ================================================================
+app.post('/api/sn-auto-connect', async (_req, res) => {
+  if (!SN_USERNAME || !SN_PASSWORD) {
+    return res.status(500).json({ error: 'SN credentials not configured on server' });
+  }
+  try {
+    const snRes = await fetch(`${SN_INSTANCE}/oauth_token.do`, {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body:    new URLSearchParams({
+        grant_type:    'password',
+        client_id:     SN_CLIENT_ID,
+        client_secret: SN_CLIENT_SEC,
+        username:      SN_USERNAME,
+        password:      SN_PASSWORD,
+      }).toString(),
+    });
+    const text = await snRes.text();
+    res.status(snRes.status).type('application/json').send(text);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
 
 // ================================================================
 // ServiceNow Table API  →  /api/now/table/...

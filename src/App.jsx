@@ -4,7 +4,7 @@ import Dashboard from './components/Dashboard/Dashboard';
 import UnderwritingWorkbench from './components/UnderwritingWorkbench/UnderwritingWorkbench';
 import SubmissionIntake from './components/SubmissionIntake/SubmissionIntake';
 import Login from './components/Login/Login';
-import { isConnected, clearToken, loginWithPassword, fetchCurrentUser } from './services/servicenow';
+import { isConnected, clearToken, setToken, fetchCurrentUser } from './services/servicenow';
 import './App.css';
 
 const USER_KEY = 'sn_user_profile';
@@ -38,19 +38,22 @@ function App() {
     setShowActionsMenu(false);
     setSnConnectLoading(true);
     try {
-      const username = import.meta.env.VITE_SN_USERNAME;
-      const password = import.meta.env.VITE_SN_PASSWORD;
-      await loginWithPassword(username, password);
+      // Call server-side endpoint — credentials stay on the server, never in the bundle
+      const res  = await fetch('/api/sn-auto-connect', { method: 'POST' });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error_description || data.error || 'Connection failed');
+
+      setToken(data.access_token, data.expires_in || 1800);
+
       let snUser = null;
-      try { snUser = await fetchCurrentUser(username); } catch { /* non-fatal */ }
-      const snUserData = {
-        userId: username,
-        name:   snUser?.name       || username,
+      try { snUser = await fetchCurrentUser('integration_user'); } catch { /* non-fatal */ }
+      handleSnConnect({
+        userId: 'integration_user',
+        name:   snUser?.name       || 'Integration User',
         email:  snUser?.email      || '',
         role:   snUser?.title      || 'Underwriter',
         domain: snUser?.department || 'Commercial Lines',
-      };
-      handleSnConnect(snUserData);
+      });
     } catch (err) {
       console.error('[Connect SN] Failed:', err.message);
     } finally {
