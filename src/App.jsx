@@ -156,6 +156,7 @@ function App() {
   ];
 
   return (
+    <>
     <DxcApplicationLayout
       header={(
         <div className="app-header">
@@ -354,6 +355,7 @@ function App() {
         </div>
       </div>
     )}
+    </>
   );
 }
 
