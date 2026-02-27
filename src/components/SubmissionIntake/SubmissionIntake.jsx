@@ -144,7 +144,7 @@ const SubmissionIntake = () => {
         size: (file.size / 1024).toFixed(2) + ' KB',
         uploadDate: new Date().toLocaleDateString(),
         documentType: isSupport ? 'Loss Runs' : 'ACORD 125',
-        description: isSupport ? '' : 'Application',
+        description: '',
         file: file,
         fileUrl: fileUrl,
         fileType: file.type,
@@ -721,7 +721,7 @@ const SubmissionIntake = () => {
                   ) : (
                     <DxcFlex direction="column" alignItems="center" justifyContent="center" style={{ height: '100%', padding: 'var(--spacing-padding-xl)' }}>
                       <span className="material-icons" style={{ fontSize: '120px', color: '#1B75BB', marginBottom: 'var(--spacing-gap-m)' }}>description</span>
-                      <DxcTypography fontSize="var(--font-scale-03, 1rem)" fontWeight="font-weight-semibold" color="var(--color-fg-neutral-stronger)">ACORD 125n</DxcTypography>
+                      <DxcTypography fontSize="var(--font-scale-03, 1rem)" fontWeight="font-weight-semibold" color="var(--color-fg-neutral-stronger)">ACORD 125</DxcTypography>
                       <DxcTypography fontSize="var(--font-scale-02, 0.875rem)" color="var(--color-fg-neutral-medium)" style={{ marginTop: 'var(--spacing-gap-s)' }}>No document uploaded yet</DxcTypography>
                     </DxcFlex>
                   )}
@@ -919,7 +919,7 @@ const SubmissionIntake = () => {
             New Submission
           </DxcTypography>
           <DxcTypography fontSize="var(--font-scale-02, 0.875rem)" color="var(--color-fg-neutral-stronger)">
-            {submissionId} 
+            {submissionId}
           </DxcTypography>
         </DxcFlex>
 
