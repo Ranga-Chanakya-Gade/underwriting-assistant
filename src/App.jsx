@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { DxcApplicationLayout, DxcFlex, DxcTypography, DxcButton, DxcTextInput } from '@dxc-technology/halstack-react';
+import { DxcApplicationLayout, DxcFlex, DxcTypography } from '@dxc-technology/halstack-react';
 import Dashboard from './components/Dashboard/Dashboard';
 import UnderwritingWorkbench from './components/UnderwritingWorkbench/UnderwritingWorkbench';
 import SubmissionIntake from './components/SubmissionIntake/SubmissionIntake';
@@ -30,37 +30,29 @@ function App() {
   const [selectedSubmission, setSelectedSubmission] = useState(null);
   const [sidenavExpanded, setSidenavExpanded] = useState(true);
 
-  // ── Actions dropdown + SN Connect dialog ────────────────────────
+  // ── Actions dropdown ─────────────────────────────────────────────
   const [showActionsMenu, setShowActionsMenu]   = useState(false);
-  const [showSnDialog, setShowSnDialog]         = useState(false);
-  const [snForm, setSnForm]                     = useState({ userId: '', password: '' });
-  const [snConnectError, setSnConnectError]     = useState('');
   const [snConnectLoading, setSnConnectLoading] = useState(false);
 
-  const handleSnLogin = async (e) => {
-    e.preventDefault();
-    if (!snForm.userId || !snForm.password) {
-      setSnConnectError('Please enter both User ID and Password');
-      return;
-    }
+  const handleSnConnect_auto = async () => {
+    setShowActionsMenu(false);
     setSnConnectLoading(true);
-    setSnConnectError('');
     try {
-      await loginWithPassword(snForm.userId, snForm.password);
+      const username = import.meta.env.VITE_SN_USERNAME;
+      const password = import.meta.env.VITE_SN_PASSWORD;
+      await loginWithPassword(username, password);
       let snUser = null;
-      try { snUser = await fetchCurrentUser(snForm.userId); } catch { /* non-fatal */ }
+      try { snUser = await fetchCurrentUser(username); } catch { /* non-fatal */ }
       const snUserData = {
-        userId: snForm.userId,
-        name:   snUser?.name       || snForm.userId,
+        userId: username,
+        name:   snUser?.name       || username,
         email:  snUser?.email      || '',
         role:   snUser?.title      || 'Underwriter',
         domain: snUser?.department || 'Commercial Lines',
       };
-      setShowSnDialog(false);
-      setSnForm({ userId: '', password: '' });
       handleSnConnect(snUserData);
     } catch (err) {
-      setSnConnectError(err.message || 'Login failed. Please check your credentials.');
+      console.error('[Connect SN] Failed:', err.message);
     } finally {
       setSnConnectLoading(false);
     }
@@ -216,21 +208,18 @@ function App() {
                     }}
                   >
                     <button
-                      onClick={() => {
-                        setShowActionsMenu(false);
-                        setShowSnDialog(true);
-                        setSnConnectError('');
-                      }}
+                      onClick={handleSnConnect_auto}
+                      disabled={snConnectLoading}
                       style={{
                         display: 'flex', alignItems: 'center', gap: '10px',
                         width: '100%', padding: '10px 16px',
-                        background: 'none', border: 'none', cursor: 'pointer',
+                        background: 'none', border: 'none', cursor: snConnectLoading ? 'default' : 'pointer',
                         fontSize: '14px', color: '#1B75BB', fontWeight: '500',
-                        textAlign: 'left',
+                        textAlign: 'left', opacity: snConnectLoading ? 0.6 : 1,
                       }}
                     >
                       <span className="material-icons" style={{ fontSize: '18px' }}>link</span>
-                      Connect to ServiceNow
+                      {snConnectLoading ? 'Connecting...' : 'Connect to ServiceNow'}
                     </button>
                   </div>
                 )}
@@ -322,75 +311,6 @@ function App() {
       </DxcApplicationLayout.Main>
     </DxcApplicationLayout>
 
-    {/* ── Connect to ServiceNow Dialog ───────────────────────── */}
-    {showSnDialog && (
-      <div
-        style={{
-          position: 'fixed', inset: 0,
-          backgroundColor: 'rgba(0,0,0,0.45)',
-          zIndex: 2000,
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
-        }}
-        onClick={(e) => { if (e.target === e.currentTarget) setShowSnDialog(false); }}
-      >
-        <div style={{
-          backgroundColor: '#fff',
-          borderRadius: '12px',
-          padding: '32px',
-          width: '400px',
-          boxShadow: '0 8px 32px rgba(0,0,0,0.18)',
-        }}>
-          <DxcFlex direction="column" gap="var(--spacing-gap-m)">
-            <DxcFlex justifyContent="space-between" alignItems="center">
-              <DxcTypography fontSize="font-scale-05" fontWeight="font-weight-semibold">
-                Connect with ServiceNow
-              </DxcTypography>
-              <button
-                onClick={() => setShowSnDialog(false)}
-                style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '4px' }}
-              >
-                <span className="material-icons" style={{ color: '#666', fontSize: '22px' }}>close</span>
-              </button>
-            </DxcFlex>
-
-            {snConnectError && (
-              <div style={{ padding: '10px 14px', backgroundColor: '#FFEBEE', borderRadius: '6px', border: '1px solid #EF9A9A' }}>
-                <DxcTypography fontSize="font-scale-02" color="#C62828">{snConnectError}</DxcTypography>
-              </div>
-            )}
-
-            <form onSubmit={handleSnLogin}>
-              <DxcFlex direction="column" gap="var(--spacing-gap-m)">
-                <DxcTextInput
-                  label="User ID"
-                  placeholder="Enter your ServiceNow User ID"
-                  value={snForm.userId}
-                  onChange={({ value }) => setSnForm(f => ({ ...f, userId: value }))}
-                  size="fillParent"
-                  disabled={snConnectLoading}
-                />
-                <DxcTextInput
-                  label="Password"
-                  type="password"
-                  placeholder="Enter your password"
-                  value={snForm.password}
-                  onChange={({ value }) => setSnForm(f => ({ ...f, password: value }))}
-                  size="fillParent"
-                  disabled={snConnectLoading}
-                />
-                <DxcButton
-                  label={snConnectLoading ? 'Connecting...' : 'Connect'}
-                  mode="primary"
-                  type="submit"
-                  size="fillParent"
-                  disabled={snConnectLoading}
-                />
-              </DxcFlex>
-            </form>
-          </DxcFlex>
-        </div>
-      </div>
-    )}
     </>
   );
 }
