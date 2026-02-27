@@ -38,18 +38,34 @@ function App() {
     setShowActionsMenu(false);
     setSnConnectLoading(true);
     try {
-      // Call server-side endpoint — credentials stay on the server, never in the bundle
-      const res  = await fetch('/api/sn-auto-connect', { method: 'POST' });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error_description || data.error || 'Connection failed');
+      const username = import.meta.env.VITE_SN_USERNAME;
+      const password = import.meta.env.VITE_SN_PASSWORD;
 
-      setToken(data.access_token, data.expires_in || 1800);
+      if (!username || !password) throw new Error('SN credentials not found in build config');
+
+      // Build Basic Auth header from Vite-baked env vars (guaranteed available in the bundle)
+      const basicAuth = `Basic ${btoa(`${username}:${password}`)}`;
+
+      // Test the connection through the proxy
+      const APP_PREFIX = import.meta.env.VITE_SN_APP_PREFIX || 'x_dxcis_underwri_0';
+      const testPath = `/api/now/table/${APP_PREFIX}_submission?sysparm_limit=1&sysparm_fields=sys_id`;
+      const testRes = await fetch(`/api/servicenow-api?snpath=${encodeURIComponent(testPath)}`, {
+        headers: { 'Authorization': basicAuth, 'Accept': 'application/json' },
+      });
+
+      if (!testRes.ok) {
+        const body = await testRes.text();
+        throw new Error(`ServiceNow rejected credentials (${testRes.status}): ${body}`);
+      }
+
+      // Store the full Basic Auth header as the "token" — snFetch detects and uses it directly
+      setToken(basicAuth, 86400);
 
       let snUser = null;
-      try { snUser = await fetchCurrentUser('integration_user'); } catch { /* non-fatal */ }
+      try { snUser = await fetchCurrentUser(username); } catch { /* non-fatal */ }
       handleSnConnect({
-        userId: 'integration_user',
-        name:   snUser?.name       || 'Integration User',
+        userId: username,
+        name:   snUser?.name       || username,
         email:  snUser?.email      || '',
         role:   snUser?.title      || 'Underwriter',
         domain: snUser?.department || 'Commercial Lines',

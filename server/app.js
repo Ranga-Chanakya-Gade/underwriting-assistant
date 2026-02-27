@@ -110,19 +110,13 @@ app.all(
 
     const hasBody = req.method !== 'GET' && req.method !== 'HEAD' && req.body?.length > 0;
 
-    // Use server-side Basic Auth if credentials are configured (same pattern as claims assistant).
-    // This lets the proxy handle auth transparently — client only needs to send any non-empty token.
-    const authHeader = (SN_USERNAME && SN_PASSWORD)
-      ? `Basic ${Buffer.from(`${SN_USERNAME}:${SN_PASSWORD}`).toString('base64')}`
-      : req.headers.authorization;
-
     try {
       const snRes = await fetch(`${SN_INSTANCE}${snPath}`, {
         method:  req.method,
         headers: {
           'Accept': 'application/json',
           ...(hasBody ? { 'Content-Type': 'application/json' } : {}),
-          ...(authHeader ? { 'Authorization': authHeader } : {}),
+          ...pickHeaders(req.headers, 'authorization'),
         },
         ...(hasBody ? { body: req.body } : {}),
       });
