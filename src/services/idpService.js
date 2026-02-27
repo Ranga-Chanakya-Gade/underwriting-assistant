@@ -163,7 +163,7 @@ class IDPService {
           caller_metadata: [
             {
               name: 'integration_sys_id',
-              value: integrationSysId,
+              value: integrationSysId || '',
             },
             {
               name: 'env',
