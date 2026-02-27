@@ -11,6 +11,15 @@ import {
 import { loginWithPassword, fetchCurrentUser } from '../../services/servicenow';
 import './Login.css';
 
+const DEMO_USER = {
+  userId: 'demo',
+  name: 'Demo User',
+  email: 'demo@bloom.com',
+  role: 'Underwriter',
+  domain: 'Commercial Lines',
+  isDemo: true,
+};
+
 const Login = ({ onLogin }) => {
   const [formData, setFormData] = useState({
     userId: '',
@@ -149,11 +158,18 @@ const Login = ({ onLogin }) => {
                 disabled={loading}
               />
 
-              {/* Create Account Button */}
+              {/* Divider */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <div style={{ flex: 1, height: '1px', backgroundColor: 'var(--color-border-neutral-medium)' }} />
+                <DxcTypography fontSize="font-scale-01" color="var(--color-fg-neutral-medium)">or</DxcTypography>
+                <div style={{ flex: 1, height: '1px', backgroundColor: 'var(--color-border-neutral-medium)' }} />
+              </div>
+
+              {/* Continue with Demo */}
               <DxcButton
-                label="Create Account"
+                label="Continue with Demo"
                 mode="secondary"
-                onClick={handleCreateAccount}
+                onClick={() => onLogin(DEMO_USER)}
                 size="fillParent"
                 disabled={loading}
               />
