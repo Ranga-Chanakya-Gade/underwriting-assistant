@@ -61,34 +61,37 @@ app.post(
 
 // ================================================================
 // ServiceNow Auto-Connect  →  POST /api/sn-auto-connect
-// Uses server-side credentials (never exposed to the client bundle)
+// Uses Basic Auth (same as claims assistant pattern).
+// Tests the connection then returns a pseudo-token so the frontend
+// can mark itself as connected without needing OAuth.
 // ================================================================
 app.post('/api/sn-auto-connect', async (_req, res) => {
-  console.log('[sn-auto-connect] username set:', !!SN_USERNAME, '| len:', SN_USERNAME?.length);
-  console.log('[sn-auto-connect] password set:', !!SN_PASSWORD, '| len:', SN_PASSWORD?.length);
-  console.log('[sn-auto-connect] client_id set:', !!SN_CLIENT_ID);
-  console.log('[sn-auto-connect] client_secret set:', !!SN_CLIENT_SEC);
-
   if (!SN_USERNAME || !SN_PASSWORD) {
-    return res.status(500).json({ error: 'SN credentials not configured on server' });
+    return res.status(500).json({ error: 'SN_USERNAME / SN_PASSWORD not configured on server' });
   }
+
+  const basicAuth = `Basic ${Buffer.from(`${SN_USERNAME}:${SN_PASSWORD}`).toString('base64')}`;
+
   try {
-    const snRes = await fetch(`${SN_INSTANCE}/oauth_token.do`, {
-      method:  'POST',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body:    new URLSearchParams({
-        grant_type:    'password',
-        client_id:     SN_CLIENT_ID,
-        client_secret: SN_CLIENT_SEC,
-        username:      SN_USERNAME,
-        password:      SN_PASSWORD,
-      }).toString(),
-    });
-    const text = await snRes.text();
-    console.log('[sn-auto-connect] SN status:', snRes.status, '| body:', text.substring(0, 200));
-    res.status(snRes.status).type('application/json').send(text);
+    // Lightweight test — fetch 1 record from the submission table
+    const APP_PREFIX = process.env.VITE_SN_APP_PREFIX || 'x_dxcis_underwri_0';
+    const testRes = await fetch(
+      `${SN_INSTANCE}/api/now/table/${APP_PREFIX}_submission?sysparm_limit=1&sysparm_fields=sys_id`,
+      { headers: { 'Authorization': basicAuth, 'Accept': 'application/json' } }
+    );
+
+    console.log('[sn-auto-connect] Basic Auth test status:', testRes.status);
+
+    if (!testRes.ok) {
+      const body = await testRes.text();
+      console.error('[sn-auto-connect] Basic Auth failed:', body.substring(0, 200));
+      return res.status(testRes.status).json({ error: 'ServiceNow rejected credentials', detail: body });
+    }
+
+    // Return a pseudo-token — the proxy will inject real Basic Auth on every request
+    res.json({ access_token: 'sn_basic_auth', expires_in: 86400 });
   } catch (err) {
-    console.error('[sn-auto-connect] fetch error:', err.message);
+    console.error('[sn-auto-connect] error:', err.message);
     res.status(500).json({ error: err.message });
   }
 });
@@ -106,14 +109,20 @@ app.all(
     if (!snPath) return res.status(400).json({ error: 'Missing ?snpath= query param' });
 
     const hasBody = req.method !== 'GET' && req.method !== 'HEAD' && req.body?.length > 0;
+
+    // Use server-side Basic Auth if credentials are configured (same pattern as claims assistant).
+    // This lets the proxy handle auth transparently — client only needs to send any non-empty token.
+    const authHeader = (SN_USERNAME && SN_PASSWORD)
+      ? `Basic ${Buffer.from(`${SN_USERNAME}:${SN_PASSWORD}`).toString('base64')}`
+      : req.headers.authorization;
+
     try {
       const snRes = await fetch(`${SN_INSTANCE}${snPath}`, {
         method:  req.method,
         headers: {
           'Accept': 'application/json',
-          // Only include Content-Type when there is an actual body
           ...(hasBody ? { 'Content-Type': 'application/json' } : {}),
-          ...pickHeaders(req.headers, 'authorization'),
+          ...(authHeader ? { 'Authorization': authHeader } : {}),
         },
         ...(hasBody ? { body: req.body } : {}),
       });
