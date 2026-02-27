@@ -4,7 +4,7 @@ import Dashboard from './components/Dashboard/Dashboard';
 import UnderwritingWorkbench from './components/UnderwritingWorkbench/UnderwritingWorkbench';
 import SubmissionIntake from './components/SubmissionIntake/SubmissionIntake';
 import Login from './components/Login/Login';
-import { isConnected, clearToken, setToken, fetchCurrentUser } from './services/servicenow';
+import { isConnected, clearToken, fetchCurrentUser, loginWithPassword } from './services/servicenow';
 import './App.css';
 
 const USER_KEY = 'sn_user_profile';
@@ -43,23 +43,8 @@ function App() {
 
       if (!username || !password) throw new Error('SN credentials not found in build config');
 
-      // Build Basic Auth header from Vite-baked env vars (guaranteed available in the bundle)
-      const basicAuth = `Basic ${btoa(`${username}:${password}`)}`;
-
-      // Test the connection through the proxy
-      const APP_PREFIX = import.meta.env.VITE_SN_APP_PREFIX || 'x_dxcis_underwri_0';
-      const testPath = `/api/now/table/${APP_PREFIX}_submission?sysparm_limit=1&sysparm_fields=sys_id`;
-      const testRes = await fetch(`/api/servicenow-api?snpath=${encodeURIComponent(testPath)}`, {
-        headers: { 'Authorization': basicAuth, 'Accept': 'application/json' },
-      });
-
-      if (!testRes.ok) {
-        const body = await testRes.text();
-        throw new Error(`ServiceNow rejected credentials (${testRes.status}): ${body}`);
-      }
-
-      // Store the full Basic Auth header as the "token" — snFetch detects and uses it directly
-      setToken(basicAuth, 86400);
+      // OAuth password grant — same pattern as claims assistant
+      await loginWithPassword(username, password);
 
       let snUser = null;
       try { snUser = await fetchCurrentUser(username); } catch { /* non-fatal */ }
