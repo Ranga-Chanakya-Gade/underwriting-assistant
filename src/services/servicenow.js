@@ -151,6 +151,9 @@ async function snFetch(path, options = {}) {
   let token = getStoredToken();
   if (!token) throw new Error('Not connected to ServiceNow');
 
+  // If stored token is already a full auth header (Basic Auth), use it directly
+  const authHeader = token.startsWith('Basic ') ? token : `Bearer ${token}`;
+
   const url = `/api/servicenow-api?snpath=${encodeURIComponent(path)}`;
 
   const res = await fetch(url, {
@@ -158,7 +161,7 @@ async function snFetch(path, options = {}) {
     headers: {
       'Content-Type':  'application/json',
       'Accept':        'application/json',
-      'Authorization': `Bearer ${token}`,
+      'Authorization': authHeader,
       ...(options.headers || {}),
     },
   });
