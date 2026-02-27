@@ -146,7 +146,7 @@ app.all(
   async (req, res) => {
     if (!IDP_API_BASE) return res.status(500).json({ error: 'IDP_API_BASE_URL not configured' });
 
-    const idpPath = req.path.replace('/api/idp', '');
+    const idpPath = req.path.replace('/api/idp', '/idp');
     const qs      = new URLSearchParams(req.query).toString();
     const url     = `${IDP_API_BASE}${idpPath}${qs ? '?' + qs : ''}`;
 

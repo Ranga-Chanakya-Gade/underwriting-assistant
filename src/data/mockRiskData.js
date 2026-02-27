@@ -9,10 +9,10 @@ export const riskCategories = {
 };
 
 export const riskLevels = {
-  VERY_LOW: { label: 'Very Low', color: '#24A148', range: [90, 100] },
-  LOW: { label: 'Low', color: '#0095FF', range: [75, 89] },
-  MODERATE: { label: 'Moderate', color: '#FF6B00', range: [60, 74] },
-  HIGH: { label: 'High', color: '#D0021B', range: [40, 59] },
+  VERY_LOW: { label: 'Very Low', color: '#37A526', range: [90, 100] },
+  LOW: { label: 'Low', color: '#1B75BB', range: [75, 89] },
+  MODERATE: { label: 'Moderate', color: '#F6921E', range: [60, 74] },
+  HIGH: { label: 'High', color: '#D02E2E', range: [40, 59] },
   VERY_HIGH: { label: 'Very High', color: '#8B0000', range: [0, 39] }
 };
 
@@ -207,31 +207,31 @@ export const mockRiskAssessments = {
 export const riskRecommendations = {
   ACCEPT_STANDARD: {
     label: 'Accept - Standard Rates',
-    color: '#24A148',
+    color: '#37A526',
     icon: 'check_circle',
     description: 'Risk profile meets standard underwriting criteria'
   },
   ACCEPT_RATED: {
     label: 'Accept - Rated',
-    color: '#0095FF',
+    color: '#1B75BB',
     icon: 'verified',
     description: 'Acceptable with premium adjustment'
   },
   REFER: {
     label: 'Refer to Senior UW',
-    color: '#FF6B00',
+    color: '#F6921E',
     icon: 'flag',
     description: 'Complex case requiring senior review'
   },
   DECLINE: {
     label: 'Recommend Decline',
-    color: '#D0021B',
+    color: '#D02E2E',
     icon: 'cancel',
     description: 'Risk exceeds acceptable thresholds'
   },
   COUNTER_OFFER: {
     label: 'Counter Offer',
-    color: '#0095FF',
+    color: '#1B75BB',
     icon: 'swap_horiz',
     description: 'Offer alternative coverage or terms'
   }

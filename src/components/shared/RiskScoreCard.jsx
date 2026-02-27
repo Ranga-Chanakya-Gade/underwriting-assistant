@@ -44,7 +44,7 @@ const RiskScoreCard = ({ riskAssessment, compact = false }) => {
               <DxcTypography
                 fontSize="64px"
                 fontWeight="font-weight-semibold"
-                color={riskLevel.color}
+                color="#000000"
                 style={{ lineHeight: 1 }}
               >
                 {overallScore}
@@ -121,7 +121,7 @@ const RiskScoreCard = ({ riskAssessment, compact = false }) => {
                       <DxcTypography
                         fontSize="font-scale-04"
                         fontWeight="font-weight-semibold"
-                        color={categoryLevel.color}
+                        color="#000000"
                       >
                         {score}
                       </DxcTypography>
@@ -144,7 +144,7 @@ const RiskScoreCard = ({ riskAssessment, compact = false }) => {
               padding: 'var(--spacing-padding-m)',
               backgroundColor: 'var(--color-bg-neutral-lighter)',
               borderRadius: 'var(--border-radius-s)',
-              borderLeft: '3px solid #0095FF'
+              borderLeft: '3px solid #1B75BB'
             }}
           >
             <DxcFlex direction="column" gap="var(--spacing-gap-s)">
@@ -164,7 +164,7 @@ const RiskScoreCard = ({ riskAssessment, compact = false }) => {
                   <DxcTypography fontSize="12px" color="var(--color-fg-neutral-stronger)">
                     Confidence
                   </DxcTypography>
-                  <DxcTypography fontSize="font-scale-02" color="#24A148">
+                  <DxcTypography fontSize="font-scale-02" color="#000000">
                     {riskAssessment.modelMetadata.confidence}%
                   </DxcTypography>
                 </DxcFlex>
@@ -172,7 +172,7 @@ const RiskScoreCard = ({ riskAssessment, compact = false }) => {
                   <DxcTypography fontSize="12px" color="var(--color-fg-neutral-stronger)">
                     Data Completeness
                   </DxcTypography>
-                  <DxcTypography fontSize="font-scale-02" color="#0095FF">
+                  <DxcTypography fontSize="font-scale-02" color="#000000">
                     {riskAssessment.modelMetadata.dataCompleteness}%
                   </DxcTypography>
                 </DxcFlex>

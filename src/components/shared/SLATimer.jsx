@@ -42,10 +42,10 @@ const SLATimer = ({ submissionSLA, compact = false }) => {
         <DxcFlex justifyContent="space-between" alignItems="center">
           <DxcHeading level={4} text="SLA Tracking" />
           <DxcFlex gap="var(--spacing-gap-xs)" alignItems="center">
-            <span className="material-icons" style={{ fontSize: '20px', color: '#0095FF' }}>
+            <span className="material-icons" style={{ fontSize: '20px', color: '#1B75BB' }}>
               schedule
             </span>
-            <DxcTypography fontSize="font-scale-03" color="#0095FF">
+            <DxcTypography fontSize="font-scale-03" color="#000000">
               Age: {submissionSLA.submissionAge}
             </DxcTypography>
           </DxcFlex>
@@ -86,7 +86,7 @@ const SLATimer = ({ submissionSLA, compact = false }) => {
                     </DxcFlex>
                     <DxcFlex gap="var(--spacing-gap-s)" alignItems="center">
                       {isBreached && (
-                        <span className="material-icons" style={{ fontSize: '20px', color: '#D0021B' }}>
+                        <span className="material-icons" style={{ fontSize: '20px', color: '#D02E2E' }}>
                           warning
                         </span>
                       )}
@@ -151,11 +151,11 @@ const SLATimer = ({ submissionSLA, compact = false }) => {
             padding: 'var(--spacing-padding-m)',
             backgroundColor: 'var(--color-bg-info-lightest)',
             borderRadius: 'var(--border-radius-s)',
-            borderLeft: '3px solid #0095FF'
+            borderLeft: '3px solid #1B75BB'
           }}
         >
           <DxcFlex gap="var(--spacing-gap-s)">
-            <span className="material-icons" style={{ fontSize: '20px', color: '#0095FF' }}>
+            <span className="material-icons" style={{ fontSize: '20px', color: '#1B75BB' }}>
               info
             </span>
             <DxcFlex direction="column" gap="var(--spacing-gap-xs)">

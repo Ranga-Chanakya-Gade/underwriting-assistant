@@ -239,7 +239,7 @@ const Dashboard = ({ onSubmissionSelect, snConnected }) => {
               <div className="kpi-triple">
 
                 <DxcFlex direction="column" gap="var(--spacing-gap-s)" alignItems="center" justifyContent="center" grow={1} basis="0">
-                  <DxcTypography fontSize="32px" fontWeight="font-weight-semibold" color="var(--color-fg-secondary-strong)" textAlign="center">
+                  <DxcTypography fontSize="32px" fontWeight="font-weight-semibold" color="#000000" textAlign="center">
                     {metrics.totalSubmissions}
                   </DxcTypography>
                   <DxcTypography fontSize="font-scale-03" fontWeight="font-weight-semibold" color="var(--color-fg-neutral-stronger)" textAlign="center">
@@ -250,7 +250,7 @@ const Dashboard = ({ onSubmissionSelect, snConnected }) => {
                 <div className="kpi-divider"><div className="kpi-divider-line" /></div>
 
                 <DxcFlex direction="column" gap="var(--spacing-gap-s)" alignItems="center" justifyContent="center" grow={1} basis="0">
-                  <DxcTypography fontSize="32px" fontWeight="font-weight-semibold" color="var(--color-fg-error-medium)" textAlign="center">
+                  <DxcTypography fontSize="32px" fontWeight="font-weight-semibold" color="#000000" textAlign="center">
                     {metrics.newSubmissions}
                   </DxcTypography>
                   <DxcTypography fontSize="font-scale-03" fontWeight="font-weight-semibold" color="var(--color-fg-neutral-stronger)" textAlign="center">
@@ -261,7 +261,7 @@ const Dashboard = ({ onSubmissionSelect, snConnected }) => {
                 <div className="kpi-divider"><div className="kpi-divider-line" /></div>
 
                 <DxcFlex direction="column" gap="var(--spacing-gap-s)" alignItems="center" justifyContent="center" grow={1} basis="0">
-                  <DxcTypography fontSize="32px" fontWeight="font-weight-semibold" color="var(--color-fg-warning-medium)" textAlign="center">
+                  <DxcTypography fontSize="32px" fontWeight="font-weight-semibold" color="#000000" textAlign="center">
                     {metrics.quotesRequired}
                   </DxcTypography>
                   <DxcTypography fontSize="font-scale-03" fontWeight="font-weight-semibold" color="var(--color-fg-neutral-stronger)" textAlign="center">
@@ -282,32 +282,32 @@ const Dashboard = ({ onSubmissionSelect, snConnected }) => {
                 <div className="metrics-sub-card" style={{ borderTopColor: 'var(--border-color-info-medium)' }}>
                   <div className="metrics-sub-inner">
                     <DxcTypography fontSize="12px" fontWeight="font-weight-regular" color="var(--color-fg-neutral-stronger)" textAlign="center">WRITTEN PREMIUM YTD</DxcTypography>
-                    <DxcTypography fontSize="28px" fontWeight="font-weight-semibold" color="var(--color-fg-secondary-medium)" textAlign="center">${metrics.writtenPremiumYTD}M</DxcTypography>
-                    <DxcTypography fontSize="12px" color="var(--color-fg-secondary-medium)" textAlign="center">+18% vs last year</DxcTypography>
+                    <DxcTypography fontSize="28px" fontWeight="font-weight-semibold" color="#000000" textAlign="center">${metrics.writtenPremiumYTD}M</DxcTypography>
+                    <DxcTypography fontSize="12px" color="var(--color-fg-neutral-stronger)" textAlign="center">+18% vs last year</DxcTypography>
                   </div>
                 </div>
 
                 <div className="metrics-sub-card" style={{ borderTopColor: 'var(--color-semantic03-400)' }}>
                   <div className="metrics-sub-inner">
                     <DxcTypography fontSize="12px" fontWeight="font-weight-regular" color="var(--color-fg-neutral-stronger)" textAlign="center">PENDING REVIEW</DxcTypography>
-                    <DxcTypography fontSize="28px" fontWeight="font-weight-semibold" color="var(--color-fg-warning-medium)" textAlign="center">{metrics.pendingReview}</DxcTypography>
-                    <DxcTypography fontSize="12px" color="var(--color-fg-warning-medium)" textAlign="center">3 closing today</DxcTypography>
+                    <DxcTypography fontSize="28px" fontWeight="font-weight-semibold" color="#000000" textAlign="center">{metrics.pendingReview}</DxcTypography>
+                    <DxcTypography fontSize="12px" color="var(--color-fg-neutral-stronger)" textAlign="center">3 closing today</DxcTypography>
                   </div>
                 </div>
 
                 <div className="metrics-sub-card" style={{ borderTopColor: 'var(--color-semantic02-500)' }}>
                   <div className="metrics-sub-inner">
                     <DxcTypography fontSize="12px" fontWeight="font-weight-regular" color="var(--color-fg-neutral-stronger)" textAlign="center">APPROVED THIS MONTH</DxcTypography>
-                    <DxcTypography fontSize="28px" fontWeight="font-weight-semibold" color="var(--color-fg-success-medium)" textAlign="center">{metrics.approvedThisMonth}</DxcTypography>
-                    <DxcTypography fontSize="12px" color="var(--color-fg-success-medium)" textAlign="center">{metrics.approvalRate}% approval rate</DxcTypography>
+                    <DxcTypography fontSize="28px" fontWeight="font-weight-semibold" color="#000000" textAlign="center">{metrics.approvedThisMonth}</DxcTypography>
+                    <DxcTypography fontSize="12px" color="var(--color-fg-neutral-stronger)" textAlign="center">{metrics.approvalRate}% approval rate</DxcTypography>
                   </div>
                 </div>
 
                 <div className="metrics-sub-card" style={{ borderTopColor: 'var(--color-semantic04-500)' }}>
                   <div className="metrics-sub-inner">
                     <DxcTypography fontSize="12px" fontWeight="font-weight-regular" color="var(--color-fg-neutral-stronger)" textAlign="center">DECLINED THIS MONTH</DxcTypography>
-                    <DxcTypography fontSize="28px" fontWeight="font-weight-semibold" color="var(--color-fg-error-medium)" textAlign="center">{metrics.declinedThisMonth}</DxcTypography>
-                    <DxcTypography fontSize="12px" color="var(--color-fg-error-medium)" textAlign="center">{100 - metrics.approvalRate}% decline rate</DxcTypography>
+                    <DxcTypography fontSize="28px" fontWeight="font-weight-semibold" color="#000000" textAlign="center">{metrics.declinedThisMonth}</DxcTypography>
+                    <DxcTypography fontSize="12px" color="var(--color-fg-neutral-stronger)" textAlign="center">{100 - metrics.approvalRate}% decline rate</DxcTypography>
                   </div>
                 </div>
 
@@ -325,11 +325,11 @@ const Dashboard = ({ onSubmissionSelect, snConnected }) => {
             </DxcFlex>
             <div className="metrics-sub-row">
 
-              <div className="metrics-sub-card" style={{ borderTopColor: '#0095FF' }}>
+              <div className="metrics-sub-card" style={{ borderTopColor: '#1B75BB' }}>
                 <div className="metrics-sub-inner">
                   <DxcTypography fontSize="12px" fontWeight="font-weight-regular" color="var(--color-fg-neutral-stronger)" textAlign="center">FAST-TRACK ELIGIBLE</DxcTypography>
-                  <DxcTypography fontSize="28px" fontWeight="font-weight-semibold" color="#0095FF" textAlign="center">{fastTrackCount}</DxcTypography>
-                  <DxcTypography fontSize="12px" color="#0095FF" textAlign="center">
+                  <DxcTypography fontSize="28px" fontWeight="font-weight-semibold" color="#000000" textAlign="center">{fastTrackCount}</DxcTypography>
+                  <DxcTypography fontSize="12px" color="var(--color-fg-neutral-stronger)" textAlign="center">
                     {submissions.length > 0 ? Math.round((fastTrackCount / submissions.length) * 100) : 0}% of total
                   </DxcTypography>
                 </div>
@@ -338,8 +338,8 @@ const Dashboard = ({ onSubmissionSelect, snConnected }) => {
               <div className="metrics-sub-card" style={{ borderTopColor: 'var(--color-semantic02-500)' }}>
                 <div className="metrics-sub-inner">
                   <DxcTypography fontSize="12px" fontWeight="font-weight-regular" color="var(--color-fg-neutral-stronger)" textAlign="center">AVG DAYS TO DECISION</DxcTypography>
-                  <DxcTypography fontSize="28px" fontWeight="font-weight-semibold" color="var(--color-fg-success-medium)" textAlign="center">8</DxcTypography>
-                  <DxcTypography fontSize="12px" color="var(--color-fg-success-medium)" textAlign="center">Target: ≤10 days</DxcTypography>
+                  <DxcTypography fontSize="28px" fontWeight="font-weight-semibold" color="#000000" textAlign="center">8</DxcTypography>
+                  <DxcTypography fontSize="12px" color="var(--color-fg-neutral-stronger)" textAlign="center">Target: ≤10 days</DxcTypography>
                 </div>
               </div>
 
@@ -349,14 +349,14 @@ const Dashboard = ({ onSubmissionSelect, snConnected }) => {
                   <DxcTypography
                     fontSize="28px"
                     fontWeight="font-weight-semibold"
-                    color={metrics.approvalRate >= 80 ? 'var(--color-fg-success-medium)' : 'var(--color-fg-warning-medium)'}
+                    color="#000000"
                     textAlign="center"
                   >
                     {metrics.approvalRate}%
                   </DxcTypography>
                   <DxcTypography
                     fontSize="12px"
-                    color={metrics.approvalRate >= 80 ? 'var(--color-fg-success-medium)' : 'var(--color-fg-warning-medium)'}
+                    color="var(--color-fg-neutral-stronger)"
                     textAlign="center"
                   >
                     {metrics.approvalRate >= 80 ? 'Meeting goal' : 'Below target'}
@@ -389,7 +389,7 @@ const Dashboard = ({ onSubmissionSelect, snConnected }) => {
                   <DxcTypography
                     fontSize="24px"
                     fontWeight="font-weight-semibold"
-                    color={group.count > 0 ? 'var(--color-fg-secondary-medium)' : 'var(--color-fg-neutral-dark)'}
+                    color="#000000"
                     textAlign="center"
                   >
                     {group.count}
@@ -480,9 +480,9 @@ const Dashboard = ({ onSubmissionSelect, snConnected }) => {
                   </div>
                 )}
                 <DxcFlex gap="var(--spacing-gap-none)" alignItems="center">
-                  <DxcTypography fontSize="font-scale-03" color="var(--color-fg-secondary-strong)">Card</DxcTypography>
+                  <DxcTypography fontSize="font-scale-03" color="var(--color-fg-neutral-stronger)">Card</DxcTypography>
                   <DxcSwitch checked={isGridView} onChange={(checked) => setIsGridView(checked)} />
-                  <DxcTypography fontSize="font-scale-03" color="var(--color-fg-secondary-strong)">Grid</DxcTypography>
+                  <DxcTypography fontSize="font-scale-03" color="var(--color-fg-neutral-stronger)">Grid</DxcTypography>
                 </DxcFlex>
               </div>
             </div>
@@ -507,7 +507,7 @@ const Dashboard = ({ onSubmissionSelect, snConnected }) => {
                         {/* Row 1: ID, name, badges + actions */}
                         <div className="submission-card-header">
                           <div className="submission-card-title">
-                            <DxcTypography fontSize="font-scale-03" fontWeight="font-weight-semibold" color="var(--color-fg-secondary-medium)">
+                            <DxcTypography fontSize="font-scale-03" fontWeight="font-weight-semibold" color="#000000">
                               {submission.id}
                             </DxcTypography>
                             <DxcTypography fontSize="font-scale-03">

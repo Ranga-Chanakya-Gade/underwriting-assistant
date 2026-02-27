@@ -58,15 +58,15 @@ const GuidelinesPanel = ({ guidelines, referral, coverageAmount }) => {
         {referral && (
           <div style={{
             padding: 'var(--spacing-padding-m)',
-            backgroundColor: referral.required ? '#FFF3E0' : '#E8F5E9',
+            backgroundColor: referral.required ? '#FFE8CC' : '#D5F2CE',
             borderRadius: 'var(--border-radius-s)',
-            borderLeft: referral.required ? '4px solid #FFA500' : '4px solid #37A526'
+            borderLeft: referral.required ? '4px solid #F6921E' : '4px solid #37A526'
           }}>
             <DxcFlex direction="column" gap="var(--spacing-gap-s)">
               <DxcFlex alignItems="center" gap="var(--spacing-gap-xs)">
                 <span
                   className="material-icons"
-                  style={{ color: referral.required ? '#FFA500' : '#37A526', fontSize: '20px' }}
+                  style={{ color: referral.required ? '#F6921E' : '#37A526', fontSize: '20px' }}
                 >
                   {referral.required ? 'warning' : 'check_circle'}
                 </span>
@@ -163,24 +163,17 @@ const GuidelinesPanel = ({ guidelines, referral, coverageAmount }) => {
                     alignItems: 'center',
                     gap: '8px',
                     padding: '10px 18px',
-                    background: 'linear-gradient(135deg, #E5F1FA 0%, #D0E8F7 100%)',
+                    backgroundColor: '#1B75BB20',
                     borderRadius: '24px',
-                    border: '2px solid #1B75BB',
-                    boxShadow: '0 2px 8px rgba(27, 117, 187, 0.15)',
+                    border: '1px solid #1B75BB4D',
                     cursor: 'pointer',
-                    transition: 'all 0.3s ease',
-                    position: 'relative',
-                    overflow: 'hidden'
+                    transition: 'all 0.2s ease'
                   }}
                   onMouseEnter={(e) => {
-                    e.currentTarget.style.transform = 'translateY(-2px)';
-                    e.currentTarget.style.boxShadow = '0 4px 12px rgba(27, 117, 187, 0.25)';
-                    e.currentTarget.style.borderColor = '#0056A3';
+                    e.currentTarget.style.backgroundColor = '#1B75BB33';
                   }}
                   onMouseLeave={(e) => {
-                    e.currentTarget.style.transform = 'translateY(0)';
-                    e.currentTarget.style.boxShadow = '0 2px 8px rgba(27, 117, 187, 0.15)';
-                    e.currentTarget.style.borderColor = '#1B75BB';
+                    e.currentTarget.style.backgroundColor = '#1B75BB20';
                   }}
                 >
                   <span className="material-icons" style={{ color: '#1B75BB', fontSize: '18px' }}>
@@ -199,16 +192,16 @@ const GuidelinesPanel = ({ guidelines, referral, coverageAmount }) => {
         {guidelines.restrictions && guidelines.restrictions !== 'None' && (
           <div style={{
             padding: 'var(--spacing-padding-m)',
-            backgroundColor: '#FFF3E0',
+            backgroundColor: '#FFE8CC',
             borderRadius: 'var(--border-radius-s)'
           }}>
             <DxcFlex gap="var(--spacing-gap-xs)" alignItems="flex-start">
-              <span className="material-icons" style={{ color: '#FFA500', fontSize: '20px' }}>
+              <span className="material-icons" style={{ color: '#F6921E', fontSize: '20px' }}>
                 info
               </span>
               <div style={{ flex: 1 }}>
                 <div style={{ display: 'block', marginBottom: '4px' }}>
-                  <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold" color="#FFA500">
+                  <DxcTypography fontSize="font-scale-02" fontWeight="font-weight-semibold" color="#F6921E">
                     Restrictions
                   </DxcTypography>
                 </div>
@@ -230,7 +223,7 @@ const GuidelinesPanel = ({ guidelines, referral, coverageAmount }) => {
             </DxcTypography>
             <div style={{
               padding: 'var(--spacing-padding-m)',
-              backgroundColor: '#F5F5F5',
+              backgroundColor: '#F8F9FA',
               borderRadius: 'var(--border-radius-s)'
             }}>
               <ul style={{ margin: 0, paddingLeft: '20px' }}>
@@ -249,7 +242,7 @@ const GuidelinesPanel = ({ guidelines, referral, coverageAmount }) => {
         {/* Quick Reference Footer */}
         <div style={{
           padding: 'var(--spacing-padding-s)',
-          backgroundColor: '#E5F1FA',
+          backgroundColor: '#D6E9F7',
           borderRadius: 'var(--border-radius-s)',
           borderLeft: '4px solid #1B75BB'
         }}>

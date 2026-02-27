@@ -100,6 +100,8 @@ const SubmissionIntake = () => {
 
   // ServiceNow sys_id of the draft submission record (created on mount)
   const [snSysId, setSnSysId] = useState(null);
+  // True while the SN draft record is still being created — blocks upload until ready
+  const [snCreating, setSnCreating] = useState(isConnected());
   const [snSubmitting, setSnSubmitting] = useState(false);
 
   // Display number for breadcrumb / UI (falls back to draft label)
@@ -116,7 +118,8 @@ const SubmissionIntake = () => {
         const id = res?.result?.sys_id;
         if (id) setSnSysId(id);
       })
-      .catch(err => console.error('[SubmissionIntake] draft creation failed:', err));
+      .catch(err => console.error('[SubmissionIntake] draft creation failed:', err))
+      .finally(() => setSnCreating(false));
   }, []);
 
   const validationSummary = useMemo(() => {
@@ -279,6 +282,7 @@ const SubmissionIntake = () => {
         <DocumentUpload
           tableName={SUBMISSION_TABLE}
           submissionId={snSysId}
+          awaitingRecord={snCreating}
           onUploadComplete={(data) => handleFileUpload(data.files)}
           onCancel={() => {}}
         />
@@ -355,6 +359,7 @@ const SubmissionIntake = () => {
         <DocumentUpload
           tableName={SUBMISSION_TABLE}
           submissionId={snSysId}
+          awaitingRecord={snCreating}
           onUploadComplete={(data) => handleFileUpload(data.files, true)}
           onCancel={() => {}}
         />
@@ -449,8 +454,8 @@ const SubmissionIntake = () => {
         {validationSummary.errorCount > 0 && (
           <div className="alert-error">
             <DxcFlex alignItems="center" gap="var(--spacing-gap-m)">
-              <span className="material-icons" style={{ color: '#D0021B', fontSize: '22px' }}>error</span>
-              <DxcTypography fontSize="var(--font-scale-02, 0.875rem)" fontWeight="font-weight-semibold" color="#D0021B">
+              <span className="material-icons" style={{ color: '#D02E2E', fontSize: '22px' }}>error</span>
+              <DxcTypography fontSize="var(--font-scale-02, 0.875rem)" fontWeight="font-weight-semibold" color="#D02E2E">
                 {validationSummary.errorCount} Validation Error{validationSummary.errorCount !== 1 ? 's' : ''} — Fields with data inconsistencies that need to be resolved
               </DxcTypography>
             </DxcFlex>
@@ -754,19 +759,19 @@ const SubmissionIntake = () => {
             <div style={{ marginTop: 'var(--spacing-gap-m)' }}>
               <DxcFlex direction="column" gap="var(--spacing-gap-s)">
                 <DxcFlex alignItems="center" gap="var(--spacing-gap-s)">
-                  <span className="material-icons" style={{ fontSize: '20px', color: allFieldsFilled ? '#37A526' : '#D0021B' }}>
+                  <span className="material-icons" style={{ fontSize: '20px', color: allFieldsFilled ? '#37A526' : '#D02E2E' }}>
                     {allFieldsFilled ? 'check_circle' : 'cancel'}
                   </span>
                   <DxcTypography fontSize="var(--font-scale-02, 0.875rem)">All required fields completed</DxcTypography>
                 </DxcFlex>
                 <DxcFlex alignItems="center" gap="var(--spacing-gap-s)">
-                  <span className="material-icons" style={{ fontSize: '20px', color: hasDocs ? '#37A526' : '#D0021B' }}>
+                  <span className="material-icons" style={{ fontSize: '20px', color: hasDocs ? '#37A526' : '#D02E2E' }}>
                     {hasDocs ? 'check_circle' : 'cancel'}
                   </span>
                   <DxcTypography fontSize="var(--font-scale-02, 0.875rem)">Documents uploaded</DxcTypography>
                 </DxcFlex>
                 <DxcFlex alignItems="center" gap="var(--spacing-gap-s)">
-                  <span className="material-icons" style={{ fontSize: '20px', color: !hasErrors ? '#37A526' : '#D0021B' }}>
+                  <span className="material-icons" style={{ fontSize: '20px', color: !hasErrors ? '#37A526' : '#D02E2E' }}>
                     {!hasErrors ? 'check_circle' : 'cancel'}
                   </span>
                   <DxcTypography fontSize="var(--font-scale-02, 0.875rem)">No unresolved validation errors</DxcTypography>
