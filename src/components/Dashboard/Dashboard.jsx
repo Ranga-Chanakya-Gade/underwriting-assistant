@@ -20,6 +20,8 @@ import {
   fetchSubmissions,
   fetchReferrals,
   fetchAIRecommendations,
+  loginWithPassword,
+  fetchCurrentUser,
 } from '../../services/servicenow';
 import './Dashboard.css';
 
@@ -67,7 +69,7 @@ function mapSNSubmission(rec, referralMap, aiMap) {
   };
 }
 
-const Dashboard = ({ onSubmissionSelect, snConnected }) => {
+const Dashboard = ({ onSubmissionSelect, snConnected, onSnConnect }) => {
   const [activeTabIndex, setActiveTabIndex] = useState(0);
   const [isGridView, setIsGridView] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
@@ -84,6 +86,41 @@ const Dashboard = ({ onSubmissionSelect, snConnected }) => {
   const [liveSubmissions, setLiveSubmissions] = useState(null); // null = not loaded
   const [loadingData, setLoadingData]         = useState(false);
   const [dataError, setDataError]             = useState('');
+
+  // ── SN Connect dialog state ──────────────────────────────────────
+  const [showSnDialog, setShowSnDialog]       = useState(false);
+  const [snForm, setSnForm]                   = useState({ userId: '', password: '' });
+  const [snConnectError, setSnConnectError]   = useState('');
+  const [snConnectLoading, setSnConnectLoading] = useState(false);
+
+  const handleSnLogin = async (e) => {
+    e.preventDefault();
+    if (!snForm.userId || !snForm.password) {
+      setSnConnectError('Please enter both User ID and Password');
+      return;
+    }
+    setSnConnectLoading(true);
+    setSnConnectError('');
+    try {
+      await loginWithPassword(snForm.userId, snForm.password);
+      let snUser = null;
+      try { snUser = await fetchCurrentUser(snForm.userId); } catch { /* non-fatal */ }
+      const userData = {
+        userId: snForm.userId,
+        name:   snUser?.name       || snForm.userId,
+        email:  snUser?.email      || '',
+        role:   snUser?.title      || 'Underwriter',
+        domain: snUser?.department || 'Commercial Lines',
+      };
+      setShowSnDialog(false);
+      setSnForm({ userId: '', password: '' });
+      if (onSnConnect) onSnConnect(userData);
+    } catch (err) {
+      setSnConnectError(err.message || 'Login failed. Please check your credentials.');
+    } finally {
+      setSnConnectLoading(false);
+    }
+  };
 
   const itemsPerPage = 9;
 
@@ -207,6 +244,98 @@ const Dashboard = ({ onSubmissionSelect, snConnected }) => {
   return (
     <div className="dashboard-wrapper">
       <DxcFlex direction="column" gap="var(--spacing-gap-m)">
+
+        {/* ── Demo Mode Banner ───────────────────────────────── */}
+        {!snConnected && (
+          <div style={{
+            display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+            padding: '12px 20px',
+            backgroundColor: '#FFF8E1',
+            border: '1px solid #FFD54F',
+            borderRadius: '8px',
+            gap: '16px',
+          }}>
+            <DxcFlex alignItems="center" gap="var(--spacing-gap-s)">
+              <span className="material-icons" style={{ color: '#F9A825', fontSize: '20px' }}>info</span>
+              <DxcTypography fontSize="font-scale-03" color="#5D4037" fontWeight="font-weight-medium">
+                You are viewing demo data. Connect to ServiceNow to load real submissions.
+              </DxcTypography>
+            </DxcFlex>
+            <DxcButton
+              label="Connect with ServiceNow"
+              mode="primary"
+              size="small"
+              onClick={() => { setShowSnDialog(true); setSnConnectError(''); }}
+            />
+          </div>
+        )}
+
+        {/* ── SN Connect Dialog ───────────────────────────────── */}
+        {showSnDialog && (
+          <div style={{
+            position: 'fixed', inset: 0,
+            backgroundColor: 'rgba(0,0,0,0.45)',
+            zIndex: 1000,
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+          }}
+            onClick={(e) => { if (e.target === e.currentTarget) setShowSnDialog(false); }}
+          >
+            <div style={{
+              backgroundColor: '#fff',
+              borderRadius: '12px',
+              padding: '32px',
+              width: '400px',
+              boxShadow: '0 8px 32px rgba(0,0,0,0.18)',
+            }}>
+              <DxcFlex direction="column" gap="var(--spacing-gap-m)">
+                <DxcFlex justifyContent="space-between" alignItems="center">
+                  <DxcHeading level={3} text="Connect with ServiceNow" />
+                  <button
+                    onClick={() => setShowSnDialog(false)}
+                    style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '4px' }}
+                  >
+                    <span className="material-icons" style={{ color: '#666', fontSize: '22px' }}>close</span>
+                  </button>
+                </DxcFlex>
+
+                {snConnectError && (
+                  <div style={{ padding: '10px 14px', backgroundColor: '#FFEBEE', borderRadius: '6px', border: '1px solid #EF9A9A' }}>
+                    <DxcTypography fontSize="font-scale-02" color="#C62828">{snConnectError}</DxcTypography>
+                  </div>
+                )}
+
+                <form onSubmit={handleSnLogin}>
+                  <DxcFlex direction="column" gap="var(--spacing-gap-m)">
+                    <DxcTextInput
+                      label="User ID"
+                      placeholder="Enter your ServiceNow User ID"
+                      value={snForm.userId}
+                      onChange={({ value }) => setSnForm(f => ({ ...f, userId: value }))}
+                      size="fillParent"
+                      disabled={snConnectLoading}
+                    />
+                    <DxcTextInput
+                      label="Password"
+                      type="password"
+                      placeholder="Enter your password"
+                      value={snForm.password}
+                      onChange={({ value }) => setSnForm(f => ({ ...f, password: value }))}
+                      size="fillParent"
+                      disabled={snConnectLoading}
+                    />
+                    <DxcButton
+                      label={snConnectLoading ? 'Connecting...' : 'Connect'}
+                      mode="primary"
+                      type="submit"
+                      size="fillParent"
+                      disabled={snConnectLoading}
+                    />
+                  </DxcFlex>
+                </form>
+              </DxcFlex>
+            </div>
+          </div>
+        )}
 
         {/* Page Title */}
         <DxcFlex alignItems="center" gap="var(--spacing-gap-m)">

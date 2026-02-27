@@ -17,13 +17,15 @@ function restoreUser() {
 }
 
 function App() {
-  // Restore session on mount — if SN token is still valid and user profile is cached,
-  // skip the login screen entirely.
+  // If a demo user is cached with no SN token, still restore them
   const [isAuthenticated, setIsAuthenticated] = useState(() => {
-    if (!isConnected()) return false;
-    return !!restoreUser();
+    const u = restoreUser();
+    if (!u) return false;
+    if (u.isDemo) return true;          // demo user never needs a token
+    return isConnected();               // real user needs a valid token
   });
-  const [user, setUser] = useState(() => (isConnected() ? restoreUser() : null));
+  const [user, setUser] = useState(() => restoreUser());
+  const [snConnected, setSnConnected] = useState(() => isConnected());
   const [currentView, setCurrentView] = useState('dashboard');
   const [selectedSubmission, setSelectedSubmission] = useState(null);
   const [sidenavExpanded, setSidenavExpanded] = useState(true);
@@ -32,12 +34,22 @@ function App() {
     localStorage.setItem(USER_KEY, JSON.stringify(userData));
     setUser(userData);
     setIsAuthenticated(true);
+    if (!userData.isDemo) setSnConnected(true);
+  };
+
+  // Called from Dashboard when user connects to SN from demo mode
+  const handleSnConnect = (snUserData) => {
+    const updated = { ...user, ...snUserData, isDemo: false };
+    localStorage.setItem(USER_KEY, JSON.stringify(updated));
+    setUser(updated);
+    setSnConnected(true);
   };
 
   const _handleLogout = () => {
     localStorage.removeItem(USER_KEY);
     clearToken();
     setUser(null);
+    setSnConnected(false);
     setIsAuthenticated(false);
     setCurrentView('dashboard');
     setSelectedSubmission(null);
@@ -63,9 +75,9 @@ function App() {
   const renderContent = () => {
     switch (currentView) {
       case 'dashboard':
-        return <Dashboard onSubmissionSelect={handleSubmissionSelect} />;
+        return <Dashboard onSubmissionSelect={handleSubmissionSelect} snConnected={snConnected} onSnConnect={handleSnConnect} />;
       case 'submissions':
-        return <Dashboard onSubmissionSelect={handleSubmissionSelect} />;
+        return <Dashboard onSubmissionSelect={handleSubmissionSelect} snConnected={snConnected} onSnConnect={handleSnConnect} />;
       case 'workbench':
         return <UnderwritingWorkbench submission={selectedSubmission} />;
       case 'intake':
