@@ -1,9 +1,12 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import { fileURLToPath } from 'url';
+import { dirname, resolve } from 'path';
 
-// Load .env for local dev — silently ignored in production (Vercel injects env vars)
-dotenv.config();
+const __dirname = dirname(fileURLToPath(import.meta.url));
+// Explicitly point to the repo root .env so dotenv finds it regardless of CWD
+dotenv.config({ path: resolve(__dirname, '..', '.env') });
 
 const app = express();
 
@@ -61,6 +64,11 @@ app.post(
 // Uses server-side credentials (never exposed to the client bundle)
 // ================================================================
 app.post('/api/sn-auto-connect', async (_req, res) => {
+  console.log('[sn-auto-connect] username set:', !!SN_USERNAME, '| len:', SN_USERNAME?.length);
+  console.log('[sn-auto-connect] password set:', !!SN_PASSWORD, '| len:', SN_PASSWORD?.length);
+  console.log('[sn-auto-connect] client_id set:', !!SN_CLIENT_ID);
+  console.log('[sn-auto-connect] client_secret set:', !!SN_CLIENT_SEC);
+
   if (!SN_USERNAME || !SN_PASSWORD) {
     return res.status(500).json({ error: 'SN credentials not configured on server' });
   }
@@ -77,8 +85,10 @@ app.post('/api/sn-auto-connect', async (_req, res) => {
       }).toString(),
     });
     const text = await snRes.text();
+    console.log('[sn-auto-connect] SN status:', snRes.status, '| body:', text.substring(0, 200));
     res.status(snRes.status).type('application/json').send(text);
   } catch (err) {
+    console.error('[sn-auto-connect] fetch error:', err.message);
     res.status(500).json({ error: err.message });
   }
 });
