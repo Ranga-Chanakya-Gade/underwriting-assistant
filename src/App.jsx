@@ -1,10 +1,10 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { DxcApplicationLayout, DxcFlex, DxcTypography } from '@dxc-technology/halstack-react';
 import Dashboard from './components/Dashboard/Dashboard';
 import UnderwritingWorkbench from './components/UnderwritingWorkbench/UnderwritingWorkbench';
 import SubmissionIntake from './components/SubmissionIntake/SubmissionIntake';
 import Login from './components/Login/Login';
-import { isConnected, clearToken, fetchCurrentUser, loginWithPassword } from './services/servicenow';
+import { isConnected, clearToken, fetchCurrentUser, connect, handleOAuthCallback } from './services/servicenow';
 import './App.css';
 
 const USER_KEY = 'sn_user_profile';
@@ -31,35 +31,45 @@ function App() {
   const [sidenavExpanded, setSidenavExpanded] = useState(true);
 
   // ── Actions dropdown ─────────────────────────────────────────────
-  const [showActionsMenu, setShowActionsMenu]   = useState(false);
-  const [snConnectLoading, setSnConnectLoading] = useState(false);
+  const [showActionsMenu, setShowActionsMenu] = useState(false);
 
-  const handleSnConnect_auto = async () => {
+  // ── OAuth authorization_code callback handler ─────────────────────
+  // Runs once on mount — picks up ?code=&state= from ServiceNow redirect
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const code  = params.get('code');
+    const state = params.get('state');
+    if (!code || !state) return;
+
+    // Clean the code/state from the URL immediately
+    window.history.replaceState({}, '', window.location.pathname);
+
+    handleOAuthCallback(code, state)
+      .then(async () => {
+        const username = import.meta.env.VITE_SN_USERNAME || 'integration_user';
+        let snUser = null;
+        try { snUser = await fetchCurrentUser(username); } catch { /* non-fatal */ }
+        const userData = {
+          userId: username,
+          name:   snUser?.name       || username,
+          email:  snUser?.email      || '',
+          role:   snUser?.title      || 'Underwriter',
+          domain: snUser?.department || 'Commercial Lines',
+        };
+        // If already in demo mode update SN connection; otherwise do a full login
+        if (isAuthenticated) {
+          handleSnConnect(userData);
+        } else {
+          handleLogin({ ...userData, isDemo: false });
+        }
+      })
+      .catch(err => console.error('[OAuth callback] Failed:', err.message));
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Clicking "Connect to ServiceNow" → redirect to ServiceNow OAuth login page
+  const handleSnConnect_auto = () => {
     setShowActionsMenu(false);
-    setSnConnectLoading(true);
-    try {
-      const username = import.meta.env.VITE_SN_USERNAME;
-      const password = import.meta.env.VITE_SN_PASSWORD;
-
-      if (!username || !password) throw new Error('SN credentials not found in build config');
-
-      // OAuth password grant — same pattern as claims assistant
-      await loginWithPassword(username, password);
-
-      let snUser = null;
-      try { snUser = await fetchCurrentUser(username); } catch { /* non-fatal */ }
-      handleSnConnect({
-        userId: username,
-        name:   snUser?.name       || username,
-        email:  snUser?.email      || '',
-        role:   snUser?.title      || 'Underwriter',
-        domain: snUser?.department || 'Commercial Lines',
-      });
-    } catch (err) {
-      console.error('[Connect SN] Failed:', err.message);
-    } finally {
-      setSnConnectLoading(false);
-    }
+    connect(); // uses VITE_SN_CLIENT_ID + VITE_SN_REDIRECT_URI from env
   };
 
   const handleLogin = (userData) => {
@@ -213,17 +223,16 @@ function App() {
                   >
                     <button
                       onClick={handleSnConnect_auto}
-                      disabled={snConnectLoading}
                       style={{
                         display: 'flex', alignItems: 'center', gap: '10px',
                         width: '100%', padding: '10px 16px',
-                        background: 'none', border: 'none', cursor: snConnectLoading ? 'default' : 'pointer',
+                        background: 'none', border: 'none', cursor: 'pointer',
                         fontSize: '14px', color: '#1B75BB', fontWeight: '500',
-                        textAlign: 'left', opacity: snConnectLoading ? 0.6 : 1,
+                        textAlign: 'left',
                       }}
                     >
                       <span className="material-icons" style={{ fontSize: '18px' }}>link</span>
-                      {snConnectLoading ? 'Connecting...' : 'Connect to ServiceNow'}
+                      Connect to ServiceNow
                     </button>
                   </div>
                 )}

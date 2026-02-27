@@ -61,35 +61,48 @@ app.post(
 
 // ================================================================
 // ServiceNow Auto-Connect  →  POST /api/sn-auto-connect
-// Uses Basic Auth (same as claims assistant pattern).
-// Tests the connection then returns a pseudo-token so the frontend
-// can mark itself as connected without needing OAuth.
+// Server fetches OAuth token using password grant.
+// Server reads .env via plain dotenv (no dotenv-expand), so special
+// chars like $h2wz in the password are NOT corrupted.
 // ================================================================
 app.post('/api/sn-auto-connect', async (_req, res) => {
-  if (!SN_USERNAME || !SN_PASSWORD) {
-    return res.status(500).json({ error: 'SN_USERNAME / SN_PASSWORD not configured on server' });
+  if (!SN_CLIENT_ID || !SN_CLIENT_SEC || !SN_USERNAME || !SN_PASSWORD) {
+    return res.status(500).json({
+      error: 'SN credentials not fully configured on server',
+      missing: { clientId: !SN_CLIENT_ID, clientSecret: !SN_CLIENT_SEC, username: !SN_USERNAME, password: !SN_PASSWORD },
+    });
   }
 
-  const basicAuth = `Basic ${Buffer.from(`${SN_USERNAME}:${SN_PASSWORD}`).toString('base64')}`;
-
   try {
-    // Lightweight test — fetch 1 record from the submission table
-    const APP_PREFIX = process.env.VITE_SN_APP_PREFIX || 'x_dxcis_underwri_0';
-    const testRes = await fetch(
-      `${SN_INSTANCE}/api/now/table/${APP_PREFIX}_submission?sysparm_limit=1&sysparm_fields=sys_id`,
-      { headers: { 'Authorization': basicAuth, 'Accept': 'application/json' } }
-    );
+    const params = new URLSearchParams({
+      grant_type:    'password',
+      client_id:     SN_CLIENT_ID,
+      client_secret: SN_CLIENT_SEC,
+      username:      SN_USERNAME,
+      password:      SN_PASSWORD,
+    });
 
-    console.log('[sn-auto-connect] Basic Auth test status:', testRes.status);
+    console.log('[sn-auto-connect] OAuth password grant for:', SN_USERNAME, '| password length:', SN_PASSWORD.length);
 
-    if (!testRes.ok) {
-      const body = await testRes.text();
-      console.error('[sn-auto-connect] Basic Auth failed:', body.substring(0, 200));
-      return res.status(testRes.status).json({ error: 'ServiceNow rejected credentials', detail: body });
+    const tokenRes = await fetch(`${SN_INSTANCE}/oauth_token.do`, {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body:    params.toString(),
+    });
+
+    const text = await tokenRes.text();
+    const data = (() => { try { return JSON.parse(text); } catch { return { raw: text }; } })();
+
+    console.log('[sn-auto-connect] OAuth status:', tokenRes.status, '| error:', data.error || 'none');
+
+    if (!tokenRes.ok || !data.access_token) {
+      return res.status(tokenRes.status || 401).json({
+        error: data.error_description || data.error || 'OAuth failed',
+        detail: data,
+      });
     }
 
-    // Return a pseudo-token — the proxy will inject real Basic Auth on every request
-    res.json({ access_token: 'sn_basic_auth', expires_in: 86400 });
+    res.json({ access_token: data.access_token, expires_in: data.expires_in || 1800 });
   } catch (err) {
     console.error('[sn-auto-connect] error:', err.message);
     res.status(500).json({ error: err.message });
