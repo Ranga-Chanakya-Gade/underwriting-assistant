@@ -66,7 +66,7 @@ const DocumentUpload = ({ submissionId, tableName, onUploadComplete, onCancel, a
       setUploadPhase('idp');
       const idpResults = await idpService.uploadAndProcessBatch(
         selectedFiles,
-        submissionId,
+        submissionId || '',
         (current, total) => setProgress({ current, total })
       );
       const idpFailures = idpResults.filter(r => !r.success);
